@@ -11,6 +11,7 @@
 <meta name="theme-color" content="#6750a4">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&display=swap');
@@ -618,27 +619,30 @@ body.dark .online{
 
 .bubble-wrapper {
     position: relative;
-    max-width: min(72%, 520px);
+    max-width: min(80%, 480px);
     display: inline-block;
+    min-width: 50px;
 }
 
 .bubble {
-    padding: 8px 12px 6px;
-    border-radius: 20px;
-    line-height: 1.4;
+    padding: 8px 14px 6px;
+    border-radius: 18px;
+    line-height: 1.5;
     font-size: 15px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.05);
     animation: bubble .2s ease;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    word-break: break-word;
+    word-break: normal;
     position: relative;
     cursor: pointer;
     transition: .15s;
     display: inline-block;
     width: auto;
-    min-width: 35px;
+    min-width: 50px;
+    max-width: 100%;
 }
+
 
 .bubble:hover .bubble-actions{
     opacity:1;
@@ -1742,19 +1746,46 @@ body.dark .mobile-nav-item.active {
     height: 26px;
 }
 
+/* ===== МОБИЛЬНЫЕ ОТСТУПЫ ===== */
 @media(max-width:880px){
+    /* Убираем лишние отступы */
+    .m3 {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
+    body {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    
     .rail{
         display:none
     }
     .mobile-nav{
-        display:block
+        display:block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        background: rgba(255,255,255,.92);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid #ded7e2;
+        padding: 4px 0 env(safe-area-inset-bottom);
+        height: 56px;
+        min-height: 56px;
+    }
+    body.dark .mobile-nav{
+        background: rgba(26,26,30,.92);
+        border-top-color:#3a3a44
     }
     .panels{
         width:100%;
         position:relative;
         overflow:hidden;
-        padding-bottom: 60px;
-        height: calc(100% - 60px);
+        padding-bottom: 0 !important;
+        height: calc(100% - 56px);
     }
     .list{
         width:100%;
@@ -1766,6 +1797,7 @@ body.dark .mobile-nav-item.active {
         transition:transform .28s cubic-bezier(.2,0,0,1);
         z-index:2;
         display: flex;
+        padding-top: 0 !important;
     }
     .chat{
         width:100%;
@@ -1777,6 +1809,7 @@ body.dark .mobile-nav-item.active {
         z-index:3;
         background:#f7f4fb;
         display: flex;
+        padding-top: 0 !important;
     }
     body.dark .chat{
         background:#1a1a1e
@@ -1796,8 +1829,8 @@ body.dark .mobile-nav-item.active {
         inset: 0;
         z-index: 1;
         padding: 14px;
-        padding-top: max(14px, env(safe-area-inset-top));
-        padding-bottom: max(14px, env(safe-area-inset-bottom));
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
         overflow: auto;
         background: var(--bg);
     }
@@ -1810,45 +1843,136 @@ body.dark .mobile-nav-item.active {
     .mobile-only{
         display:grid
     }
-    .bubble{
-        max-width:84%
-    }
     .panel{
         padding:14px;
-        padding-top: max(14px, env(safe-area-inset-top));
-        padding-bottom: max(14px, env(safe-area-inset-bottom));
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
     }
     .chatbar{
-        padding:9px 12px;
-        padding-top: max(9px, env(safe-area-inset-top));
+        padding:6px 10px !important;
+        padding-top: max(6px, env(safe-area-inset-top)) !important;
         height:auto;
-        min-height:66px;
+        min-height:54px;
+        gap:8px;
+    }
+    .chatbar .avatar-wrap {
+        width: 36px !important;
+        height: 36px !important;
+    }
+    .chatbar .avatar {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+    }
+    .chat-name {
+        font-size: 14px !important;
+    }
+    .chat-status {
+        font-size: 11px !important;
     }
     .messages{
-        padding:16px 13px;
-        padding-bottom: max(16px, env(safe-area-inset-bottom));
+        padding:10px 10px !important;
+        padding-bottom: 8px !important;
+        gap:3px;
     }
     .composer{
-        padding:9px 9px;
-        padding-bottom: max(9px, env(safe-area-inset-bottom));
+        padding:6px 8px !important;
+        padding-bottom: max(6px, env(safe-area-inset-bottom)) !important;
+        gap:4px;
+        min-height: 48px;
+    }
+    .compose{
+        height:40px;
+        padding:0 12px 0 14px;
+        border-radius:20px;
+    }
+    .compose input{
+        font-size:14px;
+    }
+    .send{
+        width:40px;
+        height:40px;
+        border-radius:14px;
+    }
+    .send .icon{
+        width:18px;
+        height:18px;
     }
     .fab{
         right:18px;
         bottom:70px
     }
     .list-scroll{
-        padding-bottom: 80px;
+        padding-bottom: 60px;
     }
     .list-head{
-        padding-top: max(18px, env(safe-area-inset-top));
+        padding:12px 14px 6px !important;
+        padding-top: max(8px, env(safe-area-inset-top)) !important;
     }
-    .avatar-url-input{
-        flex-direction:column;
+    .list-head .title{
+        font-size:22px;
     }
-    .avatar-url-input .primary,
-    .avatar-url-input .secondary{
-        width:100%;
-        justify-content:center;
+    .search{
+        margin:4px 10px 8px;
+        height:40px;
+        border-radius:20px;
+        padding:0 14px;
+    }
+    .search input{
+        font-size:14px;
+    }
+    .person{
+        padding:6px 10px;
+        gap:10px;
+    }
+    .person .avatar-wrap {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    .person .avatar {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 16px !important;
+    }
+    .person-name{
+        font-size:14px;
+    }
+    .person-sub{
+        font-size:12px;
+    }
+    .bubble-wrapper {
+        max-width: 82%;
+    }
+    .bubble {
+        font-size: 14px;
+        padding: 6px 12px 5px;
+        border-radius: 16px;
+        line-height: 1.45;
+        min-width: 40px;
+    }
+    .btime {
+        font-size: 10px;
+        margin-top: 1px;
+        gap: 2px;
+    }
+    .bubble-actions {
+        top: -8px;
+        right: 0px;
+        padding: 1px 3px;
+        gap: 2px;
+        border-radius: 12px;
+    }
+    .bubble-actions button {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+    }
+    .bubble-reactions span {
+        font-size: 13px;
+    }
+    .reaction-picker button {
+        font-size: 22px;
+        padding: 2px 4px;
     }
     .context-menu {
         left: 10px !important;
@@ -1860,47 +1984,202 @@ body.dark .mobile-nav-item.active {
         width: 100%;
     }
     .reply-preview {
-        padding: 6px 12px;
+        padding: 4px 12px;
+        min-height: 36px;
+    }
+    .reply-preview .reply-info {
+        font-size: 11px;
+    }
+    .reply-preview .reply-text {
+        font-size: 12px;
+    }
+    .avatar-url-input{
+        flex-direction:column;
+    }
+    .avatar-url-input .primary,
+    .avatar-url-input .secondary{
+        width:100%;
+        justify-content:center;
+    }
+    .mobile-nav-item .icon {
+        width: 22px;
+        height: 22px;
+    }
+    .mobile-nav-item span {
+        font-size: 9px;
+    }
+    .empty-symbol {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+    .empty h2 {
+        font-size: 17px;
+    }
+    .empty p {
+        font-size: 13px;
     }
 }
 
 @media(max-width:560px){
     .reg-card{padding:24px}
-    .title{font-size:25px}
+    .title{font-size:22px}
     .list-head{
-        padding:18px 15px 8px;
-        padding-top: max(18px, env(safe-area-inset-top));
+        padding:10px 12px 4px !important;
+        padding-top: max(6px, env(safe-area-inset-top)) !important;
+    }
+    .list-head .title{
+        font-size:20px;
     }
     .search{
-        margin-left:12px;
-        margin-right:12px
+        height:36px;
+        padding:0 12px;
+        margin:4px 8px 6px;
     }
     .person{
-        padding:10px 9px
+        padding:5px 8px;
+        gap:8px;
+    }
+    .person .avatar-wrap {
+        width: 34px !important;
+        height: 34px !important;
+    }
+    .person .avatar {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 13px !important;
+    }
+    .person-name{
+        font-size:13px;
+    }
+    .person-sub{
+        font-size:11px;
     }
     .chat-actions .iconbtn:first-child{
         display:none
     }
     .messages{
-        gap:6px
+        gap:3px;
+        padding:8px 8px !important;
     }
-    .bubble{
-        font-size:14.5px;
-        max-width:88%
+    .bubble-wrapper {
+        max-width: 88%;
     }
-    .mobile-nav-item {
-        padding: 4px 8px;
+    .bubble {
+        font-size: 13.5px;
+        padding: 5px 10px 4px;
+        line-height: 1.4;
+        min-width: 35px;
+        border-radius: 14px;
+    }
+    .bubble-actions {
+        top: -6px;
+        right: 0px;
+        padding: 1px 2px;
+        border-radius: 10px;
+    }
+    .bubble-actions button {
+        width: 18px;
+        height: 18px;
         font-size: 10px;
     }
+    .btime {
+        font-size: 9px;
+    }
+    .chatbar{
+        padding:4px 8px !important;
+        min-height:46px;
+        gap:6px;
+    }
+    .chatbar .avatar-wrap {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    .chatbar .avatar {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 12px !important;
+    }
+    .chat-name {
+        font-size: 13px !important;
+    }
+    .chat-status {
+        font-size: 10px !important;
+    }
+    .composer{
+        padding:4px 6px !important;
+        padding-bottom: max(4px, env(safe-area-inset-bottom)) !important;
+        min-height: 42px;
+        gap:3px;
+    }
+    .compose{
+        height:34px;
+        padding:0 10px 0 12px;
+        border-radius:17px;
+    }
+    .compose input{
+        font-size:13px;
+    }
+    .send{
+        width:34px;
+        height:34px;
+        border-radius:12px;
+    }
+    .send .icon{
+        width:16px;
+        height:16px;
+    }
+    .mobile-nav-item {
+        padding: 2px 4px;
+        font-size: 9px;
+    }
     .mobile-nav-item .icon {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
     }
     .reg-card{
         padding:16px;
     }
     .reg-card h1{
         font-size:28px;
+    }
+    .mobile-nav {
+        height: 48px;
+        min-height: 48px;
+        padding: 2px 0 env(safe-area-inset-bottom);
+    }
+    .panels {
+        height: calc(100% - 48px);
+    }
+    .bubble-reactions span {
+        font-size: 12px;
+        padding: 0 2px;
+    }
+    .reaction-picker {
+        padding: 4px 6px;
+        border-radius: 16px;
+    }
+    .reaction-picker button {
+        font-size: 18px;
+        padding: 2px 3px;
+    }
+    .reply-preview {
+        padding: 3px 10px;
+        min-height: 30px;
+    }
+    .reply-preview .reply-info {
+        font-size: 10px;
+    }
+    .reply-preview .reply-text {
+        font-size: 11px;
+    }
+    .iconbtn {
+        width: 32px;
+        height: 32px;
+    }
+    .iconbtn .icon {
+        width: 16px;
+        height: 16px;
     }
 }
 
@@ -4011,6 +4290,7 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
 }
 // ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
 // ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
+// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
 function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpdateChat, metas, onOpenChannel }) {
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState("");
@@ -4075,7 +4355,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         const currentId = chatId;
         
         if (isChannel) {
-            // Для каналов - загружаем посты
             const ref = window.db.ref("chats/"+currentId+"/posts").limitToLast(150);
             const h = ref.on("value", snap => {
                 if (currentChatIdRef.current !== currentId) return;
@@ -4085,7 +4364,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             }, e => show(friendlyError(e), true));
             return () => ref.off("value", h);
         } else {
-            // Для групп и личных чатов - загружаем сообщения
             const ref = window.db.ref("chats/"+currentId+"/messages").limitToLast(150);
             const h = ref.on("value", snap => {
                 if (currentChatIdRef.current !== currentId) return;
@@ -4120,11 +4398,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         
         const lastPost = posts[posts.length - 1];
         if (!lastPost || !lastPost.id) return;
-        
-        // Не считаем свои просмотры
         if (lastPost.senderId === me.uid) return;
         
-        // Проверяем, не просматривал ли пользователь уже этот пост
         const viewRef = window.db.ref("chats/"+chatId+"/posts/"+lastPost.id+"/viewedBy/"+me.uid);
         
         viewRef.once('value', snap => {
@@ -4165,7 +4440,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 await ref.set(true);
                 show('Вы подписались на канал');
             }
-            // Обновляем локальный чат
             const updatedChat = { ...chat };
             if (isSubscribed) {
                 if (updatedChat.subscribers) {
@@ -4190,12 +4464,12 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         
         try {
             if (isChannel) {
-                // Проверяем, может ли пользователь писать в канал
-                if (!isSubscribed && chat.createdBy !== me.uid) {
-                    show('Вы не подписаны на этот канал', true);
+                // === КАНАЛ: только владелец может писать ===
+                if (chat.createdBy !== me.uid) {
+                    show('Только владелец канала может публиковать посты', true);
                     return;
                 }
-                // Отправка поста в канал
+                
                 const ref = window.db.ref("chats/"+chatId+"/posts").push();
                 await ref.set({
                     text: t,
@@ -4206,14 +4480,13 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     reactions: {}
                 });
                 
-                // Обновляем мета-информацию канала
                 await window.db.ref("chatsMeta/"+chatId).update({
                     lastMessage: t,
                     lastTs: window.SV_TS,
                     lastSender: me.uid
                 });
-            } else {
-                // Отправка сообщения в группу или личный чат
+            } else if (isGroup) {
+                // === ГРУППА ===
                 window.db.ref("typing/"+chatId+"/"+me.uid).remove();
                 const mr = window.db.ref("chats/"+chatId+"/messages").push();
                 const messageData = { 
@@ -4236,21 +4509,49 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 
                 const meta = { 
                     id: chatId, 
-                    type: isGroup ? "group" : "dm", 
+                    type: "group", 
                     lastMessage: t, 
                     lastTs: window.SV_TS, 
-                    lastSender: me.uid 
+                    lastSender: me.uid,
+                    members: chat.members || {},
+                    name: chat.name || "Группа"
                 };
-                if(isGroup) { 
-                    meta.members = chat.members || {}; 
-                    meta.name = chat.name || "Группа";
-                    if (chat.createdBy) {
-                        meta.createdBy = chat.createdBy;
-                    }
-                } else { 
-                    meta.members = { [me.uid]:true, [chat.uid]:true }; 
-                    meta.name = other?.name || chat.name || "Чат"; 
+                if (chat.createdBy) {
+                    meta.createdBy = chat.createdBy;
                 }
+                await window.db.ref("chatsMeta/"+chatId).update(meta);
+                
+            } else {
+                // === ЛИЧНЫЙ ЧАТ (DM) ===
+                window.db.ref("typing/"+chatId+"/"+me.uid).remove();
+                const mr = window.db.ref("chats/"+chatId+"/messages").push();
+                const messageData = { 
+                    senderId: me.uid, 
+                    text: t, 
+                    ts: window.SV_TS, 
+                    status: "sent" 
+                };
+                if (replyTo) {
+                    messageData.replyTo = {
+                        id: replyTo.id,
+                        text: replyTo.text,
+                        senderId: replyTo.senderId,
+                        senderName: users[replyTo.senderId]?.name || 'Неизвестный'
+                    };
+                    setReplyTo(null);
+                    setHighlightId(null);
+                }
+                await mr.set(messageData);
+                
+                const meta = { 
+                    id: chatId, 
+                    type: "dm", 
+                    lastMessage: t, 
+                    lastTs: window.SV_TS, 
+                    lastSender: me.uid,
+                    members: { [me.uid]: true, [chat.uid]: true },
+                    name: other?.name || chat.name || "Чат"
+                };
                 await window.db.ref("chatsMeta/"+chatId).update(meta);
             }
         } catch(e) { 
@@ -4841,12 +5142,12 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 )}
             </div>
             
-            {/* ===== ПОЛЕ ВВОДА ДЛЯ КАНАЛОВ ===== */}
+            {/* ===== КОМПОЗЕР ===== */}
             <div className="composer">
                 {isChannel ? (
-                    // Для каналов - кнопка подписки или поле ввода для владельца
+                    // === КАНАЛ ===
                     chat.createdBy === me.uid ? (
-                        // Владелец канала - может писать
+                        // ВЛАДЕЛЕЦ КАНАЛА - показывает поле ввода
                         <>
                             <div className="compose">
                                 <input 
@@ -4861,16 +5162,15 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                             </button>
                         </>
                     ) : (
-                        // Подписчик или не подписчик - кнопка подписки
+                        // НЕ ВЛАДЕЛЕЦ - показывает кнопку подписки вместо поля ввода
                         <div style={{ 
                             display: 'flex', 
                             justifyContent: 'center', 
                             alignItems: 'center', 
                             width: '100%',
-                            padding: '4px 0'
+                            padding: '6px 0'
                         }}>
                             <button 
-                                className={"channel-subscribe-btn " + (isSubscribed ? 'subscribed' : '')}
                                 onClick={toggleSubscribe}
                                 disabled={subscribing}
                                 style={{
@@ -4886,13 +5186,19 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                                     background: isSubscribed ? 'var(--ch)' : '#1da1f2',
                                     color: isSubscribed ? 'var(--txt)' : '#fff'
                                 }}
+                                onMouseEnter={e => {
+                                    if (!isSubscribed) e.target.style.background = '#0d8bd9';
+                                }}
+                                onMouseLeave={e => {
+                                    if (!isSubscribed) e.target.style.background = '#1da1f2';
+                                }}
                             >
                                 {subscribing ? '...' : (isSubscribed ? '✅ Вы подписаны' : '➕ Подписаться')}
                             </button>
                         </div>
                     )
                 ) : (
-                    // Для групп и личных чатов - обычное поле ввода
+                    // === ГРУППА ИЛИ ЛИЧНЫЙ ЧАТ ===
                     <>
                         <div className="compose">
                             <input 
