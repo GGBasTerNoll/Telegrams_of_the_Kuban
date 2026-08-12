@@ -5,12 +5,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <title>Телеграммы по Кубани</title>
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%236750a4'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='34'%3E💬%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%236750a4'/%3E%3Ctext x='90' y='115' text-anchor='middle' font-size='90'%3E💬%3C/text%3E%3C/svg%3E">
-<link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%236750a4'/%3E%3Ctext x='96' y='122' text-anchor='middle' font-size='95'%3E💬%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%236750a4'/%3E%3Cpath d='M16 18h32a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H28l-10 8v-8H16a4 4 0 0 1-4-4V22a4 4 0 0 1 4-4z' fill='white'/%3E%3Ccircle cx='24' cy='30' r='2.5' fill='%236750a4'/%3E%3Ccircle cx='32' cy='30' r='2.5' fill='%236750a4'/%3E%3Ccircle cx='40' cy='30' r='2.5' fill='%236750a4'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" id="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%236750a4'/%3E%3Ctext x='90' y='115' font-family='Arial, sans-serif' font-size='96' text-anchor='middle' fill='white'>К%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#6750a4">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Кубань">
+<link rel="manifest" href="./manifest.webmanifest">
+<script>
+(function(){
+    try {
+        var link=document.getElementById('apple-touch-icon');
+        if(link) link.href='./icon.svg';
+    } catch(e) {}
+})();
+</script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&display=swap');
@@ -581,6 +590,19 @@ body.dark .online{
     gap:2px
 }
 
+.rec-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ba1a1a;
+    animation: recPulse 1s infinite;
+}
+
+@keyframes recPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.8); }
+}
+
 .messages{
     flex:1;
     overflow:auto;
@@ -588,7 +610,7 @@ body.dark .online{
     padding-bottom: max(20px, env(safe-area-inset-bottom));
     display:flex;
     flex-direction:column;
-    gap:4px;
+    gap:4px
 }
 
 .date{
@@ -641,7 +663,6 @@ body.dark .online{
 .mine .quote-block{ background: rgba(255,255,255,.18); }
 .mine .quote-block:hover{ background: rgba(255,255,255,.26); }
 body.dark .quote-block{ background: rgba(255,255,255,.08); }
-body.dark .quote-block:hover{ background: rgba(255,255,255,.14); }
 body.dark .mine .quote-block{ background: rgba(0,0,0,.22); }
 body.dark .mine .quote-block:hover{ background: rgba(0,0,0,.3); }
 .quote-bar{
@@ -673,8 +694,7 @@ body.dark .mine .quote-block:hover{ background: rgba(0,0,0,.3); }
     border-radius: 18px;
     line-height: 1.5;
     font-size: 15px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-    animation: bubble .2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     overflow-wrap: break-word;
     word-wrap: break-word;
     word-break: normal;
@@ -714,8 +734,12 @@ body.dark .theirs .bubble{
     color:#e3e3e3
 }
 
-@keyframes bubble{
-    from{opacity:0;transform:translateY(4px) scale(.98)}
+.bubble-enter{
+    animation:bubbleIn .22s ease
+}
+
+@keyframes bubbleIn{
+    from{opacity:0;transform:translateY(6px)}
     to{opacity:1;transform:none}
 }
 
@@ -757,9 +781,10 @@ body.dark .theirs .bubble{
 
 .composer{
     display:flex;
-    align-items:center;
+    align-items:flex-end;
     gap:7px;
     padding:11px 15px;
+    position:relative;
     padding-bottom: max(11px, env(safe-area-inset-bottom));
     padding-left: max(15px, env(safe-area-inset-left));
     padding-right: max(15px, env(safe-area-inset-right));
@@ -773,26 +798,176 @@ body.dark .theirs .bubble{
 .compose{
     flex:1;
     min-width:0;
-    height:50px;
+    min-height:50px;
+    max-height:140px;
     border-radius:25px;
     background:var(--ch);
     display:flex;
-    align-items:center;
-    padding:0 7px 0 18px
+    align-items:flex-end;
+    padding:8px 7px 8px 18px;
+    transition:box-shadow .2s
 }
 
-.compose input{
+.compose:focus-within{
+    box-shadow:0 0 0 2px rgba(103,80,164,.25)
+}
+
+.compose input,.compose textarea{
     flex:1;
     min-width:0;
     border:0;
     outline:0;
     background:none;
     color:var(--txt);
+    resize:none;
+    line-height:1.45;
+    max-height:120px;
+    font-size:15px;
+    padding:2px 0
 }
 
-body.dark .compose input{
+body.dark .compose input,body.dark .compose textarea{
     color:#e3e3e3;
 }
+
+.composer-tools{
+    display:flex;
+    align-items:center;
+    gap:2px;
+    flex-shrink:0
+}
+
+.sticker-panel{
+    position:absolute;
+    bottom:100%;
+    left:0;
+    right:0;
+    margin-bottom:8px;
+    background:var(--bg);
+    border:1px solid var(--ch);
+    border-radius:16px;
+    padding:10px;
+    box-shadow:0 -4px 24px rgba(0,0,0,.12);
+    max-height:220px;
+    overflow:auto;
+    z-index:20
+}
+
+.sticker-pack-label{
+    font-size:11px;
+    font-weight:600;
+    color:var(--muted);
+    margin:6px 0 4px;
+    text-transform:uppercase;
+    letter-spacing:.04em
+}
+
+.sticker-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px
+}
+
+.sticker-btn{
+    width:44px;
+    height:44px;
+    border-radius:12px;
+    font-size:26px;
+    display:grid;
+    place-items:center;
+    transition:background .15s,transform .1s
+}
+
+.sticker-btn:hover{background:var(--ch)}
+.sticker-btn:active{transform:scale(.9)}
+
+.msg-sticker{font-size:64px;line-height:1;padding:4px 0}
+
+.voice-msg{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:180px
+}
+
+.voice-msg button{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:rgba(255,255,255,.2);
+    display:grid;
+    place-items:center;
+    flex-shrink:0
+}
+
+.mine .voice-msg button{background:rgba(0,0,0,.12)}
+
+.voice-bar{
+    flex:1;
+    height:4px;
+    background:rgba(0,0,0,.15);
+    border-radius:2px;
+    overflow:hidden
+}
+
+.mine .voice-bar{background:rgba(255,255,255,.3)}
+
+.voice-fill{
+    height:100%;
+    background:currentColor;
+    border-radius:2px;
+    transition:width .1s linear
+}
+
+.recording-indicator{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#ba1a1a;
+    font-size:13px;
+    font-weight:600;
+    padding:0 8px
+}
+
+.rec-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#ba1a1a;
+    animation:recPulse 1s infinite
+}
+
+@keyframes recPulse{50%{opacity:.3}}
+
+.channel-id-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+    padding:10px 12px;
+    background:var(--ch);
+    border-radius:12px;
+    font-size:13px
+}
+
+.channel-id-row code{
+    flex:1;
+    font-family:ui-monospace,monospace;
+    font-size:12px;
+    word-break:break-all;
+    color:var(--muted)
+}
+
+.channel-share-card{
+    background:var(--ch);
+    border-radius:12px;
+    padding:10px 12px;
+    cursor:pointer;
+    margin-bottom:4px;
+    transition:background .15s
+}
+
+.channel-share-card:hover{background:var(--chh)}
 
 .send{
     width:50px;
@@ -1101,7 +1276,7 @@ body.dark .secondary{
     gap:10px;
     align-items:center;
     margin-top:10px;
-    flex-wrap:wrap;
+    flex-wrap:wrap
 }
 
 .avatar-url-input input{
@@ -1114,7 +1289,7 @@ body.dark .secondary{
     outline:0;
     transition:.2s;
     font-size:13px;
-    min-width:150px;
+    min-width:150px
 }
 
 .avatar-url-input input:focus{
@@ -1141,7 +1316,7 @@ body.dark .secondary{
     background-size:cover;
     background-position:center;
     border:2px solid var(--ch);
-    flex:none;
+    flex:none
 }
 
 .avatar-url-preview{
@@ -1152,7 +1327,7 @@ body.dark .secondary{
     padding:10px;
     background:var(--ch);
     border-radius:12px;
-    flex-wrap:wrap;
+    flex-wrap:wrap
 }
 
 .avatar-url-preview .avatar-preview{
@@ -1163,7 +1338,7 @@ body.dark .secondary{
 .avatar-url-preview .muted{
     font-size:12px;
     word-break:break-all;
-    flex:1;
+    flex:1
 }
 
 .avatar-url-preview .remove-btn{
@@ -1175,7 +1350,7 @@ body.dark .secondary{
     font-size:12px;
     font-weight:600;
     cursor:pointer;
-    border:none;
+    border:none
 }
 
 body.dark .avatar-url-preview .remove-btn{
@@ -1183,10 +1358,235 @@ body.dark .avatar-url-preview .remove-btn{
     color:#000;
 }
 
+/* ===== ОПРОСЫ (КАК В ТЕЛЕГРАМЕ) ===== */
+.poll-block {
+    background: var(--ch);
+    border-radius: 16px;
+    padding: 14px 16px 12px;
+    margin: 6px 0 2px;
+    min-width: 240px;
+    max-width: 100%;
+    border: 1px solid transparent;
+    transition: background .3s, border-color .3s;
+}
+
+body.dark .poll-block {
+    background: #2a2a32;
+    border-color: #3a3a44;
+}
+
+.poll-question {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 12px;
+    color: var(--txt);
+    line-height: 1.4;
+}
+
+.poll-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.poll-option {
+    position: relative;
+    padding: 8px 12px;
+    background: var(--bg);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .2s;
+    overflow: hidden;
+    border: 1px solid transparent;
+    min-height: 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+body.dark .poll-option {
+    background: #1e1e24;
+}
+
+.poll-option:hover:not(.voted) {
+    background: var(--chh);
+    border-color: rgba(103, 80, 164, 0.3);
+}
+
+body.dark .poll-option:hover:not(.voted) {
+    background: #2a2a32;
+    border-color: rgba(187, 134, 252, 0.3);
+}
+
+.poll-option.selected {
+    border-color: #6750a4;
+    background: var(--pc);
+}
+
+body.dark .poll-option.selected {
+    border-color: #bb86fc;
+    background: #3700b3;
+}
+
+.poll-option.selected .poll-option-text {
+    color: var(--onpc);
+}
+
+body.dark .poll-option.selected .poll-option-text {
+    color: #fff;
+}
+
+.poll-option.selected .poll-option-percent {
+    color: #fff;
+}
+
+.poll-option.selected .poll-option-votes {
+    color: rgba(255,255,255,0.7);
+}
+
+.poll-option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    gap: 8px;
+}
+
+.poll-option-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--txt);
+    flex: 1;
+    word-break: break-word;
+    z-index: 2;
+    position: relative;
+}
+
+.poll-option-percent {
+    font-size: 15px;
+    font-weight: 700;
+    color: #6750a4;
+    z-index: 2;
+    position: relative;
+    flex-shrink: 0;
+    min-width: 36px;
+    text-align: right;
+}
+
+body.dark .poll-option-percent {
+    color: #bb86fc;
+}
+
+.poll-option-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: rgba(103, 80, 164, 0.12);
+    border-radius: 10px;
+    transition: width .4s cubic-bezier(.34,1.56,.64,1);
+    z-index: 0;
+}
+
+body.dark .poll-option-bar {
+    background: rgba(187, 134, 252, 0.15);
+}
+
+.poll-option.selected .poll-option-bar {
+    background: rgba(255,255,255,0.2);
+}
+
+body.dark .poll-option.selected .poll-option-bar {
+    background: rgba(255,255,255,0.15);
+}
+
+.poll-option-votes {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    position: relative;
+    z-index: 2;
+}
+
+.poll-option.selected .poll-option-votes {
+    color: rgba(255,255,255,0.7);
+}
+
+.poll-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--ch);
+    font-size: 12px;
+    color: var(--muted);
+}
+
+body.dark .poll-footer {
+    border-top-color: #3a3a44;
+}
+
+.poll-footer span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.poll-footer .poll-total {
+    font-weight: 500;
+}
+
+.poll-option.voted .poll-option-text {
+    font-weight: 500;
+}
+
+/* Анимация при голосовании */
+.poll-option {
+    animation: pollAppear .25s ease;
+}
+
+@keyframes pollAppear {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Для мобильных устройств */
+@media(max-width: 560px) {
+    .poll-block {
+        padding: 12px 14px 10px;
+        min-width: 180px;
+    }
+    .poll-question {
+        font-size: 14px;
+    }
+    .poll-option {
+        padding: 6px 10px;
+        min-height: 36px;
+    }
+    .poll-option-text {
+        font-size: 13px;
+    }
+    .poll-option-percent {
+        font-size: 13px;
+        min-width: 30px;
+    }
+    .poll-footer {
+        font-size: 11px;
+    }
+}
+
 .upload-hint{
     font-size:12px;
     color:var(--muted);
-    margin-top:6px;
+    margin-top:6px
 }
 
 /* ГРУППА */
@@ -1196,7 +1596,7 @@ body.dark .avatar-url-preview .remove-btn{
     gap:12px;
     padding:8px 12px;
     border-radius:12px;
-    transition:.15s;
+    transition:.15s
 }
 
 .group-member-item:hover{
@@ -1239,7 +1639,7 @@ body.dark .group-member-item .member-role{
     font-size:12px;
     font-weight:600;
     cursor:pointer;
-    border:none;
+    border:none
 }
 
 body.dark .group-member-item .remove-btn{
@@ -1251,7 +1651,7 @@ body.dark .group-member-item .remove-btn{
     display:flex;
     gap:8px;
     margin-top:8px;
-    flex-wrap:wrap;
+    flex-wrap:wrap
 }
 
 .group-edit-field input,
@@ -1265,7 +1665,7 @@ body.dark .group-member-item .remove-btn{
     outline:0;
     transition:.2s;
     font-size:13px;
-    min-width:150px;
+    min-width:150px
 }
 
 .group-edit-field input:focus,
@@ -1681,7 +2081,7 @@ body.dark .forward-modal .chat-list .person.active {
     gap:12px;
     margin:16px 0;
     color:var(--muted);
-    font-size:12px;
+    font-size:12px
 }
 
 .reg-divider::before,
@@ -1861,7 +2261,7 @@ body.dark .mobile-nav-item.active {
         background:#1a1a1e
     }
     .panels.mobile-chat-open .list{
-        transform:translateX(-25%)
+        transform:translateX(-100%)
     }
     .panels.mobile-chat-open .chat{
         transform:translateX(0)
@@ -2065,159 +2465,84 @@ body.dark .mobile-nav-item.active {
     .empty p {
         font-size: 13px;
     }
-}
-
-@media(max-width:560px){
-    .reg-card{padding:24px}
-    .title{font-size:22px}
     .list-head{
-        padding:10px 12px 4px !important;
-        padding-top: max(6px, env(safe-area-inset-top)) !important;
+        padding:12px 14px 6px !important;
+        padding-top: max(8px, env(safe-area-inset-top)) !important;
     }
     .list-head .title{
-        font-size:20px;
+        font-size:22px;
     }
     .search{
-        height:36px;
-        padding:0 12px;
-        margin:4px 8px 6px;
+        margin:4px 10px 8px;
+        height:40px;
+        border-radius:20px;
+        padding:0 14px;
+    }
+    .search input{
+        font-size:14px;
     }
     .person{
-        padding:5px 8px;
-        gap:8px;
+        padding:6px 10px;
+        gap:10px;
     }
     .person .avatar-wrap {
-        width: 34px !important;
-        height: 34px !important;
+        width: 40px !important;
+        height: 40px !important;
     }
     .person .avatar {
-        width: 34px !important;
-        height: 34px !important;
-        font-size: 13px !important;
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 16px !important;
     }
     .person-name{
-        font-size:13px;
+        font-size:14px;
     }
     .person-sub{
-        font-size:11px;
-    }
-    .chat-actions .iconbtn:first-child{
-        display:none
-    }
-    .messages{
-        gap:3px;
-        padding:8px 8px !important;
+        font-size:12px;
     }
     .bubble-wrapper {
-        max-width: 88%;
+        max-width: 82%;
     }
     .bubble {
-        font-size: 13.5px;
-        padding: 5px 10px 4px;
-        line-height: 1.4;
-        min-width: 35px;
-        border-radius: 14px;
-    }
-    .bubble-actions {
-        top: -6px;
-        right: 0px;
-        padding: 1px 2px;
-        border-radius: 10px;
-    }
-    .bubble-actions button {
-        width: 18px;
-        height: 18px;
-        font-size: 10px;
+        font-size: 14px;
+        padding: 6px 12px 5px;
+        border-radius: 16px;
+        line-height: 1.45;
+        min-width: 40px;
     }
     .btime {
-        font-size: 9px;
+        font-size: 10px;
+        margin-top: 1px;
+        gap: 2px;
     }
-    .chatbar{
-        padding:4px 8px !important;
-        min-height:46px;
-        gap:6px;
+    .bubble-actions {
+        top: -8px;
+        right: 0px;
+        padding: 1px 3px;
+        gap: 2px;
+        border-radius: 12px;
     }
-    .chatbar .avatar-wrap {
-        width: 32px !important;
-        height: 32px !important;
-    }
-    .chatbar .avatar {
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 12px !important;
-    }
-    .chat-name {
-        font-size: 13px !important;
-    }
-    .chat-status {
-        font-size: 10px !important;
-    }
-    .composer{
-        padding:4px 6px !important;
-        padding-bottom: max(4px, env(safe-area-inset-bottom)) !important;
-        min-height: 42px;
-        gap:3px;
-    }
-    .compose{
-        height:34px;
-        padding:0 10px 0 12px;
-        border-radius:17px;
-    }
-    .compose input{
-        font-size:13px;
-    }
-    .send{
-        width:34px;
-        height:34px;
-        border-radius:12px;
-    }
-    .send .icon{
-        width:16px;
-        height:16px;
-    }
-    .mobile-nav-item {
-        padding: 2px 4px;
-        font-size: 9px;
-    }
-    .mobile-nav-item .icon {
-        width: 18px;
-        height: 18px;
-    }
-    .reg-card{
-        padding:16px;
-    }
-    .reg-card h1{
-        font-size:28px;
-    }
-    .mobile-nav {
-        height: 48px;
-        min-height: 48px;
-        padding: 2px 0 env(safe-area-inset-bottom);
-    }
-    .panels {
-        height: calc(100% - 48px);
+    .bubble-actions button {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
     }
     .bubble-reactions span {
-        font-size: 12px;
-        padding: 0 2px;
-    }
-    .reaction-picker {
-        padding: 4px 6px;
-        border-radius: 16px;
+        font-size: 13px;
     }
     .reaction-picker button {
-        font-size: 18px;
-        padding: 2px 3px;
+        font-size: 22px;
+        padding: 2px 4px;
     }
     .reply-preview {
-        padding: 3px 10px;
-        min-height: 30px;
+        padding: 4px 12px;
+        min-height: 36px;
     }
     .reply-preview .reply-info {
-        font-size: 10px;
+        font-size: 11px;
     }
     .reply-preview .reply-text {
-        font-size: 11px;
+        font-size: 12px;
     }
     .iconbtn {
         width: 32px;
@@ -2226,6 +2551,74 @@ body.dark .mobile-nav-item.active {
     .iconbtn .icon {
         width: 16px;
         height: 16px;
+    }
+    .chatbar{
+        padding:6px 10px !important;
+        padding-top: max(6px, env(safe-area-inset-top)) !important;
+        height:auto;
+        min-height:54px;
+        gap:8px;
+    }
+    .chatbar .avatar-wrap {
+        width: 36px !important;
+        height: 36px !important;
+    }
+    .chatbar .avatar {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+    }
+    .chat-name {
+        font-size: 14px !important;
+    }
+    .chat-status {
+        font-size: 11px !important;
+    }
+    .messages{
+        padding:10px 10px !important;
+        padding-bottom: 8px !important;
+        gap:3px;
+    }
+    .composer{
+        padding:6px 8px !important;
+        padding-bottom: max(6px, env(safe-area-inset-bottom)) !important;
+        gap:4px;
+        min-height: 48px;
+    }
+    .compose{
+        height:40px;
+        padding:0 12px 0 14px;
+        border-radius:20px;
+    }
+    .compose input{
+        font-size:14px;
+    }
+    .send{
+        width:40px;
+        height:40px;
+        border-radius:14px;
+    }
+    .send .icon{
+        width:18px;
+        height:18px;
+    }
+    .mobile-nav-item .icon {
+        width: 22px;
+        height: 22px;
+    }
+    .mobile-nav-item span {
+        font-size: 9px;
+    }
+    .empty-symbol {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+    .empty h2 {
+        font-size: 17px;
+    }
+    .empty p {
+        font-size: 13px;
     }
 }
 
@@ -2250,7 +2643,7 @@ body.dark .mobile-nav-item.active {
 }
 
 body.dark .avatar-wrap .verified-check {
-    border-color: #1a1a1e;
+    border-color: #1a1
 }
 
 /* Для маленьких аватарок */
@@ -2338,6 +2731,27 @@ body.dark .verified-check {
     margin-left: 4px;
     gap: 2px;
 }
+
+.list,.chatbar,.composer{
+    box-shadow:0 1px 3px rgba(0,0,0,.04)
+}
+
+.person{
+    transition:background .15s,transform .1s
+}
+
+.person:active{transform:scale(.985)}
+
+.toast{
+    border-radius:16px;
+    box-shadow:0 8px 32px rgba(0,0,0,.18);
+    font-weight:500
+}
+
+.message-context-menu{min-width:180px;max-width:calc(100vw - 16px);animation:contextPop .12s ease-out;transform-origin:top left}
+.message-context-menu .context-menu-item{width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;text-align:left;color:var(--txt);font-size:14px}
+.message-context-menu .context-menu-item:hover{background:var(--ch)}
+@keyframes contextPop{from{opacity:0;transform:scale(.96) translateY(-3px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -2358,7 +2772,7 @@ body.dark .verified-check {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-database-compat.js"></script>
 
-<script>
+<script type="text/babel">
 try {
     const firebaseConfig={
         apiKey:"AIzaSyCj8XDvSGdlVK4JMaKjwJ1F0LazKTdkP-g",
@@ -2381,6 +2795,15 @@ window.auth = window.firebase ? firebase.auth() : null;
 window.db = window.firebase ? firebase.database() : null;
 window.SV_TS = window.firebase ? firebase.database.ServerValue.TIMESTAMP : Date.now();
 
+(function registerAppServiceWorker(){
+    if(!('serviceWorker' in navigator)) return;
+    try{
+        navigator.serviceWorker.register('./sw.js', {scope:'./'})
+            .then(function(reg){ window.__swReg=reg; })
+            .catch(function(err){ console.warn('Service worker:', err); });
+    }catch(e){}
+})();
+
 window.addEventListener("error", e => {
     console.error('Global error:', e);
     const root = document.getElementById('root');
@@ -2399,8 +2822,7 @@ window.addEventListener("error", e => {
 window.addEventListener("unhandledrejection", e => {
     console.error('Unhandled rejection:', e);
 });
-</script>
-<script type="text/babel">
+
 const depsOk = typeof React !== 'undefined' && typeof ReactDOM !== 'undefined' && typeof firebase !== 'undefined';
 
 if (!depsOk) {
@@ -2433,6 +2855,13 @@ const AVATARS = [
 
 const COLORS = ["#6750a4","#006a6a","#9b4057","#386a20","#8a4b00","#4c5f92","#6c5674"];
 const REACTIONS = ['❤️', '👍', '😂', '😮', '😢', '😡', '🥰', '🔥', '👏', '💯'];
+const STICKER_PACKS = [
+    { name: 'Настроение', stickers: ['😀','😂','🥰','😎','🤔','😭','🥳','😴','🤯','😇','🫠','🥲'] },
+    { name: 'Жесты', stickers: ['👍','👎','👏','🙏','💪','✌️','🤝','👋','🫡','🤌','👀','🫶'] },
+    { name: 'Кубань', stickers: ['🌻','🍇','☀️','🌊','🏔️','🐴','🎭','🎪','🍉','🌾','🦅','🔥'] },
+    { name: 'Символы', stickers: ['❤️','💯','⭐','🎉','✨','💬','📢','🎁','🏆','💎','🚀','⚡'] }
+];
+const IS_TOUCH = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
 // ===== ИКОНКИ =====
 function Icon({ name, size=22, stroke=2, fill="none", className="" }) {
@@ -2440,7 +2869,7 @@ function Icon({ name, size=22, stroke=2, fill="none", className="" }) {
         search: <><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></>,
         close: <><path d="m6 6 12 12"/><path d="M18 6 6 18"/></>,
         chat: <><path d="M20 11a7.5 7.5 0 0 1-7.5 7.5H7L3.5 21v-5.2A7.5 7.5 0 0 1 11 8.3h1.5A7.5 7.5 0 0 1 20 11Z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></>,
-        settings: <><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.5 1.5-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.12v-.08a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.5-1.5.06-.06A1.7 1.7 0 0 0 9.2 15a1.7 1.7 0 0 0-1.56-1.03H7.56v-2.12h.08A1.7 1.7 0 0 0 9.2 10a1.7 1.7 0 0 0-.34-1.88L8.8 8.06l1.5-1.5.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V5.3h2.12v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.5 1.5-.06.06A1.7 1.7 0 0 0 19.4 10c.2.58.75.97 1.36.97h.08v2.12h-.08c-.61 0-1.16.39-1.36.97Z"/></>,
+        settings: <><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.5 1.5-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.12v-.08a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.5-1.5.06-.06A1.7 1.7 0 0 0 9.2 15a1.7 1.7 0 0 1-1.56-1.03H7.56v-2.12h.08A1.7 1.7 0 0 1 9.2 10a1.7 1.7 0 0 0-.34-1.88L8.8 8.06l1.5-1.5.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V5.3h2.12v.08a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.5 1.5-.06.06A1.7 1.7 0 0 0 19.4 10c.2.58.75.97 1.36.97h.08v2.12h-.08c-.61 0-1.16.39-1.36.97Z"/></>,
         back: <><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></>,
         send: <path d="M21 3 10 14"/>,
         more: <><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></>,
@@ -2470,7 +2899,12 @@ function Icon({ name, size=22, stroke=2, fill="none", className="" }) {
         channel: <><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></>,
         verified: <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>,
         subscribers: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
-        megaphone: <><path d="M20 4L8 9v6l12 5V4z"/><path d="M4 12h4"/><path d="M4 18h4"/><path d="M4 6h4"/></>
+        megaphone: <><path d="M20 4L8 9v6l12 5V4z"/><path d="M4 12h4"/><path d="M4 18h4"/><path d="M4 6h4"/></>,
+        mic: <><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></>,
+        copy: <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>,
+                play: <polygon points="8 5 19 12 8 19 8 5" fill="currentColor" stroke="none"/>,
+        pause: <><rect x="7" y="5" width="4" height="14" fill="currentColor" stroke="none"/><rect x="13" y="5" width="4" height="14" fill="currentColor" stroke="none"/></>,
+        mic: <><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></>,
     };
     return (
         <svg className={"icon "+className} width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
@@ -2480,17 +2914,13 @@ function Icon({ name, size=22, stroke=2, fill="none", className="" }) {
 }
 
 function avatarData(id) { return AVATARS.find(a=>a.id===id) || AVATARS[0]; }
-
-function initials(n) { return (n||"?") .trim() .split(/\s+/) .slice(0,2) .map(x=>x[0]) .join("") .toUpperCase(); }
-
+function initials(n) { return (n||"?" ) .trim() .split(/\s+/) .slice(0,2) .map(x=>x[0]) .join("") .toUpperCase(); }
 function avatarColor(key) {
     let h=0;
     for(const c of String(key||"")) { h=(h*31+c.charCodeAt(0))>>>0; }
     return COLORS[h%COLORS.length];
 }
-
 function fmtTime(ts) { if(!ts)return ""; return new Date(ts).toLocaleTimeString("ru-RU", {hour:"2-digit", minute:"2-digit"}); }
-
 function fmtLastSeen(ts, hideTime = false) {
     if(!ts) return "был(а) в сети давно";
     const d = new Date(ts);
@@ -2516,11 +2946,33 @@ function fmtLastSeen(ts, hideTime = false) {
         return d.toLocaleDateString("ru-RU", {day:"2-digit", month:"2-digit", year:"numeric"}) + " в " + fmtTime(ts);
     }
 }
-
 function chatIdFor(a,b) { return "dm_"+[a,b].sort().join("_"); }
-
 function normalizeUsername(v) { return v.toLowerCase().replace(/^@/,"").replace(/[^a-z0-9_]/g,""); }
-
+function normalizeSearch(v) { return v.toLowerCase().replace(/^@/,"").trim(); }
+function messagesSnapshotEqual(a, b) {
+    if (!a || !b || a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+        const x = a[i], y = b[i];
+        if (x.id !== y.id || x.text !== y.text || x.status !== y.status || x.ts !== y.ts) return false;
+        if (x.type !== y.type || x.sticker !== y.sticker || x.voiceData !== y.voiceData) return false;
+        if (JSON.stringify(x.reactions || {}) !== JSON.stringify(y.reactions || {})) return false;
+    }
+    return true;
+}
+async function copyToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+        return true;
+    } catch(e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok;
+    }
+}
 function friendlyError(e) {
     if(!e) return "Неизвестная ошибка";
     const code = e.code || '';
@@ -2553,7 +3005,6 @@ function friendlyError(e) {
     }
     return e.message || "Не удалось выполнить действие.";
 }
-
 function getDeviceInfo() {
     const ua = navigator.userAgent;
     let device = 'Неизвестное устройство';
@@ -2583,7 +3034,6 @@ function getDeviceInfo() {
     
     return { device, type, browser, ua: ua.substring(0, 100) };
 }
-
 async function requestNotifications() {
     if(!("Notification" in window)) { return { ok:false, message:"Ваш браузер не поддерживает уведомления." }; }
     if(Notification.permission === "granted") { return { ok:true, message:"Уведомления уже включены." }; }
@@ -2594,19 +3044,31 @@ async function requestNotifications() {
         return { ok:false, message:"Вы не разрешили уведомления." };
     } catch(e) { return { ok:false, message:"Не удалось включить уведомления." }; }
 }
-
-function showBrowserNotification(title, text) {
+function showBrowserNotification(title, text, chatId) {
+    const body = (text || "Новое сообщение").slice(0, 180);
+    const options = {
+        body,
+        icon: document.getElementById('apple-touch-icon')?.href || undefined,
+        badge: document.getElementById('apple-touch-icon')?.href || undefined,
+        tag: chatId ? ('chat-' + chatId) : 'kuban-message',
+        renotify: true,
+        vibrate: [120, 60, 120],
+        silent: false
+    };
+    if (window.__swReg && window.__swReg.active) {
+        window.__swReg.active.postMessage({ type: 'notify', title, options });
+        return;
+    }
     if(!("Notification" in window) || Notification.permission !== "granted") return;
     try {
-        const n = new Notification(title, {
-            body: text,
-            icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%236750a4'/><text x='50' y='67' text-anchor='middle' font-size='58'>💬</text></svg>",
-            tag:"kuban-message"
-        });
+        const n = new Notification(title, options);
         n.onclick = () => { window.focus(); n.close(); };
+        setTimeout(() => n.close(), 8000);
     } catch(e) {}
+    if ('setAppBadge' in navigator) {
+        navigator.setAppBadge().catch(() => {});
+    }
 }
-
 function Toast({ toast }) {
     if(!toast) return null;
     return (
@@ -2616,7 +3078,6 @@ function Toast({ toast }) {
         </div>
     );
 }
-
 function Avatar({ name, uid, avatar, avatarUrl, size=48, online=false, group=false, verified=false }) {
     const a = avatarData(avatar);
     
@@ -2906,19 +3367,13 @@ function Register({ uid, onDone, show }) {
     );
 }
 
-
-
-// ===== ПРОФИЛЬ МОДАЛКА =====
-// ===== ПРОФИЛЬ МОДАЛКА =====
-// ===== ПРОФИЛЬ МОДАЛКА (С ПРИВЯЗКОЙ КАНАЛА) =====
-// ===== ПРОФИЛЬ МОДАЛКА (С ПРИВЯЗКОЙ КАНАЛА) =====
+// ===== ПРОФИЛЬ МОДАЛКА (ИСПРАВЛЕННАЯ) =====
 function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
     const [channelId, setChannelId] = useState(user.channelId || '');
     const [tempChannelId, setTempChannelId] = useState(user.channelId || '');
     const [channel, setChannel] = useState(null);
     const [busy, setBusy] = useState(false);
 
-    // Загрузка информации о канале
     useEffect(() => {
         if (!channelId || !metas) return;
         const found = Object.values(metas).find(m => m.type === 'channel' && m.id === channelId);
@@ -2928,14 +3383,11 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
     async function saveChannel() {
         const id = tempChannelId.trim();
         if (!id) {
-            // Удаляем привязку
             await window.db.ref('users/' + user.uid + '/channelId').remove();
             setChannelId('');
             show('Канал отвязан');
             return;
         }
-        
-        // Проверяем, существует ли канал
         const snap = await window.db.ref('chatsMeta/' + id).get();
         if (!snap.exists()) {
             show('Канал не найден', true);
@@ -2950,7 +3402,6 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
             show('Вы не являетесь владельцем этого канала', true);
             return;
         }
-        
         setBusy(true);
         try {
             await window.db.ref('users/' + user.uid + '/channelId').set(id);
@@ -3002,7 +3453,6 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
                 
                 {user.about && <p className="muted" style={{ margin:"0 0 18px" }}>{user.about}</p>}
                 
-                {/* Привязка канала к профилю */}
                 <div className="setting-card" style={{ margin: '0 0 16px 0', padding: 16 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ fontWeight: 600, fontSize: 14 }}>📢 Привязанный канал</span>
@@ -3070,7 +3520,8 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
     );
 }
 
-// ===== ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ (С ПЕРЕХОДОМ НА КАНАЛ) =====
+
+// ===== ПРОФИЛЬ МОДАЛКА =====
 // ===== ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ (С ПЕРЕХОДОМ НА КАНАЛ) =====
 function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, metas }) {
     const [channel, setChannel] = useState(null);
@@ -3361,12 +3812,6 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
                                 }} disabled={busy}>
                                     Сохранить
                                 </button>
-                                <button className="secondary" onClick={() => {
-                                    setNewName(chat.name || '');
-                                    setEditingName(false);
-                                }}>
-                                    Отмена
-                                </button>
                             </div>
                         ) : (
                             <div>
@@ -3403,12 +3848,6 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
                                 setEditingAbout(false);
                             }} disabled={busy}>
                                 Сохранить
-                            </button>
-                            <button className="secondary" onClick={() => {
-                                setNewAbout(chat.about || '');
-                                setEditingAbout(false);
-                            }}>
-                                Отмена
                             </button>
                         </div>
                     ) : (
@@ -4143,7 +4582,7 @@ function CreateChannelModal({ onClose, onCreated, show, me }) {
 }
 
 // ===== ИНФОРМАЦИЯ О КАНАЛЕ =====
-function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
+function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show, onShare }) {
     const [subscribers, setSubscribers] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
     const [editing, setEditing] = useState(false);
@@ -4231,6 +4670,19 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                         <div className="label">Подписчиков</div>
                     </div>
                 </div>
+
+                <div className="channel-id-row">
+                    <span className="muted">ID канала</span>
+                    <code>{chatId}</code>
+                    <button className="iconbtn" title="Скопировать ID" onClick={async () => {
+                        const ok = await copyToClipboard(chatId);
+                        show(ok ? 'ID канала скопирован' : 'Не удалось скопировать', !ok);
+                    }}><Icon name="copy" size={16}/></button>
+                </div>
+
+                <button className="primary" style={{ width: '100%', marginTop: 10, justifyContent: 'center' }} onClick={() => onShare && onShare(chat)}>
+                    <Icon name="share" size={18}/> Поделиться каналом
+                </button>
 
                 {/* Настройки канала (только для владельца) */}
                 {isOwner && (
@@ -4334,9 +4786,313 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
         </div>
     );
 }
-// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
-// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
-// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
+// ===== СООБЩЕНИЯ (вынесено из ChatView — без мерцания при наборе) =====
+function StatusTicks({ status }) {
+    if(status === "read") return <Icon name="checks" size={16} stroke={2} className="ticks" style={{color:"#53b7e8"}} />;
+    if(status === "delivered") return <Icon name="checks" size={16} stroke={2} className="ticks" />;
+    return <Icon name="check" size={16} stroke={2} className="ticks" />;
+}
+
+function VoicePlayer({ src, duration, mine }) {
+    const audioRef = useRef(null);
+    const [playing, setPlaying] = useState(false);
+    const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        const a = audioRef.current;
+        if (!a) return;
+        const onTime = () => setProgress(a.duration ? (a.currentTime / a.duration) * 100 : 0);
+        const onEnd = () => { setPlaying(false); setProgress(0); };
+        a.addEventListener('timeupdate', onTime);
+        a.addEventListener('ended', onEnd);
+        return () => { a.removeEventListener('timeupdate', onTime); a.removeEventListener('ended', onEnd); };
+    }, [src]);
+
+    function toggle() {
+        const a = audioRef.current;
+        if (!a) return;
+        if (playing) { a.pause(); setPlaying(false); }
+        else { a.play().then(() => setPlaying(true)).catch(() => {}); }
+    }
+
+    const label = duration ? Math.floor(duration) + ' сек' : 'Голосовое';
+    return (
+        <div className="voice-msg">
+            <audio ref={audioRef} src={src} preload="metadata"/>
+            <button type="button" onClick={toggle} aria-label={playing ? 'Пауза' : 'Воспроизвести'}>
+                <Icon name={playing ? 'pause' : 'play'} size={16} stroke={2}/>
+            </button>
+            <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="voice-bar"><div className="voice-fill" style={{ width: progress + '%' }}/></div>
+                <div style={{ fontSize: 11, opacity: .7, marginTop: 4 }}>{label}</div>
+            </div>
+        </div>
+    );
+}
+
+function ShareChannelModal({ channel, me, users, metas, onClose, show }) {
+    const [search, setSearch] = useState('');
+    const [selectedChat, setSelectedChat] = useState(null);
+    const [busy, setBusy] = useState(false);
+
+    const availableChats = useMemo(() => {
+        const result = [];
+        Object.values(metas || {}).forEach(meta => {
+            if (!meta || meta.type !== 'dm') return;
+            const members = meta.members || {};
+            if (!members[me.uid]) return;
+            const otherUid = Object.keys(members).find(uid => uid !== me.uid);
+            if (!otherUid) return;
+            const person = users[otherUid];
+            if (!person) return;
+            result.push({ ...person, id: meta.id, type: 'dm', uid: otherUid, name: person.name });
+        });
+        return result.sort((a,b) => (b.lastTs||0) - (a.lastTs||0));
+    }, [metas, users, me.uid]);
+
+    const filtered = search
+        ? availableChats.filter(c => c.name.toLowerCase().includes(search.toLowerCase()) || c.username.includes(normalizeUsername(search)))
+        : availableChats;
+
+    async function shareChannel() {
+        if (!selectedChat) { show('Выберите чат', true); return; }
+        setBusy(true);
+        try {
+            const targetId = selectedChat.id;
+            await window.db.ref('chats/' + targetId + '/messages').push().set({
+                senderId: me.uid,
+                type: 'channel_share',
+                channelId: channel.id,
+                channelName: channel.name,
+                channelAbout: channel.about || '',
+                channelAvatarUrl: channel.avatarUrl || '',
+                channelVerified: !!channel.verified,
+                text: '📢 Канал: ' + channel.name,
+                ts: window.SV_TS,
+                status: 'sent'
+            });
+            await window.db.ref('chatsMeta/' + targetId).update({
+                lastMessage: '📢 Канал: ' + channel.name,
+                lastTs: window.SV_TS,
+                lastSender: me.uid
+            });
+            show('Канал отправлен');
+            onClose();
+        } catch(e) { show(friendlyError(e), true); }
+        setBusy(false);
+    }
+
+    return (
+        <div className="overlay" onClick={onClose}>
+            <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 400 }}>
+                <div className="modal-head">
+                    <h2 style={{ margin: 0, fontSize: 18 }}>Поделиться каналом</h2>
+                    <button className="iconbtn close" onClick={onClose}><Icon name="close"/></button>
+                </div>
+                <div className="search" style={{ margin: 0 }}>
+                    <Icon name="search" size={19}/>
+                    <input placeholder="Поиск чатов..." value={search} onChange={e => setSearch(e.target.value)}/>
+                </div>
+                <div style={{ maxHeight: 280, overflow: 'auto', marginTop: 12 }}>
+                    {filtered.map(c => (
+                        <button key={c.id} className={"person " + (selectedChat?.id === c.id ? 'active' : '')} onClick={() => setSelectedChat(c)}>
+                            <Avatar name={c.name} uid={c.uid} avatar={c.avatar} avatarUrl={c.avatarUrl} size={40} verified={c.verified}/>
+                            <div className="person-body">
+                                <div className="person-name">{c.name}</div>
+                                <div className="person-sub">@{c.username}</div>
+                            </div>
+                        </button>
+                    ))}
+                </div>
+                <div className="modal-actions">
+                    <button className="secondary" onClick={onClose}>Отмена</button>
+                    <button className="primary" onClick={shareChannel} disabled={busy || !selectedChat}>{busy ? 'Отправка…' : 'Отправить'}</button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+const ChatMessage = React.memo(function ChatMessage({
+    message, me, users, isChannel, isGroup, highlightId, isNew,
+    onReaction, onDelete, onReply, onForward, onScrollTo, onOpenChannel, quickReaction
+}) {
+    const mine = message.senderId === me.uid;
+    const sender = users[message.senderId];
+    const isDeleted = message.deletedFor && message.deletedFor[me.uid];
+    const reactions = useMemo(() => {
+        if (!message.reactions) return {};
+        const counts = {};
+        Object.values(message.reactions).forEach(r => { if (r) counts[r] = (counts[r] || 0) + 1; });
+        return counts;
+    }, [message.reactions]);
+    const [showReactions, setShowReactions] = useState(false);
+    const [showContextMenu, setShowContextMenu] = useState(false);
+    const [contextPos, setContextPos] = useState({ x: 0, y: 0 });
+    const longPressTimer = useRef(null);
+
+    // Все контекстные меню сообщений синхронизированы: открытие одного
+    // автоматически закрывает меню любого другого сообщения.
+    useEffect(() => {
+        const closeOtherMenus = (event) => {
+            if (event.detail !== message.id) setShowContextMenu(false);
+        };
+        const closeOnPointer = (event) => {
+            if (!event.target.closest?.('.message-context-menu')) setShowContextMenu(false);
+        };
+        window.addEventListener('kuban-context-open', closeOtherMenus);
+        document.addEventListener('pointerdown', closeOnPointer);
+        return () => {
+            window.removeEventListener('kuban-context-open', closeOtherMenus);
+            document.removeEventListener('pointerdown', closeOnPointer);
+        };
+    }, [message.id]);
+    const isReplied = highlightId === message.id;
+
+    if (isDeleted) {
+        return (
+            <div className={"row " + (mine ? "mine" : "theirs")} id={"msg-" + message.id}>
+                <div className="bubble" style={{ opacity: 0.5, fontStyle: 'italic' }}>
+                    {isChannel ? 'Пост удалён' : 'Сообщение удалено'}
+                </div>
+            </div>
+        );
+    }
+
+    function handleContextMenu(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.dispatchEvent(new CustomEvent('kuban-context-open', { detail: message.id }));
+        const menuWidth = 220;
+        const menuHeight = isChannel ? 150 : (mine ? 190 : 150);
+        const x = Math.max(8, Math.min(e.clientX, window.innerWidth - menuWidth - 8));
+        const y = Math.max(8, Math.min(e.clientY, window.innerHeight - menuHeight - 8));
+        setContextPos({ x, y });
+        setShowContextMenu(true);
+    }
+
+    function handleTouchStart(e) {
+        longPressTimer.current = setTimeout(() => {
+            const touch = e.touches[0];
+            setContextPos({ x: touch.clientX, y: touch.clientY });
+            setShowContextMenu(true);
+        }, 500);
+    }
+
+    function handleTouchEnd() { clearTimeout(longPressTimer.current); }
+    function handleTouchMove() { clearTimeout(longPressTimer.current); }
+
+    const content = message.type === 'sticker' ? (
+        <div className="msg-sticker">{message.sticker}</div>
+    ) : message.type === 'voice' && message.voiceData ? (
+        <VoicePlayer src={message.voiceData} duration={message.voiceDuration} mine={mine}/>
+    ) : message.type === 'channel_share' ? (
+        <div className="channel-share-card" onClick={(e) => {
+            e.stopPropagation();
+            onOpenChannel && onOpenChannel({
+                type: 'channel', id: message.channelId, name: message.channelName,
+                about: message.channelAbout, avatarUrl: message.channelAvatarUrl, verified: message.channelVerified
+            });
+        }}>
+            <div style={{ fontWeight: 700 }}>📢 {message.channelName}</div>
+            <div className="muted" style={{ fontSize: 12 }}>{message.channelAbout || 'Нажмите, чтобы открыть канал'}</div>
+        </div>
+    ) : (
+        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+    {message.forwardedFrom && (
+        <div style={{ fontSize: 10.5, opacity: 0.5, marginBottom: 2, fontWeight: 500 }}>
+            📎 Переслано от {message.forwardedFrom}
+        </div>
+    )}
+    {message.text}
+</div>
+    );
+
+    return (
+        <>
+            <div
+                className={"row " + (mine ? "mine" : "theirs")}
+                onDoubleClick={() => onReaction(message.id, quickReaction)}
+                onContextMenu={handleContextMenu}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onTouchMove={handleTouchMove}
+            >
+                <div className={"bubble-wrapper" + (isReplied ? ' highlight' : '')} id={"msg-" + message.id}>
+                    <div className={"bubble" + (isNew ? ' bubble-enter' : '')}>
+                        {!isChannel && message.replyTo && (
+                            <div className="quote-block" onClick={(e) => { e.stopPropagation(); onScrollTo(message.replyTo.id); }}>
+                                <div className="quote-bar"/>
+                                <div className="quote-body">
+                                    <div className="quote-sender">{message.replyTo.senderName}</div>
+                                    <div className="quote-text">{message.replyTo.text.substring(0, 50)}{message.replyTo.text.length > 50 && '...'}</div>
+                                </div>
+                            </div>
+                        )}
+                        {isGroup && !mine && (
+                            <div style={{ fontSize: 12, fontWeight: 700, color: '#6750a4', marginBottom: 3 }}>{sender?.name || 'Участник'}</div>
+                        )}
+                        {content}
+                        <div className="btime">
+                            {fmtTime(message.ts)}
+                            {!isChannel && mine && <StatusTicks status={message.status || 'sent'}/>}
+                            {isChannel && (
+                                <span style={{ marginLeft: 8, opacity: 0.6, display: 'flex', alignItems: 'center', gap: 3 }}>👁 {message.views || 0}</span>
+                            )}
+                        </div>
+                        {Object.keys(reactions).length > 0 && (
+                            <div className="bubble-reactions">
+                                {Object.entries(reactions).map(([emoji, count]) => (
+                                    <span key={emoji} onClick={() => onReaction(message.id, emoji)}>{emoji} {count > 1 ? count : ''}</span>
+                                ))}
+                            </div>
+                        )}
+                        <div className="bubble-actions">
+                            <button onClick={(e) => { e.stopPropagation(); setShowReactions(!showReactions); }}>😊</button>
+                            {mine && (
+                                <>
+                                    <button onClick={(e) => { e.stopPropagation(); onDelete(message.id, false); }}>🗑️</button>
+                                    {!isChannel && (
+                                        <button onClick={(e) => { e.stopPropagation(); onDelete(message.id, true); }}>✏️</button>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                        {showReactions && (
+                            <div className="reaction-picker-container">
+                                <div className="reaction-picker">
+                                    {REACTIONS.map(r => (
+                                        <button key={r} onClick={() => { onReaction(message.id, r); setShowReactions(false); }}>{r}</button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+            {showContextMenu && (
+                <div className="message-context-menu" style={{ position: 'fixed', left: contextPos.x, top: contextPos.y, zIndex: 60, background: 'var(--bg)', borderRadius: 12, padding: 6, boxShadow: '0 8px 32px rgba(0,0,0,0.2)', border: '1px solid var(--ch)' }}>
+                    {!isChannel && (
+                        <button className="context-menu-item" onClick={() => { onReply(message); setShowContextMenu(false); }}>
+                            <Icon name="back" size={18} style={{ transform: 'scaleX(-1)' }}/> Ответить
+                        </button>
+                    )}
+                    <button className="context-menu-item" onClick={() => { onForward(message); setShowContextMenu(false); }}>
+                        <Icon name="share" size={18}/> Переслать
+                    </button>
+                    {mine && (
+                        <button className="context-menu-item" onClick={() => { onDelete(message.id, false); setShowContextMenu(false); }}>
+                            <Icon name="trash" size={18}/> Удалить
+                        </button>
+                    )}
+                </div>
+            )}
+        </>
+    );
+});
+
+// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ) =====
+// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ) =====
 function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpdateChat, metas, onOpenChannel }) {
     const [messages, setMessages] = useState([]);
     const [text, setText] = useState("");
@@ -4348,21 +5104,37 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     const [replyTo, setReplyTo] = useState(null);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [highlightId, setHighlightId] = useState(null);
-    const [contextMenu, setContextMenu] = useState(null);
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [subscribersCount, setSubscribersCount] = useState(0);
     const [subscribing, setSubscribing] = useState(false);
+    const [showStickers, setShowStickers] = useState(false);
+    const [recording, setRecording] = useState(false);
+    const [recordSeconds, setRecordSeconds] = useState(0);
+    const [shareChannel, setShareChannel] = useState(null);
+    
     const scroll = useRef(null);
     const typingTimer = useRef(null);
+    const typingWriteTimer = useRef(null);
+    const textareaRef = useRef(null);
+    const mediaRecorderRef = useRef(null);
+    const recordIntervalRef = useRef(null);
+    const recordStreamRef = useRef(null);
+    const prevMsgCountRef = useRef(0);
+    const knownMsgIdsRef = useRef(new Set());
+    const newMsgIdsRef = useRef(new Set());
+    const readTimerRef = useRef(null);
     const isGroup = chat.type === "group";
     const isChannel = chat.type === "channel";
     const chatId = chat.id || chatIdFor(me.uid, chat.uid);
     const other = !isGroup && !isChannel ? users[chat.uid] : null;
     const currentChatIdRef = useRef(chatId);
     const quickReaction = localStorage.getItem('quickReaction') || '❤️';
-    
-    // Для каналов - отдельное состояние для постов
     const [posts, setPosts] = useState([]);
+	const [showPollCreator, setShowPollCreator] = useState(false);
+const [pollQuestion, setPollQuestion] = useState('');
+const [pollOptions, setPollOptions] = useState(['', '']);
+const [pollAnonymous, setPollAnonymous] = useState(false);
+const [pollCreating, setPollCreating] = useState(false);
 
     // Проверка подписки на канал
     useEffect(() => {
@@ -4391,8 +5163,24 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         setTyping(false);
         setReplyTo(null);
         setHighlightId(null);
-        setContextMenu(null);
+        setShowStickers(false);
+        setRecording(false);
+        setRecordSeconds(0);
+        prevMsgCountRef.current = 0;
+        knownMsgIdsRef.current = new Set();
+        newMsgIdsRef.current = new Set();
         currentChatIdRef.current = chatId;
+        if (recordIntervalRef.current) {
+            clearInterval(recordIntervalRef.current);
+            recordIntervalRef.current = null;
+        }
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+            try { mediaRecorderRef.current.stop(); } catch(e) {}
+        }
+        if (recordStreamRef.current) {
+            recordStreamRef.current.getTracks().forEach(t => t.stop());
+            recordStreamRef.current = null;
+        }
     }, [chatId]);
 
     // Загрузка сообщений/постов
@@ -4406,7 +5194,14 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 if (currentChatIdRef.current !== currentId) return;
                 const val = snap.val() || {};
                 const arr = Object.keys(val).map(id => ({ id, ...val[id] })).sort((a,b) => (a.ts||0) - (b.ts||0));
-                setPosts(arr);
+                arr.forEach(m => {
+                    if (!knownMsgIdsRef.current.has(m.id)) {
+                        knownMsgIdsRef.current.add(m.id);
+                        newMsgIdsRef.current.add(m.id);
+                        setTimeout(() => newMsgIdsRef.current.delete(m.id), 400);
+                    }
+                });
+                setPosts(prev => messagesSnapshotEqual(prev, arr) ? prev : arr);
             }, e => show(friendlyError(e), true));
             return () => ref.off("value", h);
         } else {
@@ -4415,10 +5210,23 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 if (currentChatIdRef.current !== currentId) return;
                 const val = snap.val() || {};
                 const arr = Object.keys(val).map(id => ({ id, ...val[id] })).sort((a,b) => (a.ts||0) - (b.ts||0));
-                setMessages(arr);
-                arr.filter(m => m.senderId !== me.uid && m.status !== "read").forEach(m => {
-                    window.db.ref("chats/"+currentId+"/messages/"+m.id+"/status").set("read").catch(()=>{});
+                arr.forEach(m => {
+                    if (!knownMsgIdsRef.current.has(m.id)) {
+                        knownMsgIdsRef.current.add(m.id);
+                        newMsgIdsRef.current.add(m.id);
+                        setTimeout(() => newMsgIdsRef.current.delete(m.id), 400);
+                    }
                 });
+                setMessages(prev => messagesSnapshotEqual(prev, arr) ? prev : arr);
+                clearTimeout(readTimerRef.current);
+                readTimerRef.current = setTimeout(() => {
+                    arr.filter(m => m.senderId !== me.uid && m.status === "sent").forEach(m => {
+                        window.db.ref("chats/"+currentId+"/messages/"+m.id+"/status").set("delivered").catch(()=>{});
+                    });
+                    arr.filter(m => m.senderId !== me.uid && m.status !== "read").forEach(m => {
+                        window.db.ref("chats/"+currentId+"/messages/"+m.id+"/status").set("read").catch(()=>{});
+                    });
+                }, 400);
             }, e => show(friendlyError(e), true));
             
             const typingRef = window.db.ref("typing/"+currentId);
@@ -4426,13 +5234,14 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 if (currentChatIdRef.current !== currentId) return;
                 const val = snap.val() || {};
                 const somebody = Object.keys(val).some(uid => uid !== me.uid && val[uid] === true);
-                setTyping(somebody);
+                setTyping(prev => prev === somebody ? prev : somebody);
             };
             typingRef.on("value", typingHandler);
             
             return () => {
                 ref.off("value", h);
                 typingRef.off("value", typingHandler);
+                clearTimeout(readTimerRef.current);
                 window.db.ref("typing/"+currentId+"/"+me.uid).remove();
             };
         }
@@ -4459,18 +5268,38 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         });
     }, [posts, isChannel, chatId, me.uid]);
 
+    // Автоскролл при новых сообщениях
     useEffect(() => {
-        setTimeout(() => { if(scroll.current) { scroll.current.scrollTop = scroll.current.scrollHeight; } }, 20);
-    }, [messages, posts, typing]);
+        const el = scroll.current;
+        if (!el) return;
+        const list = isChannel ? posts : messages;
+        const count = list.length;
+        const isNew = count > prevMsgCountRef.current;
+        prevMsgCountRef.current = count;
+        const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+        if (isNew || nearBottom) {
+            requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
+        }
+    }, [messages, posts, isChannel]);
+
+    function autoResizeTextarea(el) {
+        if (!el) return;
+        el.style.height = 'auto';
+        el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+    }
 
     function change(e) {
         setText(e.target.value);
+        autoResizeTextarea(e.target);
         if (!window.db || isChannel) return;
-        const r = window.db.ref("typing/"+chatId+"/"+me.uid);
-        r.set(true);
-        r.onDisconnect().remove();
-        clearTimeout(typingTimer.current);
-        typingTimer.current = setTimeout(() => r.remove(), 1200);
+        clearTimeout(typingWriteTimer.current);
+        typingWriteTimer.current = setTimeout(() => {
+            const r = window.db.ref("typing/"+chatId+"/"+me.uid);
+            r.set(true);
+            r.onDisconnect().remove();
+            clearTimeout(typingTimer.current);
+            typingTimer.current = setTimeout(() => r.remove(), 1200);
+        }, 280);
     }
 
     // ===== ФУНКЦИЯ ПОДПИСКИ/ОТПИСКИ =====
@@ -4501,16 +5330,144 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         }
         setSubscribing(false);
     }
+	
+	// ===== ФУНКЦИЯ ГОЛОСОВАНИЯ =====
+async function votePoll(messageId, optionIndex) {
+    try {
+        const path = isChannel ? 
+            "chats/"+chatId+"/posts/"+messageId : 
+            "chats/"+chatId+"/messages/"+messageId;
+        
+        const snap = await window.db.ref(path + "/poll/votes/" + me.uid).get();
+        if (snap.exists()) {
+            show('Вы уже проголосовали', true);
+            return;
+        }
+        
+        await window.db.ref(path + "/poll/votes/" + me.uid).set(optionIndex);
+        await window.db.ref(path + "/poll/totalVotes").transaction(v => (v || 0) + 1);
+        show('Голос учтён!');
+    } catch(e) {
+        show(friendlyError(e), true);
+    }
+}
 
-    async function send() {
-        const t = text.trim();
-        if(!t) return;
-        setText("");
+function handleComposerKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        send();
+    }
+    // Shift+Enter работает автоматически в textarea
+}
+
+function getPlural(n, word = 'голос') {
+    if (n % 10 === 1 && n % 100 !== 11) return word;
+    if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) return word + 'а';
+    return word + 'ов';
+}
+	
+	async function createPoll() {
+    const question = pollQuestion.trim();
+    const options = pollOptions.map(o => o.trim()).filter(o => o);
+    
+    if (!question) {
+        show('Введите вопрос опроса', true);
+        return;
+    }
+    if (options.length < 2) {
+        show('Добавьте минимум 2 варианта ответа', true);
+        return;
+    }
+    
+    setPollCreating(true);
+    try {
+        const pollData = {
+            question,
+            options,
+            anonymous: pollAnonymous,
+            createdBy: me.uid,
+            ts: window.SV_TS,
+            votes: {},
+            totalVotes: 0
+        };
+        
+        if (isChannel) {
+            if (chat.createdBy !== me.uid) {
+                show('Только владелец канала может создавать опросы', true);
+                setPollCreating(false);
+                return;
+            }
+            const ref = window.db.ref("chats/"+chatId+"/posts").push();
+            await ref.set({
+                text: '📊 Опрос: ' + question,
+                ts: window.SV_TS,
+                senderId: me.uid,
+                views: 0,
+                viewedBy: {},
+                reactions: {},
+                poll: pollData,
+                type: 'poll'
+            });
+            await window.db.ref("chatsMeta/"+chatId).update({
+                lastMessage: '📊 Опрос: ' + question,
+                lastTs: window.SV_TS,
+                lastSender: me.uid
+            });
+        } else {
+            const mr = window.db.ref("chats/"+chatId+"/messages").push();
+            await mr.set({
+                senderId: me.uid,
+                text: '📊 Опрос: ' + question,
+                ts: window.SV_TS,
+                status: "sent",
+                poll: pollData,
+                type: 'poll'
+            });
+            
+            const meta = { 
+                id: chatId, 
+                type: isGroup ? "group" : "dm", 
+                lastMessage: '📊 Опрос: ' + question, 
+                lastTs: window.SV_TS, 
+                lastSender: me.uid 
+            };
+            if(isGroup) { 
+                meta.members = chat.members || {}; 
+                meta.name = chat.name || "Группа";
+                if (chat.createdBy) meta.createdBy = chat.createdBy;
+            } else { 
+                meta.members = { [me.uid]: true, [chat.uid]: true }; 
+                meta.name = other?.name || chat.name || "Чат"; 
+            }
+            await window.db.ref("chatsMeta/"+chatId).update(meta);
+        }
+        
+        setShowPollCreator(false);
+        setPollQuestion('');
+        setPollOptions(['', '']);
+        setPollAnonymous(false);
+        show('Опрос создан!');
+    } catch(e) {
+        show(friendlyError(e), true);
+    }
+    setPollCreating(false);
+}
+
+    // ===== ОСНОВНАЯ ФУНКЦИЯ ОТПРАВКИ =====
+    async function send(extraData) {
+        const t = (extraData && extraData.text !== undefined) ? extraData.text : text.trim();
+        const payload = extraData || {};
+        if(!t && !payload.sticker && !payload.voiceData) return;
+        if (!extraData) {
+            setText("");
+            if (textareaRef.current) {
+                textareaRef.current.style.height = 'auto';
+            }
+        }
         if (!window.db) return;
         
         try {
             if (isChannel) {
-                // === КАНАЛ: только владелец может писать ===
                 if (chat.createdBy !== me.uid) {
                     show('Только владелец канала может публиковать посты', true);
                     return;
@@ -4523,23 +5480,24 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     senderId: me.uid,
                     views: 0,
                     viewedBy: {},
-                    reactions: {}
+                    reactions: {},
+                    ...payload
                 });
                 
                 await window.db.ref("chatsMeta/"+chatId).update({
-                    lastMessage: t,
+                    lastMessage: payload.sticker ? payload.sticker : (payload.voiceData ? '🎤 Голосовое' : t),
                     lastTs: window.SV_TS,
                     lastSender: me.uid
                 });
             } else if (isGroup) {
-                // === ГРУППА ===
                 window.db.ref("typing/"+chatId+"/"+me.uid).remove();
                 const mr = window.db.ref("chats/"+chatId+"/messages").push();
                 const messageData = { 
                     senderId: me.uid, 
-                    text: t, 
+                    text: t || (payload.sticker ? payload.sticker : '🎤 Голосовое'), 
                     ts: window.SV_TS, 
-                    status: "sent" 
+                    status: "sent",
+                    ...payload
                 };
                 if (replyTo) {
                     messageData.replyTo = {
@@ -4556,9 +5514,10 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 const meta = { 
                     id: chatId, 
                     type: "group", 
-                    lastMessage: t, 
+                    lastMessage: payload.sticker ? payload.sticker : (payload.voiceData ? '🎤 Голосовое' : t), 
                     lastTs: window.SV_TS, 
                     lastSender: me.uid,
+                    lastStatus: "sent",
                     members: chat.members || {},
                     name: chat.name || "Группа"
                 };
@@ -4566,16 +5525,20 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     meta.createdBy = chat.createdBy;
                 }
                 await window.db.ref("chatsMeta/"+chatId).update(meta);
+                const groupMembers = chat.members || {};
+                await Promise.all(Object.keys(groupMembers).filter(uid => uid !== me.uid).map(uid =>
+                    window.db.ref("chatsMeta/"+chatId+"/unreadBy/"+uid).transaction(v => (Number(v) || 0) + 1).catch(() => null)
+                ));
                 
             } else {
-                // === ЛИЧНЫЙ ЧАТ (DM) ===
                 window.db.ref("typing/"+chatId+"/"+me.uid).remove();
                 const mr = window.db.ref("chats/"+chatId+"/messages").push();
                 const messageData = { 
                     senderId: me.uid, 
-                    text: t, 
+                    text: t || (payload.sticker ? payload.sticker : '🎤 Голосовое'), 
                     ts: window.SV_TS, 
-                    status: "sent" 
+                    status: "sent",
+                    ...payload
                 };
                 if (replyTo) {
                     messageData.replyTo = {
@@ -4592,13 +5555,15 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 const meta = { 
                     id: chatId, 
                     type: "dm", 
-                    lastMessage: t, 
+                    lastMessage: payload.sticker ? payload.sticker : (payload.voiceData ? '🎤 Голосовое' : t), 
                     lastTs: window.SV_TS, 
                     lastSender: me.uid,
+                    lastStatus: "sent",
                     members: { [me.uid]: true, [chat.uid]: true },
                     name: other?.name || chat.name || "Чат"
                 };
                 await window.db.ref("chatsMeta/"+chatId).update(meta);
+                await window.db.ref("chatsMeta/"+chatId+"/unreadBy/"+chat.uid).transaction(v => (Number(v) || 0) + 1).catch(() => null);
             }
         } catch(e) { 
             console.error('Send error:', e);
@@ -4606,8 +5571,156 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         }
     }
 
+    // ===== ФУНКЦИИ ДЛЯ СТИКЕРОВ И ГОЛОСОВЫХ =====
+    async function sendSticker(sticker) {
+        setShowStickers(false);
+        await send({ 
+            type: 'sticker', 
+            sticker, 
+            text: sticker 
+        });
+    }
+
+    async function sendVoiceMessage(voiceData, voiceDuration) {
+        await send({ 
+            type: 'voice', 
+            voiceData, 
+            voiceDuration, 
+            text: '🎤 Голосовое сообщение' 
+        });
+    }
+
+    // ===== ЗАПИСЬ ГОЛОСОВОГО =====
+    async function startRecording() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            show('Ваш браузер не поддерживает запись звука', true);
+            return;
+        }
+        
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true
+                } 
+            });
+            
+            recordStreamRef.current = stream;
+            
+            let mimeType = 'audio/webm';
+            if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                mimeType = 'audio/webm;codecs=opus';
+            } else if (MediaRecorder.isTypeSupported('audio/webm;codecs=vorbis')) {
+                mimeType = 'audio/webm;codecs=vorbis';
+            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                mimeType = 'audio/mp4';
+            }
+            
+            const chunks = [];
+            const recorder = new MediaRecorder(stream, { mimeType });
+            
+            recorder.ondataavailable = (e) => {
+                if (e.data && e.data.size > 0) {
+                    chunks.push(e.data);
+                }
+            };
+            
+            recorder.onstop = async () => {
+                if (recordStreamRef.current) {
+                    recordStreamRef.current.getTracks().forEach(track => track.stop());
+                    recordStreamRef.current = null;
+                }
+                
+                const blob = new Blob(chunks, { type: mimeType });
+                
+                if (blob.size < 5000) {
+                    show('Запись слишком короткая (минимум 1 секунда)', true);
+                    return;
+                }
+                if (blob.size > 300000) {
+                    show('Запись слишком длинная (максимум 30 секунд)', true);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64 = e.target.result;
+                    sendVoiceMessage(base64, recordSeconds);
+                };
+                reader.readAsDataURL(blob);
+                
+                setRecording(false);
+                setRecordSeconds(0);
+            };
+            
+            recorder.onerror = (e) => {
+                console.error('Recorder error:', e);
+                show('Ошибка записи', true);
+                setRecording(false);
+                setRecordSeconds(0);
+                if (recordStreamRef.current) {
+                    recordStreamRef.current.getTracks().forEach(track => track.stop());
+                    recordStreamRef.current = null;
+                }
+            };
+            
+            mediaRecorderRef.current = recorder;
+            recorder.start(100);
+            
+            setRecording(true);
+            setRecordSeconds(0);
+            
+            if (recordIntervalRef.current) {
+                clearInterval(recordIntervalRef.current);
+            }
+            recordIntervalRef.current = setInterval(() => {
+                setRecordSeconds(prev => {
+                    if (prev >= 30) {
+                        stopRecording();
+                        return prev;
+                    }
+                    return prev + 1;
+                });
+            }, 1000);
+            
+        } catch(e) {
+            console.error('Microphone error:', e);
+            if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
+                show('Доступ к микрофону запрещён. Разрешите доступ в настройках браузера.', true);
+            } else if (e.name === 'NotFoundError' || e.name === 'DevicesNotFoundError') {
+                show('Микрофон не найден. Подключите микрофон к устройству.', true);
+            } else {
+                show('Не удалось получить доступ к микрофону: ' + e.message, true);
+            }
+        }
+    }
+
+    function stopRecording() {
+        if (recordIntervalRef.current) {
+            clearInterval(recordIntervalRef.current);
+            recordIntervalRef.current = null;
+        }
+        
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+            try {
+                mediaRecorderRef.current.stop();
+            } catch(e) {
+                console.warn('Stop recording error:', e);
+            }
+        } else {
+            setRecording(false);
+            setRecordSeconds(0);
+            if (recordStreamRef.current) {
+                recordStreamRef.current.getTracks().forEach(track => track.stop());
+                recordStreamRef.current = null;
+            }
+        }
+    }
+
     function StatusTicks({ status }) {
-        if(status === "read") { return <Icon name="checks" size={16} stroke={2} className="ticks" />; }
+        if(status === "read") return <Icon name="checks" size={16} stroke={2} className="ticks" style={{color:"#53b7e8"}} />;
+        if(status === "delivered") return <Icon name="checks" size={16} stroke={2} className="ticks" />;
         return <Icon name="check" size={16} stroke={2} className="ticks" />;
     }
 
@@ -4664,7 +5777,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         } catch(e) {
             show(friendlyError(e), true);
         }
-        setContextMenu(null);
     }
 
     // ===== ОТВЕТ =====
@@ -4680,8 +5792,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             senderName: users[message.senderId]?.name || 'Неизвестный'
         });
         setHighlightId(message.id);
-        document.querySelector('.compose input')?.focus();
-        setContextMenu(null);
+        document.querySelector('.compose textarea')?.focus();
         
         setTimeout(() => {
             setHighlightId(null);
@@ -4744,14 +5855,16 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 const mr = window.db.ref("chats/"+targetChatId+"/messages").push();
                 await mr.set({
                     senderId: me.uid,
-                    text: '📎 Пересланное сообщение:\n' + message.text,
+                    text: message.text,
                     ts: window.SV_TS,
                     status: 'sent',
                     forwardedFrom: chat.name || 'Чат'
                 });
                 const meta = { 
                     id: targetChatId, type: selectedChat.type || 'dm', 
-                    lastMessage: '📎 Пересланное сообщение', lastTs: window.SV_TS, lastSender: me.uid 
+                    lastMessage: message.text.substring(0, 50) + (message.text.length > 50 ? '…' : ''), 
+                    lastTs: window.SV_TS, 
+                    lastSender: me.uid 
                 };
                 if (selectedChat.type === 'group') {
                     meta.members = selectedChat.members || {};
@@ -4808,82 +5921,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                             {busy ? 'Отправка…' : 'Переслать'}
                         </button>
                     </div>
-                </div>
-            </div>
-        );
-    }
-
-    // ===== КОНТЕКСТНОЕ МЕНЮ =====
-    function ContextMenu({ message, x, y, onClose }) {
-        const menuRef = useRef(null);
-        const mine = message.senderId === me.uid;
-        
-        useEffect(() => {
-            const handleClickOutside = (e) => {
-                if (menuRef.current && !menuRef.current.contains(e.target)) {
-                    onClose();
-                }
-            };
-            document.addEventListener('mousedown', handleClickOutside);
-            return () => document.removeEventListener('mousedown', handleClickOutside);
-        }, [onClose]);
-        
-        const menuStyle = { position: 'fixed', zIndex: 60 };
-        const menuWidth = 220, menuHeight = 300;
-        const maxX = window.innerWidth - menuWidth, maxY = window.innerHeight - menuHeight;
-        menuStyle.left = Math.min(Math.max(x, 10), maxX);
-        menuStyle.top = Math.min(Math.max(y, 10), maxY);
-        
-        return (
-            <div ref={menuRef} style={menuStyle} className="context-menu">
-                <div style={{
-                    background: 'var(--bg)',
-                    borderRadius: 12,
-                    padding: 6,
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
-                    minWidth: 200,
-                    border: '1px solid var(--ch)'
-                }}>
-                    <div style={{ display: 'flex', gap: 4, padding: '4px 8px', flexWrap: 'wrap', borderBottom: '1px solid var(--ch)', marginBottom: 4 }}>
-                        {REACTIONS.slice(0, 6).map(r => (
-                            <button key={r} onClick={() => { addReaction(message.id, r); onClose(); }} style={{ fontSize: 24, padding: '2px 4px', borderRadius: 8, background: 'transparent' }}>
-                                {r}
-                            </button>
-                        ))}
-                    </div>
-                    
-                    {!isChannel && (
-                        <button className="context-menu-item" onClick={() => { replyToMessage(message); onClose(); }}>
-                            <Icon name="back" size={18} style={{ transform: 'scaleX(-1)' }} />
-                            <span>Ответить</span>
-                        </button>
-                    )}
-                    
-                    <button className="context-menu-item" onClick={() => { setSelectedMessage(message); onClose(); }}>
-                        <Icon name="share" size={18} />
-                        <span>Переслать</span>
-                    </button>
-                    
-                    {mine && (
-                        <>
-                            {!isChannel && (
-                                <button className="context-menu-item" onClick={() => { onClose(); }}>
-                                    <Icon name="edit" size={18} />
-                                    <span>Редактировать</span>
-                                </button>
-                            )}
-                            <button className="context-menu-item" onClick={() => { deleteMessage(message.id, false); onClose(); }}>
-                                <Icon name="trash" size={18} />
-                                <span>{isChannel ? 'Удалить пост' : 'Удалить для себя'}</span>
-                            </button>
-                            {!isChannel && (
-                                <button className="context-menu-item danger" onClick={() => { deleteMessage(message.id, true); onClose(); }}>
-                                    <Icon name="trash" size={18} />
-                                    <span>Удалить для всех</span>
-                                </button>
-                            )}
-                        </>
-                    )}
                 </div>
             </div>
         );
@@ -4957,144 +5994,283 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         setShowChatMenu(false);
     }
 
-    // ===== СООБЩЕНИЕ (МЕМОИЗИРОВАНО) =====
-    const Message = React.memo(({ message }) => {
-        const mine = message.senderId === me.uid;
-        const sender = users[message.senderId];
-        const isDeleted = message.deletedFor && message.deletedFor[me.uid];
-        const reactions = getReactionCount(message);
-        const [showReactions, setShowReactions] = useState(false);
-        const [showContextMenu, setShowContextMenu] = useState(false);
-        const [contextPos, setContextPos] = useState({ x: 0, y: 0 });
-        const [isLongPress, setIsLongPress] = useState(false);
-        const longPressTimer = useRef(null);
-        const isReplied = highlightId === message.id;
-        
-        const views = message.views || 0;
-
-        if (isDeleted) {
-            return (
-                <div className={"row " + (mine ? "mine" : "theirs")} id={"msg-" + message.id}>
-                    <div className="bubble" style={{ opacity: 0.5, fontStyle: 'italic' }}>
-                        {isChannel ? 'Пост удалён' : 'Сообщение удалено'}
-                    </div>
-                </div>
-            );
-        }
-
-        function handleContextMenu(e) {
+    function handleComposerKeyDown(e) {
+        if (e.key === 'Enter' && !e.shiftKey && !IS_TOUCH) {
             e.preventDefault();
-            e.stopPropagation();
-            setContextPos({ x: e.clientX, y: e.clientY });
-            setShowContextMenu(true);
+            send();
         }
+    }
 
-        function handleTouchStart(e) {
-            longPressTimer.current = setTimeout(() => {
-                setIsLongPress(true);
-                const touch = e.touches[0];
-                setContextPos({ x: touch.clientX, y: touch.clientY });
-                setShowContextMenu(true);
-            }, 500);
-        }
+    // ===== КОМПОНЕНТ СООБЩЕНИЯ (ВНУТРЕННИЙ) =====
+    // ===== КОМПОНЕНТ СООБЩЕНИЯ (ВНУТРЕННИЙ) =====
+const Message = React.memo(({ message }) => {
+    const mine = message.senderId === me.uid;
+    const sender = users[message.senderId];
+    const isDeleted = message.deletedFor && message.deletedFor[me.uid];
+    const reactions = useMemo(() => {
+        if (!message.reactions) return {};
+        const counts = {};
+        Object.values(message.reactions).forEach(r => { if (r) counts[r] = (counts[r] || 0) + 1; });
+        return counts;
+    }, [message.reactions]);
+    const [showReactions, setShowReactions] = useState(false);
+    const [showContextMenu, setShowContextMenu] = useState(false);
+    const [contextPos, setContextPos] = useState({ x: 0, y: 0 });
+    const longPressTimer = useRef(null);
+    const isReplied = highlightId === message.id;
+    const isNew = newMsgIdsRef.current.has(message.id);
 
-        function handleTouchEnd(e) {
-            clearTimeout(longPressTimer.current);
-            if (isLongPress) { e.preventDefault(); setIsLongPress(false); }
-        }
+    // Закрытие других меню при открытии этого
+    useEffect(() => {
+        const closeOtherMenus = (event) => {
+            if (event.detail !== message.id) setShowContextMenu(false);
+        };
+        const closeOnPointer = (event) => {
+            if (!event.target.closest?.('.message-context-menu')) setShowContextMenu(false);
+        };
+        window.addEventListener('kuban-context-open', closeOtherMenus);
+        document.addEventListener('pointerdown', closeOnPointer);
+        return () => {
+            window.removeEventListener('kuban-context-open', closeOtherMenus);
+            document.removeEventListener('pointerdown', closeOnPointer);
+        };
+    }, [message.id]);
 
-        function handleTouchMove(e) {
-            clearTimeout(longPressTimer.current);
-            setIsLongPress(false);
-        }
-
+    if (isDeleted) {
         return (
-            <>
-                <div 
-                    className={"row " + (mine ? "mine" : "theirs")}
-                    onDoubleClick={() => handleDoubleClick(message.id)}
-                    onContextMenu={handleContextMenu}
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
-                    onTouchMove={handleTouchMove}
-                >
-                    <div className={"bubble-wrapper" + (isReplied ? ' highlight' : '')} id={"msg-" + message.id}>
-                        <div className="bubble">
-                            {!isChannel && message.replyTo && (
-                                <div className="quote-block" onClick={(e) => { e.stopPropagation(); scrollToMessage(message.replyTo.id); }}>
-                                    <div className="quote-bar" />
-                                    <div className="quote-body">
-                                        <div className="quote-sender">{message.replyTo.senderName}</div>
-                                        <div className="quote-text">{message.replyTo.text.substring(0, 50)}{message.replyTo.text.length > 50 && '...'}</div>
-                                    </div>
-                                </div>
-                            )}
-                            {isGroup && !mine && (
-                                <div style={{ fontSize:12, fontWeight:700, color:"#6750a4", marginBottom:3 }}>
-                                    {sender?.name || "Участник"}
-                                </div>
-                            )}
-                            <div style={{ whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
-                                {message.forwardedFrom && (
-                                    <div style={{ fontSize: 11, opacity: 0.6, marginBottom: 2 }}>
-                                        📎 Переслано из {message.forwardedFrom}
-                                    </div>
-                                )}
-                                {message.text}
-                            </div>
-                            
-                            <div className="btime">
-                                {fmtTime(message.ts)}
-                                {!isChannel && mine && <StatusTicks status={message.status || "sent"} />}
-                                {isChannel && (
-                                    <span style={{ marginLeft: 8, opacity: 0.6, display: 'flex', alignItems: 'center', gap: 3 }}>
-                                        👁 {views}
-                                    </span>
-                                )}
-                            </div>
-                            
-                            {Object.keys(reactions).length > 0 && (
-                                <div className="bubble-reactions">
-                                    {Object.entries(reactions).map(([emoji, count]) => (
-                                        <span key={emoji} onClick={() => addReaction(message.id, emoji)}>
-                                            {emoji} {count > 1 ? count : ''}
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
-                            
-                            <div className="bubble-actions">
-                                <button onClick={(e) => { e.stopPropagation(); setShowReactions(!showReactions); }}>😊</button>
-                                {mine && (
-                                    <>
-                                        <button onClick={(e) => { e.stopPropagation(); deleteMessage(message.id, false); }}>✏️</button>
-                                        {!isChannel && (
-                                            <button onClick={(e) => { e.stopPropagation(); deleteMessage(message.id, true); }}>🗑️</button>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-                            
-                            {showReactions && (
-                                <div className="reaction-picker-container">
-                                    <div className="reaction-picker">
-                                        {REACTIONS.map(r => (
-                                            <button key={r} onClick={() => { addReaction(message.id, r); setShowReactions(false); }}>{r}</button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+            <div className={"row " + (mine ? "mine" : "theirs")} id={"msg-" + message.id}>
+                <div className="bubble" style={{ opacity: 0.5, fontStyle: 'italic' }}>
+                    {isChannel ? 'Пост удалён' : 'Сообщение удалено'}
+                </div>
+            </div>
+        );
+    }
+
+    function handleContextMenu(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.dispatchEvent(new CustomEvent('kuban-context-open', { detail: message.id }));
+        const menuWidth = 220;
+        const menuHeight = isChannel ? 150 : (mine ? 190 : 150);
+        const x = Math.max(8, Math.min(e.clientX, window.innerWidth - menuWidth - 8));
+        const y = Math.max(8, Math.min(e.clientY, window.innerHeight - menuHeight - 8));
+        setContextPos({ x, y });
+        setShowContextMenu(true);
+    }
+
+    function handleTouchStart(e) {
+        longPressTimer.current = setTimeout(() => {
+            const touch = e.touches[0];
+            setContextPos({ x: touch.clientX, y: touch.clientY });
+            setShowContextMenu(true);
+        }, 500);
+    }
+
+    function handleTouchEnd() { clearTimeout(longPressTimer.current); }
+    function handleTouchMove() { clearTimeout(longPressTimer.current); }
+
+    // ===== КОНТЕНТ СООБЩЕНИЯ =====
+    // Стикер
+    if (message.type === 'sticker') {
+        return (
+            <div className={"row " + (mine ? "mine" : "theirs")}>
+                <div className="bubble-wrapper" id={"msg-" + message.id}>
+                    <div className="bubble">
+                        <div className="msg-sticker">{message.sticker}</div>
+                        <div className="btime">
+                            {fmtTime(message.ts)}
+                            {mine && <StatusTicks status={message.status || 'sent'}/>}
                         </div>
                     </div>
                 </div>
-                
-                {showContextMenu && (
-                    <ContextMenu message={message} x={contextPos.x} y={contextPos.y} onClose={() => setShowContextMenu(false)} />
-                )}
-            </>
+            </div>
         );
-    });
+    }
 
+    // Голосовое
+    if (message.type === 'voice' && message.voiceData) {
+        return (
+            <div className={"row " + (mine ? "mine" : "theirs")}>
+                <div className="bubble-wrapper" id={"msg-" + message.id}>
+                    <div className="bubble">
+                        <VoicePlayer src={message.voiceData} duration={message.voiceDuration} mine={mine}/>
+                        <div className="btime">
+                            {fmtTime(message.ts)}
+                            {mine && <StatusTicks status={message.status || 'sent'}/>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Канал (поделиться)
+    if (message.type === 'channel_share') {
+        return (
+            <div className={"row " + (mine ? "mine" : "theirs")}>
+                <div className="bubble-wrapper" id={"msg-" + message.id}>
+                    <div className="bubble">
+                        <div className="channel-share-card" onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenChannel && onOpenChannel({
+                                type: 'channel', id: message.channelId, name: message.channelName,
+                                about: message.channelAbout, avatarUrl: message.channelAvatarUrl, verified: message.channelVerified
+                            });
+                        }}>
+                            <div style={{ fontWeight: 700 }}>📢 {message.channelName}</div>
+                            <div className="muted" style={{ fontSize: 12 }}>{message.channelAbout || 'Нажмите, чтобы открыть канал'}</div>
+                        </div>
+                        <div className="btime">
+                            {fmtTime(message.ts)}
+                            {mine && <StatusTicks status={message.status || 'sent'}/>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // ===== ОБЫЧНОЕ СООБЩЕНИЕ =====
+    // Здесь рендерится обычное текстовое сообщение с опросом
+    return (
+        <>
+            <div
+                className={"row " + (mine ? "mine" : "theirs")}
+                onDoubleClick={() => addReaction(message.id, quickReaction)}
+                onContextMenu={handleContextMenu}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onTouchMove={handleTouchMove}
+            >
+                <div className={"bubble-wrapper" + (isReplied ? ' highlight' : '')} id={"msg-" + message.id}>
+                    <div className={"bubble" + (isNew ? ' bubble-enter' : '')}>
+                        {!isChannel && message.replyTo && (
+                            <div className="quote-block" onClick={(e) => { e.stopPropagation(); scrollToMessage(message.replyTo.id); }}>
+                                <div className="quote-bar"/>
+                                <div className="quote-body">
+                                    <div className="quote-sender">{message.replyTo.senderName}</div>
+                                    <div className="quote-text">{message.replyTo.text.substring(0, 50)}{message.replyTo.text.length > 50 && '...'}</div>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {isGroup && !mine && (
+                            <div style={{ fontSize: 12, fontWeight: 700, color: '#6750a4', marginBottom: 3 }}>{sender?.name || 'Участник'}</div>
+                        )}
+                        
+                        {/* ===== ВСТАВЬТЕ КОД ОПРОСА СЮДА ===== */}
+                        {/* ===== ОПРОС (КАК В ТЕЛЕГРАМЕ) ===== */}
+{message.type === 'poll' && message.poll && (
+    <div className="poll-block">
+        <div className="poll-question">{message.poll.question}</div>
+        <div className="poll-options">
+            {message.poll.options.map((opt, idx) => {
+                const votes = Object.values(message.poll.votes || {}).filter(v => v === idx).length;
+                const total = message.poll.totalVotes || 0;
+                const percent = total > 0 ? Math.round((votes / total) * 100) : 0;
+                const voted = message.poll.votes && message.poll.votes[me.uid] !== undefined;
+                const selected = message.poll.votes && message.poll.votes[me.uid] === idx;
+                
+                return (
+                    <div 
+                        key={idx} 
+                        className={"poll-option" + (selected ? ' selected' : '') + (voted ? ' voted' : '')}
+                        onClick={() => votePoll(message.id, idx)}
+                    >
+                        <div className="poll-option-row">
+                            <span className="poll-option-text">{opt}</span>
+                            {voted && <span className="poll-option-percent">{percent}%</span>}
+                        </div>
+                        {voted && (
+                            <div className="poll-option-bar" style={{ width: percent + '%' }} />
+                        )}
+                        {voted && (
+                            <div className="poll-option-votes">
+                                {votes} {getPlural(votes)}
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
+        </div>
+        <div className="poll-footer">
+            <span>{message.poll.totalVotes || 0} {getPlural(message.poll.totalVotes || 0, 'голос')}</span>
+            {message.poll.anonymous && <span>🔒 Анонимно</span>}
+        </div>
+    </div>
+)}
+                        {/* ===== КОНЕЦ КОДА ОПРОСА ===== */}
+                        
+                        <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                            {message.forwardedFrom && (
+                                <div style={{ fontSize: 10.5, opacity: 0.5, marginBottom: 2, fontWeight: 500 }}>
+                                    📎 Переслано от {message.forwardedFrom}
+                                </div>
+                            )}
+                            {message.text}
+                        </div>
+                        
+                        <div className="btime">
+                            {fmtTime(message.ts)}
+                            {!isChannel && mine && <StatusTicks status={message.status || 'sent'}/>}
+                            {isChannel && (
+                                <span style={{ marginLeft: 8, opacity: 0.6, display: 'flex', alignItems: 'center', gap: 3 }}>👁 {message.views || 0}</span>
+                            )}
+                        </div>
+                        
+                        {Object.keys(reactions).length > 0 && (
+                            <div className="bubble-reactions">
+                                {Object.entries(reactions).map(([emoji, count]) => (
+                                    <span key={emoji} onClick={() => addReaction(message.id, emoji)}>{emoji} {count > 1 ? count : ''}</span>
+                                ))}
+                            </div>
+                        )}
+                        
+                        <div className="bubble-actions">
+                            <button onClick={(e) => { e.stopPropagation(); setShowReactions(!showReactions); }}>😊</button>
+                            {mine && (
+                                <>
+                                    <button onClick={(e) => { e.stopPropagation(); deleteMessage(message.id, false); }}>🗑️</button>
+                                    {!isChannel && (
+                                        <button onClick={(e) => { e.stopPropagation(); deleteMessage(message.id, true); }}>✏️</button>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                        
+                        {showReactions && (
+                            <div className="reaction-picker-container">
+                                <div className="reaction-picker">
+                                    {REACTIONS.map(r => (
+                                        <button key={r} onClick={() => { addReaction(message.id, r); setShowReactions(false); }}>{r}</button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+            
+            {showContextMenu && (
+                <div className="message-context-menu" style={{ position: 'fixed', left: contextPos.x, top: contextPos.y, zIndex: 60, background: 'var(--bg)', borderRadius: 12, padding: 6, boxShadow: '0 8px 32px rgba(0,0,0,0.2)', border: '1px solid var(--ch)' }}>
+                    {!isChannel && (
+                        <button className="context-menu-item" onClick={() => { replyToMessage(message); setShowContextMenu(false); }}>
+                            <Icon name="back" size={18} style={{ transform: 'scaleX(-1)' }}/> Ответить
+                        </button>
+                    )}
+                    <button className="context-menu-item" onClick={() => { setSelectedMessage(message); setShowContextMenu(false); }}>
+                        <Icon name="share" size={18}/> Переслать
+                    </button>
+                    {mine && (
+                        <button className="context-menu-item" onClick={() => { deleteMessage(message.id, false); setShowContextMenu(false); }}>
+                            <Icon name="trash" size={18}/> Удалить
+                        </button>
+                    )}
+                </div>
+            )}
+        </>
+    );
+});
     return (
         <div className="chat">
             <div className="chatbar">
@@ -5196,77 +6372,209 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             </div>
             
             {/* ===== КОМПОЗЕР ===== */}
-            <div className="composer">
-                {isChannel ? (
-                    // === КАНАЛ ===
-                    chat.createdBy === me.uid ? (
-                        // ВЛАДЕЛЕЦ КАНАЛА - показывает поле ввода
-                        <>
-                            <div className="compose">
-                                <input 
-                                    placeholder="Напишите пост..." 
-                                    value={text} 
-                                    onChange={change} 
-                                    onKeyDown={e => { if(e.key==="Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} 
-                                />
-                            </div>
-                            <button className={"send " + (text.trim() ? "ready" : "")} onClick={send}>
-                                <Icon name="send" size={20} />
-                            </button>
-                        </>
+<div className="composer">
+    {isChannel ? (
+        chat.createdBy === me.uid ? (
+            <>
+                <div className="compose">
+                    <input 
+                        placeholder="Напишите пост..." 
+                        value={text} 
+                        onChange={change} 
+                        onKeyDown={handleComposerKeyDown}
+                    />
+                </div>
+                <button className={"send " + (text.trim() ? "ready" : "")} onClick={send}>
+                    <Icon name="send" size={20} />
+                </button>
+            </>
+        ) : (
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                width: '100%',
+                padding: '6px 0'
+            }}>
+                <button 
+                    onClick={toggleSubscribe}
+                    disabled={subscribing}
+                    style={{
+                        width: '100%',
+                        maxWidth: 300,
+                        padding: '10px 20px',
+                        borderRadius: 20,
+                        fontSize: 14,
+                        fontWeight: 600,
+                        border: 'none',
+                        cursor: 'pointer',
+                        transition: '.2s',
+                        background: isSubscribed ? 'var(--ch)' : '#1da1f2',
+                        color: isSubscribed ? 'var(--txt)' : '#fff'
+                    }}
+                >
+                    {subscribing ? '...' : (isSubscribed ? '✅ Вы подписаны' : '➕ Подписаться')}
+                </button>
+            </div>
+        )
+    ) : (
+        <>
+            <div className="compose">
+                <textarea 
+                    ref={textareaRef}
+                    placeholder="Сообщение" 
+                    value={text} 
+                    onChange={change} 
+                    onKeyDown={handleComposerKeyDown}
+                    rows="1"
+                />
+            </div>
+            
+            {/* Кнопки рядом с отправкой */}
+            <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                {/* Кнопка скрепки (стикеры + опросы) */}
+                <button 
+                    className="iconbtn" 
+                    onClick={() => setShowStickers(!showStickers)}
+                    style={{ width: 40, height: 40 }}
+                    title="Стикеры"
+                >
+                    <Icon name="smile" size={20} />
+                </button>
+                
+                {/* Кнопка опросов */}
+                <button 
+                    className="iconbtn" 
+                    onClick={() => setShowPollCreator(true)}
+                    style={{ width: 40, height: 40 }}
+                    title="Создать опрос"
+                >
+                    <Icon name="poll" size={20} />
+                </button>
+                
+                {/* Кнопка записи голосового */}
+                <button 
+                    className="iconbtn" 
+                    onClick={recording ? stopRecording : startRecording}
+                    style={{ 
+                        width: 40, 
+                        height: 40,
+                        color: recording ? '#ba1a1a' : 'var(--muted)'
+                    }}
+                    title={recording ? 'Остановить запись' : 'Голосовое сообщение'}
+                >
+                    {recording ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <span className="rec-dot" style={{ width: 10, height: 10 }} />
+                            <span style={{ fontSize: 11, fontWeight: 600 }}>{recordSeconds}s</span>
+                        </div>
                     ) : (
-                        // НЕ ВЛАДЕЛЕЦ - показывает кнопку подписки вместо поля ввода
-                        <div style={{ 
-                            display: 'flex', 
-                            justifyContent: 'center', 
-                            alignItems: 'center', 
-                            width: '100%',
-                            padding: '6px 0'
-                        }}>
-                            <button 
-                                onClick={toggleSubscribe}
-                                disabled={subscribing}
-                                style={{
-                                    width: '100%',
-                                    maxWidth: 300,
-                                    padding: '10px 20px',
-                                    borderRadius: 20,
-                                    fontSize: 14,
-                                    fontWeight: 600,
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    transition: '.2s',
-                                    background: isSubscribed ? 'var(--ch)' : '#1da1f2',
-                                    color: isSubscribed ? 'var(--txt)' : '#fff'
-                                }}
-                                onMouseEnter={e => {
-                                    if (!isSubscribed) e.target.style.background = '#0d8bd9';
-                                }}
-                                onMouseLeave={e => {
-                                    if (!isSubscribed) e.target.style.background = '#1da1f2';
-                                }}
-                            >
-                                {subscribing ? '...' : (isSubscribed ? '✅ Вы подписаны' : '➕ Подписаться')}
-                            </button>
-                        </div>
-                    )
-                ) : (
-                    // === ГРУППА ИЛИ ЛИЧНЫЙ ЧАТ ===
-                    <>
-                        <div className="compose">
-                            <input 
-                                placeholder="Сообщение" 
-                                value={text} 
-                                onChange={change} 
-                                onKeyDown={e => { if(e.key==="Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} 
-                            />
-                        </div>
-                        <button className={"send " + (text.trim() ? "ready" : "")} onClick={send}>
-                            <Icon name="send" size={20} />
+                        <Icon name="mic" size={20} />
+                    )}
+                </button>
+                
+                {/* Кнопка отправки */}
+                <button className={"send " + (text.trim() ? "ready" : "")} onClick={send}>
+                    <Icon name="send" size={20} />
+                </button>
+            </div>
+        </>
+    )}
+</div>
+
+{/* Панель стикеров */}
+{showStickers && !isChannel && (
+    <div className="sticker-panel" style={{ 
+        position: 'absolute', 
+        bottom: 'calc(100% + 8px)', 
+        left: 0, 
+        right: 0, 
+        background: 'var(--bg)', 
+        border: '1px solid var(--ch)', 
+        borderRadius: 16, 
+        padding: 10, 
+        boxShadow: '0 -4px 24px rgba(0,0,0,.12)', 
+        maxHeight: 220, 
+        overflow: 'auto', 
+        zIndex: 20 
+    }}>
+        {STICKER_PACKS.map(pack => (
+            <div key={pack.name}>
+                <div className="sticker-pack-label">{pack.name}</div>
+                <div className="sticker-grid">
+                    {pack.stickers.map(s => (
+                        <button key={s} className="sticker-btn" onClick={() => sendSticker(s)}>
+                            {s}
                         </button>
-                    </>
+                    ))}
+                </div>
+            </div>
+        ))}
+    </div>
+)}
+
+{/* Модалка создания опроса */}
+{showPollCreator && (
+    <div className="overlay" onClick={() => setShowPollCreator(false)}>
+        <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 400 }}>
+            <div className="modal-head">
+                <h2 style={{ margin: 0, fontSize: 18 }}>📊 Создать опрос</h2>
+                <button className="iconbtn close" onClick={() => setShowPollCreator(false)}><Icon name="close"/></button>
+            </div>
+            <div className="field">
+                <label>Вопрос</label>
+                <input 
+                    placeholder="Что вы думаете?" 
+                    value={pollQuestion} 
+                    onChange={e => setPollQuestion(e.target.value)}
+                    maxLength="200"
+                />
+            </div>
+            <div className="field">
+                <label>Варианты ответа</label>
+                {pollOptions.map((opt, idx) => (
+                    <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
+                        <input 
+                            placeholder={`Вариант ${idx + 1}`} 
+                            value={opt} 
+                            onChange={e => {
+                                const newOpts = [...pollOptions];
+                                newOpts[idx] = e.target.value;
+                                setPollOptions(newOpts);
+                            }}
+                            style={{ flex: 1 }}
+                            maxLength="100"
+                        />
+                        {pollOptions.length > 2 && (
+                            <button className="iconbtn danger" onClick={() => {
+                                setPollOptions(pollOptions.filter((_, i) => i !== idx));
+                            }} style={{ width: 36, height: 36 }}>
+                                <Icon name="close" size={16} />
+                            </button>
+                        )}
+                    </div>
+                ))}
+                {pollOptions.length < 10 && (
+                    <button className="secondary" onClick={() => setPollOptions([...pollOptions, ''])} style={{ marginTop: 4 }}>
+                        + Добавить вариант
+                    </button>
                 )}
             </div>
+            <div className="toggle-row" style={{ padding: '8px 0' }}>
+                <span className="toggle-label">🔒 Анонимный опрос</span>
+                <div className={"toggle " + (pollAnonymous ? "active" : "")} onClick={() => setPollAnonymous(!pollAnonymous)}>
+                    <div className="toggle-knob"/>
+                </div>
+            </div>
+            <div className="modal-actions">
+                <button className="secondary" onClick={() => setShowPollCreator(false)}>Отмена</button>
+                <button className="primary" onClick={createPoll} disabled={pollCreating}>
+                    {pollCreating ? 'Создаём…' : 'Опубликовать опрос'}
+                </button>
+            </div>
+        </div>
+    </div>
+)}
             
             {profile && (
                 <UserProfileModal 
@@ -5297,11 +6605,22 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     onClose={() => setChannelInfo(false)} 
                     onUpdate={onUpdateChat}
                     show={show}
+                    onShare={setShareChannel}
                 />
             )}
             {showChatMenu && <ChatMenu />}
             {selectedMessage && (
                 <ForwardModal message={selectedMessage} onClose={() => setSelectedMessage(null)} />
+            )}
+            {shareChannel && (
+                <ShareChannelModal 
+                    channel={shareChannel}
+                    me={me}
+                    users={users}
+                    metas={metas}
+                    onClose={() => setShareChannel(null)}
+                    show={show}
+                />
             )}
         </div>
     );
@@ -5311,13 +6630,15 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
 function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateChannel, hideLastSeen }) {
     const [search, setSearch] = useState("");
     const [focused, setFocused] = useState(false);
-    const q = normalizeUsername(search);
+    const q = normalizeSearch(search);
 
     // Поиск людей
     const people = useMemo(() => {
         const arr = Object.values(users).filter(u => u.uid !== me.uid);
-        if(!q) { return arr.sort((a,b) => a.username.localeCompare(b.username)).slice(0,20); }
-        return arr.filter(u => u.username === q || u.username.includes(q)).sort((a,b) => a.username.localeCompare(b.username));
+        if(!q) return [];
+        const usernameQuery = normalizeUsername(q);
+        if(!usernameQuery) return [];
+        return arr.filter(u => { const username=(u.username||"").toLowerCase(); return username===usernameQuery || username.includes(usernameQuery); }).sort((a,b)=>a.username.localeCompare(b.username)).slice(0,12);
     }, [users, q, me.uid]);
 
     // Поиск каналов (все каналы)
@@ -5378,7 +6699,7 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
         return result.sort((a,b) => (b.sortTs||0) - (a.sortTs||0));
     }, [metas, users, me.uid]);
 
-    const showPeople = focused || q;
+    const showPeople = !!q || focused;
 
     return (
         <div className="list">
@@ -5397,8 +6718,20 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
             <div className="list-scroll">
                 {showPeople ? (
                     <>
+                        {!q && (
+                            <>
+                                <div className="section-label">Рекомендуемые каналы</div>
+                                {allChannels.slice(0, 5).map(c => (
+                                    <button className="person" key={c.id} onClick={() => { onSelect({ type:"channel", id:c.id, name:c.name, about:c.about, avatarUrl:c.avatarUrl, verified:c.verified }); setSearch(""); setFocused(false); }}>
+                                        <Avatar name={c.name} uid={c.id} avatar={null} avatarUrl={c.avatarUrl} size={48} verified={c.verified} />
+                                        <div className="person-body"><div className="person-row"><span className="person-name">📢 {c.name}</span></div><div className="person-sub">{c.about || "Канал"}</div></div>
+                                    </button>
+                                ))}
+                                {allChannels.length === 0 && <div className="empty" style={{padding:24}}><p>Пока нет доступных каналов.</p></div>}
+                            </>
+                        )}
                         {/* Люди */}
-                        <div className="section-label">{q ? "Результаты поиска" : "Люди"}</div>
+                        {q && <div className="section-label">Результаты поиска</div>}
                         {people.length ? people.map(u => (
                             <button className={"person " + (active === u.uid ? "active" : "")} key={u.uid} onClick={() => {
                                 onSelect({ type:"dm", id:chatIdFor(me.uid, u.uid), uid:u.uid, name:u.name, username:u.username, avatar:u.avatar, avatarUrl:u.avatarUrl, verified:u.verified });
@@ -5497,7 +6830,7 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
                                         <div className="person-sub">
                                             {!isGroup && !isChannel && chat.lastSender === me.uid && (
                                                 <span className="chat-preview-ticks">
-                                                    <Icon name="check" size={15} />
+                                                    <StatusTicks status={chat.lastStatus || "sent"} />
                                                 </span>
                                             )}
                                             <span style={{ minWidth:0, overflow:"hidden", textOverflow:"ellipsis" }}>
@@ -5642,6 +6975,9 @@ function App() {
 
     // Авторизация
     useEffect(() => {
+        const timeout = setTimeout(() => {
+            setLoadErr(prev => prev || "Не удалось подключиться к Firebase. Проверьте интернет и Rules/Authentication.");
+        }, 12000);
         if (!window.auth) {
             setLoadErr("Firebase не инициализирован");
             return;
@@ -5680,7 +7016,7 @@ function App() {
             setLoadErr(friendlyError(e)); 
             show(friendlyError(e), true); 
         });
-        return () => unsub && unsub();
+        return () => { clearTimeout(timeout); if (unsub) unsub(); };
     }, []);
 
     const handleRegisterDone = (result) => {
