@@ -7589,10 +7589,9 @@ body:not(.dark) .channel-tools-popup-v11{
       var voice=document.createElement("button");
       voice.type="button";voice.className="channel-tool-v11";
       voice.dataset.channelTool="voice";voice.title="Голосовое сообщение";voice.textContent="🎙️";
-      voice.onclick=function(){
-        if(window.startVoiceRecording) window.startVoiceRecording();
-        else if(window.startRecording) window.startRecording();
-        else if(window.showToast) window.showToast("Голосовые сообщения не подключены");
+      voice.onclick=function(e){
+        e.preventDefault(); e.stopPropagation();
+        if(window.startVoiceRecordingV14) window.startVoiceRecordingV14();
       };
       c.insertBefore(voice,c.firstElementChild);
     }
@@ -7904,5 +7903,250 @@ body.dark .v13-device-logout{color:#ff8b98!important;background:rgba(255,105,120
   tick();
   new MutationObserver(tick).observe(document.body,{subtree:true,childList:true});
   window.addEventListener("resize",tick,{passive:true});
+})();
+</script>
+
+<style id="media-search-comments-v14">
+/* ===== V14: channels/comments/search/voice/photo UI ===== */
+.v14-channel-tools{display:flex;align-items:center;gap:6px}
+.v14-tool{width:40px;height:40px;border:0;border-radius:14px;background:transparent;color:inherit;font-size:20px;cursor:pointer}
+.v14-tool:hover{background:rgba(127,127,127,.14);transform:translateY(-1px)}
+.v14-comments{
+ display:flex;align-items:center;justify-content:center;gap:7px;
+ min-height:42px;padding:0 16px;border:0;border-top:1px solid rgba(127,127,127,.14);
+ background:transparent;color:inherit;font-weight:700;cursor:pointer;width:100%;
+}
+.v14-comments-count{min-width:22px;height:22px;padding:0 6px;border-radius:11px;
+ display:inline-flex;align-items:center;justify-content:center;background:rgba(127,127,127,.16);font-size:12px}
+.v14-comment-sheet{
+ position:fixed;z-index:2147483000;left:50%;bottom:0;transform:translate(-50%,105%);
+ width:min(560px,100vw);max-height:min(78dvh,680px);overflow:auto;
+ border-radius:26px 26px 0 0;padding:16px;background:rgba(20,19,27,.97);color:#fff;
+ border:1px solid rgba(255,255,255,.12);box-shadow:0 -24px 80px rgba(0,0,0,.45);
+ backdrop-filter:blur(30px) saturate(180%);transition:transform .28s cubic-bezier(.2,.8,.2,1)
+}
+.v14-comment-sheet.open{transform:translate(-50%,0)}
+body:not(.dark) .v14-comment-sheet{background:rgba(250,248,253,.98);color:#211d27}
+.v14-comment-row{padding:10px 4px;border-bottom:1px solid rgba(127,127,127,.14)}
+.v14-comment-user{font-weight:800;cursor:pointer}.v14-comment-user:hover{text-decoration:underline}
+.v14-comment-text{margin-top:3px;line-height:1.35}
+.v14-search-bar{
+ position:fixed;z-index:2147482500;top:max(10px,env(safe-area-inset-top));left:50%;
+ transform:translate(-50%,-140%);width:min(560px,calc(100vw - 20px));
+ padding:8px;border-radius:18px;background:rgba(20,19,27,.95);color:#fff;
+ box-shadow:0 18px 60px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);
+ backdrop-filter:blur(26px);transition:transform .22s ease
+}
+.v14-search-bar.open{transform:translate(-50%,0)}
+body:not(.dark) .v14-search-bar{background:rgba(250,248,253,.98);color:#211d27}
+.v14-search-input{width:100%;box-sizing:border-box;border:0;outline:0;background:rgba(127,127,127,.11);
+ color:inherit;border-radius:12px;height:42px;padding:0 13px;font:inherit}
+.v14-search-results{max-height:45dvh;overflow:auto;margin-top:7px}
+.v14-result{padding:9px;border-radius:11px;cursor:pointer}.v14-result:hover{background:rgba(127,127,127,.13)}
+.v14-result-meta{font-size:11px;opacity:.58;margin-top:3px}
+.v14-recording{
+ position:fixed;z-index:2147482900;left:50%;bottom:86px;transform:translateX(-50%);
+ display:none;align-items:center;gap:10px;padding:10px 14px;border-radius:18px;
+ background:rgba(22,21,29,.96);color:#fff;border:1px solid rgba(255,255,255,.14);
+ box-shadow:0 18px 55px rgba(0,0,0,.4);backdrop-filter:blur(24px)
+}
+.v14-recording.show{display:flex}
+.v14-rec-dot{width:10px;height:10px;border-radius:50%;background:#ff405b;animation:v14pulse 1s ease-in-out infinite}
+.v14-rec-time{font-variant-numeric:tabular-nums;font-weight:800;min-width:42px}
+.v14-rec-wave{display:flex;align-items:center;gap:3px;height:20px}.v14-rec-wave i{width:3px;height:7px;border-radius:3px;background:#fff;animation:v14wave .65s ease-in-out infinite}
+.v14-rec-wave i:nth-child(2){animation-delay:.08s}.v14-rec-wave i:nth-child(3){animation-delay:.16s}.v14-rec-wave i:nth-child(4){animation-delay:.24s}.v14-rec-wave i:nth-child(5){animation-delay:.32s}
+@keyframes v14pulse{50%{opacity:.35;transform:scale(.75)}} @keyframes v14wave{50%{height:18px}}
+.v14-photo-input{display:none}
+.v14-photo-preview{max-width:100%;max-height:180px;border-radius:14px;display:block;margin-top:8px}
+@media(max-width:700px){
+ .v14-comment-sheet{max-height:82dvh}
+ .v14-search-bar{top:max(6px,env(safe-area-inset-top))}
+ .v14-recording{bottom:max(76px,calc(76px + env(safe-area-inset-bottom)))}
+}
+</style>
+
+<script id="media-search-comments-runtime-v14">
+(function(){
+  var recTimer=null,recSeconds=0,mediaRecorder=null,recChunks=[];
+  var commentSheet=null,searchBox=null;
+
+  function toast(x){if(window.showToast)window.showToast(x);else console.warn(x)}
+  function activeId(){
+    return window.activeChannelId||window.currentChannelId||
+      document.querySelector("[data-channel-id]")?.getAttribute("data-channel-id")||
+      document.querySelector("[data-chat-id]")?.getAttribute("data-chat-id")||null;
+  }
+  function safePath(p){return window.safeFirebasePathV10?window.safeFirebasePathV10(p):String(p).replace(/[.#$[\]]/g,"_")}
+
+  /* ---------- COMMENTS ---------- */
+  function ensureCommentsButton(){
+    var root=document.querySelector(".channel-screen-v10,[data-screen='channel']");
+    if(!root)return;
+    var footer=root.querySelector(".channel-composer-v10,.channel-composer-v11")?.parentElement||root;
+    if(root.querySelector("[data-v14-comments]"))return;
+    var b=document.createElement("button");b.type="button";b.className="v14-comments";b.dataset.v14Comments="";
+    b.innerHTML='💬 <span>Комментарии</span> <span class="v14-comments-count" data-v14-count>0</span>';
+    b.onclick=function(){openComments(activeId())};
+    var composer=root.querySelector(".channel-composer-v10,.channel-composer-v11");
+    if(composer&&composer.parentNode)composer.parentNode.insertBefore(b,composer);
+    else root.appendChild(b);
+    loadCommentCount(activeId(),b.querySelector("[data-v14-count]"));
+  }
+  async function loadCommentCount(cid,node){
+    if(!cid||!window.db||!node)return;
+    try{
+      var snap=await window.db.ref(safePath("channels/"+cid+"/comments")).once("value");
+      var n=0;snap.forEach(function(){n++});node.textContent=n;
+    }catch(e){}
+  }
+  function openComments(cid){
+    if(!cid)return toast("Не удалось определить канал");
+    if(commentSheet)commentSheet.remove();
+    commentSheet=document.createElement("div");commentSheet.className="v14-comment-sheet";
+    commentSheet.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:19px">Комментарии</b><button data-close style="border:0;background:transparent;color:inherit;font-size:22px">×</button></div><div data-comments style="margin-top:8px">Загрузка…</div>';
+    document.body.appendChild(commentSheet);requestAnimationFrame(function(){commentSheet.classList.add("open")});
+    commentSheet.querySelector("[data-close]").onclick=closeComments;
+    var list=commentSheet.querySelector("[data-comments]");
+    if(!window.db){list.textContent="Firebase недоступен";return}
+    window.db.ref(safePath("channels/"+cid+"/comments")).limitToLast(100).on("value",function(snap){
+      list.innerHTML="";
+      snap.forEach(function(ch){
+        var d=ch.val()||{},row=document.createElement("div");row.className="v14-comment-row";
+        var u=document.createElement("div");u.className="v14-comment-user";u.textContent="@"+(d.username||d.name||"user");
+        u.onclick=function(){if(window.openProfile)window.openProfile(d.uid)};
+        var t=document.createElement("div");t.className="v14-comment-text";t.textContent=d.text||"";
+        row.append(u,t);list.appendChild(row);
+      });
+    });
+  }
+  function closeComments(){
+    if(commentSheet){commentSheet.classList.remove("open");setTimeout(function(){commentSheet&&commentSheet.remove();commentSheet=null},280)}
+  }
+
+  /* ---------- MESSAGE SEARCH ---------- */
+  function openSearch(){
+    if(searchBox){searchBox.classList.add("open");searchBox.querySelector("input").focus();return}
+    searchBox=document.createElement("div");searchBox.className="v14-search-bar";
+    searchBox.innerHTML='<input class="v14-search-input" placeholder="Поиск сообщений…" autocomplete="off"><div class="v14-search-results"></div>';
+    document.body.appendChild(searchBox);requestAnimationFrame(function(){searchBox.classList.add("open")});
+    var input=searchBox.querySelector("input"),results=searchBox.querySelector(".v14-search-results");
+    input.addEventListener("input",function(){
+      var q=input.value.trim().toLowerCase();results.innerHTML="";
+      if(!q)return;
+      var nodes=document.querySelectorAll("[data-message-id],.message,.msg,.message-bubble");
+      var seen=new Set(),arr=[];
+      nodes.forEach(function(n){
+        var txt=(n.innerText||"").replace(/\s+/g," ").trim();
+        if(txt.toLowerCase().includes(q)&&!seen.has(txt)){seen.add(txt);arr.push({n:n,txt:txt})}
+      });
+      arr.slice(0,30).forEach(function(x){
+        var r=document.createElement("div");r.className="v14-result";r.textContent=x.txt.slice(0,180);
+        r.onclick=function(){x.n.scrollIntoView({behavior:"smooth",block:"center"});x.n.animate([{transform:"scale(1)"},{transform:"scale(1.025)"},{transform:"scale(1)"}],400);closeSearch()};
+        results.appendChild(r);
+      });
+      if(!results.children.length)results.textContent="Ничего не найдено";
+    });
+  }
+  function closeSearch(){if(searchBox){searchBox.classList.remove("open");setTimeout(function(){searchBox?.remove();searchBox=null},220)}}
+
+  /* Add a search button to any chat header/menu that exposes a common overflow button. */
+  function ensureSearchButton(){
+    var root=document.querySelector(".chat,.channel-screen-v10,[data-screen='channel'],[data-screen='group']");
+    if(!root||root.querySelector("[data-v14-search]"))return;
+    var header=root.querySelector(".chat-header,.channel-header,header");
+    if(!header)return;
+    var b=document.createElement("button");b.type="button";b.dataset.v14Search="";b.className="v14-tool";b.title="Поиск сообщений";b.textContent="🔎";b.onclick=openSearch;
+    header.appendChild(b);
+  }
+
+  /* ---------- VOICE RECORDING ---------- */
+  function recordingUI(){
+    var e=document.querySelector(".v14-recording");if(e)return e;
+    e=document.createElement("div");e.className="v14-recording";
+    e.innerHTML='<span class="v14-rec-dot"></span><span>Запись</span><span class="v14-rec-time">00:00</span><span class="v14-rec-wave"><i></i><i></i><i></i><i></i><i></i></span><button data-stop style="border:0;border-radius:10px;padding:7px 10px;background:#ff405b;color:#fff;font-weight:800">■</button>';
+    document.body.appendChild(e);e.querySelector("[data-stop]").onclick=stopRecording;return e;
+  }
+  async function startRecording(){
+    if(mediaRecorder&&mediaRecorder.state==="recording")return;
+    if(!navigator.mediaDevices?.getUserMedia)return toast("Браузер не поддерживает запись с микрофона");
+    try{
+      var stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      recChunks=[];mediaRecorder=new MediaRecorder(stream,{mimeType:"audio/webm;codecs=opus"});
+      mediaRecorder.ondataavailable=function(e){if(e.data.size)recChunks.push(e.data)};
+      mediaRecorder.onstop=function(){
+        stream.getTracks().forEach(function(t){t.stop()});
+        var blob=new Blob(recChunks,{type:"audio/webm"});
+        /* Existing app upload hook, when available. */
+        if(window.sendVoiceBlob)window.sendVoiceBlob(blob);
+        else if(window.uploadVoiceMessage)window.uploadVoiceMessage(blob);
+        else toast("Запись готова — подключите загрузку голосовых в Firebase Storage");
+      };
+      mediaRecorder.start(250);recSeconds=0;
+      var ui=recordingUI();ui.classList.add("show");ui.querySelector(".v14-rec-time").textContent="00:00";
+      recTimer=setInterval(function(){recSeconds++;var m=String(Math.floor(recSeconds/60)).padStart(2,"0"),z=String(recSeconds%60).padStart(2,"0");ui.querySelector(".v14-rec-time").textContent=m+":"+z},1000);
+    }catch(e){console.error(e);toast("Нет доступа к микрофону")}
+  }
+  function stopRecording(){
+    if(recTimer){clearInterval(recTimer);recTimer=null}
+    if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();
+    var ui=document.querySelector(".v14-recording");if(ui)ui.classList.remove("show");
+  }
+  window.startVoiceRecordingV14=startRecording;
+
+  /* ---------- COMPRESSED PHOTO ---------- */
+  async function compressImage(file,maxSide,quality){
+    var bmp=await createImageBitmap(file),scale=Math.min(1,maxSide/Math.max(bmp.width,bmp.height));
+    var c=document.createElement("canvas");c.width=Math.round(bmp.width*scale);c.height=Math.round(bmp.height*scale);
+    c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+    return await new Promise(function(resolve){c.toBlob(resolve,"image/jpeg",quality)});
+  }
+  async function choosePhoto(){
+    var input=document.querySelector(".v14-photo-input");
+    if(!input){input=document.createElement("input");input.type="file";input.accept="image/*";input.className="v14-photo-input";input.capture="environment";document.body.appendChild(input)}
+    input.onchange=async function(){
+      var f=input.files&&input.files[0];if(!f)return;
+      try{
+        var blob=await compressImage(f,1280,.78);
+        if(window.sendImageBlob)await window.sendImageBlob(blob);
+        else if(window.uploadImageMessage)await window.uploadImageMessage(blob);
+        else{
+          var url=URL.createObjectURL(blob);
+          var img=document.createElement("img");img.src=url;img.className="v14-photo-preview";
+          var composer=document.querySelector(".chat-composer,.channel-composer-v10,.channel-composer-v11");
+          composer?.appendChild(img);toast("Фото сжато. Подключите uploadImageMessage для отправки");
+        }
+      }catch(e){console.error(e);toast("Не удалось обработать фото")}
+      input.value="";
+    };
+    input.click();
+  }
+  window.chooseCompressedPhotoV14=choosePhoto;
+
+  function install(){
+    ensureCommentsButton();ensureSearchButton();
+    document.querySelectorAll("[data-channel-tool='voice'],[data-v14-voice]").forEach(function(b){
+      if(b.dataset.v14Bound)return;b.dataset.v14Bound="1";b.onclick=function(e){e.preventDefault();startRecording()}
+    });
+    document.querySelectorAll("[data-channel-tool='photo'],[data-v14-photo]").forEach(function(b){
+      if(b.dataset.v14Bound)return;b.dataset.v14Bound="1";b.onclick=function(e){e.preventDefault();choosePhoto()}
+    });
+  }
+  install();new MutationObserver(install).observe(document.body,{childList:true,subtree:true});
+  document.addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();openSearch()}});
+})();
+</script>
+
+<script id="photo-button-v14">
+(function(){
+ function add(){
+   document.querySelectorAll(".channel-composer-v10,.channel-composer-v11,.chat-composer").forEach(function(c){
+     if(c.querySelector("[data-channel-tool='photo'],[data-v14-photo]"))return;
+     var b=document.createElement("button");b.type="button";b.className="channel-tool-v11 v14-tool";
+     b.dataset.v14Photo="";b.title="Фото";b.textContent="🖼️";
+     b.onclick=function(e){e.preventDefault();e.stopPropagation();window.chooseCompressedPhotoV14&&window.chooseCompressedPhotoV14()};
+     c.insertBefore(b,c.firstElementChild);
+   });
+ }
+ add();new MutationObserver(add).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
