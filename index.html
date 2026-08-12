@@ -7576,3 +7576,96 @@ body:not(.dark) .channel-tools-popup-v11{
   new MutationObserver(install).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
+
+<style id="mobile-visual-fix-v12">
+/* ===== V12 MOBILE VISUAL / LAYER FIX =====
+   The previous mobile layout intentionally left 25% of the chat list visible.
+   On a real phone this looks like a second screen bleeding through the chat.
+*/
+@media(max-width:880px){
+  .panels{
+    position:relative!important;
+    width:100%!important;
+    height:calc(100dvh - 58px)!important;
+    min-height:0!important;
+    overflow:hidden!important;
+    isolation:isolate!important;
+  }
+  .panels.mobile-chat-open .list{
+    transform:translate3d(-100%,0,0)!important;
+    pointer-events:none!important;
+  }
+  .panels.mobile-chat-open .chat{
+    transform:translate3d(0,0,0)!important;
+    left:0!important;right:0!important;width:100%!important;
+    pointer-events:auto!important;
+    z-index:20!important;
+    box-shadow:-10px 0 35px rgba(0,0,0,.10)!important;
+  }
+  .panels:not(.mobile-chat-open) .chat{
+    transform:translate3d(100%,0,0)!important;
+    pointer-events:none!important;
+  }
+  .panels:not(.mobile-chat-open) .list{
+    transform:translate3d(0,0,0)!important;
+    pointer-events:auto!important;
+  }
+
+  /* Don't let the previous page/section visually remain under a new one. */
+  .chat,.list,.panel{
+    backface-visibility:hidden!important;
+    -webkit-backface-visibility:hidden!important;
+  }
+
+  /* Proper mobile safe-area handling. */
+  .mobile-nav{
+    z-index:1000!important;
+    bottom:0!important;
+    padding-bottom:max(7px,env(safe-area-inset-bottom))!important;
+  }
+  .panels.mobile-chat-open + *{pointer-events:none}
+}
+
+/* This rule comes AFTER the old broad mobile rule and therefore wins in dark mode. */
+body.dark .mobile-nav{
+  background:rgba(20,19,27,.90)!important;
+  border-top:1px solid rgba(255,255,255,.11)!important;
+  box-shadow:0 -10px 30px rgba(0,0,0,.28)!important;
+}
+body.dark .mobile-nav-item{color:#aaa6b7!important}
+body.dark .mobile-nav-item.active{color:#bb86fc!important}
+
+/* Settings/profile cards in dark mode should never inherit the light glass. */
+body.dark .setting-card,
+body.dark .profile-card{
+  background:rgba(25,24,32,.82)!important;
+  color:#eee!important;
+  border-color:rgba(255,255,255,.12)!important;
+}
+
+/* Verification badges must wrap instead of breaking the profile card. */
+.badge-verified,.badge-not-verified,.official-badge{
+  display:inline-flex!important;
+  align-items:center!important;
+  white-space:normal!important;
+  max-width:100%!important;
+  vertical-align:middle!important;
+}
+.badge-not-verified{
+  line-height:1.25!important;
+}
+@media(max-width:700px){
+  .profile-head{align-items:flex-start!important;min-width:0!important}
+  .profile-head>div:last-child{min-width:0!important;overflow:hidden!important}
+  .profile-head h2{font-size:22px!important;overflow-wrap:anywhere!important}
+  .profile-head .muted{overflow-wrap:anywhere!important}
+  .profile-head .badge-verified,.profile-head .badge-not-verified{
+    margin-left:0!important;margin-top:5px!important;
+    font-size:10px!important;
+  }
+}
+
+/* Keep the app itself from producing a second scrolling page on iOS. */
+html,body,#root{overscroll-behavior:none!important}
+body{overflow:hidden!important}
+</style>
