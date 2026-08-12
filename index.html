@@ -3031,7 +3031,21 @@ function fmtLastSeen(ts, hideTime = false) {
         return d.toLocaleDateString("ru-RU", {day:"2-digit", month:"2-digit", year:"numeric"}) + " в " + fmtTime(ts);
     }
 }
-function chatIdFor(a,b) { return "dm_"+[a,b].sort().join("_"); }
+function chatIdFor(a, b) {
+    if (!a || !b) return 'dm_invalid';
+    const sorted = [a, b].sort();
+    
+    // Заменяем все запрещённые символы на подчеркивание
+    // Firebase запрещает: . # $ [ ]
+    const safeA = sorted[0].replace(/[.#$\[\]]/g, '_');
+    const safeB = sorted[1].replace(/[.#$\[\]]/g, '_');
+    
+    // Убираем дублирующиеся подчеркивания
+    const cleanA = safeA.replace(/_+/g, '_');
+    const cleanB = safeB.replace(/_+/g, '_');
+    
+    return "dm_" + cleanA + "_" + cleanB;
+}
 function normalizeUsername(v) { return v.toLowerCase().replace(/^@/,"").replace(/[^a-z0-9_]/g,""); }
 function normalizeSearch(v) { return v.toLowerCase().replace(/^@/,"").trim(); }
 function messagesSnapshotEqual(a, b) {
