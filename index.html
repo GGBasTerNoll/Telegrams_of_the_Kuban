@@ -4403,6 +4403,24 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
         setBusy(false);
     }
 
+    async function logoutDevice(device) {
+        if (!device || !device.id || !window.db) return;
+        const isCurrent = device.id === localStorage.getItem('deviceId');
+        if (!confirm(isCurrent ? 'Выйти на этом устройстве?' : 'Выйти из устройства «' + (device.name || 'устройство') + '»?')) return;
+        try {
+            await window.db.ref('devices/' + user.uid + '/' + device.id).remove();
+            if (isCurrent) {
+                localStorage.removeItem('deviceId');
+                if (window.auth && window.auth.signOut) await window.auth.signOut();
+                onLogout();
+            } else {
+                show('Устройство отключено');
+            }
+        } catch(e) {
+            show(friendlyError(e), true);
+        }
+    }
+
     // Функции для выдачи галочек (только для админа)
     async function verifyUser() {
         const u = normalizeUsername(adminUsername);
@@ -4445,34 +4463,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
     return (
         <div className="panel">
             <div className="settings">
-<div className="privacy-section" id="privacy-settings-block">
-  <div className="privacy-section-title">Конфиденциальность</div>
-  <div className="privacy-section-subtitle">Управляйте тем, что видят другие пользователи и кто может вам звонить.</div>
-  <div className="privacy-row">
-    <div className="privacy-row-copy">
-      <div className="privacy-row-title">Скрывать время последнего захода</div>
-      <div className="privacy-row-desc">Другие пользователи не увидят точное время вашего последнего посещения.</div>
-    </div>
-    <button className={"privacy-switch " + (window.MessengerPrivacy && window.MessengerPrivacy.hideLastSeen() ? "on" : "")}
-      onClick={function(e){
-        var next=!(window.MessengerPrivacy && window.MessengerPrivacy.hideLastSeen());
-        if(window.MessengerPrivacy) window.MessengerPrivacy.save({hideLastSeen:next});
-        e.currentTarget.classList.toggle("on",next);
-      }} aria-label="Скрывать время последнего захода"></button>
-  </div>
-  <div className="privacy-row">
-    <div className="privacy-row-copy">
-      <div className="privacy-row-title">Разрешать звонки</div>
-      <div className="privacy-row-desc">Если выключить, пользователи не смогут начать аудиовызов с вами.</div>
-    </div>
-    <button className={"privacy-switch " + (window.MessengerPrivacy && window.MessengerPrivacy.allowCalls() ? "on" : "")}
-      onClick={function(e){
-        var next=!(window.MessengerPrivacy && window.MessengerPrivacy.allowCalls());
-        if(window.MessengerPrivacy) window.MessengerPrivacy.save({allowCalls:next});
-        e.currentTarget.classList.toggle("on",next);
-      }} aria-label="Разрешать звонки"></button>
-  </div>
-</div>
+
 
                 <div className="setting-card">
                     <div className="profile-head">
@@ -4547,6 +4538,35 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                     </button>
                 </div>
                 
+
+                <div className="privacy-section" id="privacy-settings-block">
+  <div className="privacy-section-title">Конфиденциальность</div>
+  <div className="privacy-section-subtitle">Управляйте тем, что видят другие пользователи и кто может вам звонить.</div>
+  <div className="privacy-row">
+    <div className="privacy-row-copy">
+      <div className="privacy-row-title">Скрывать время последнего захода</div>
+      <div className="privacy-row-desc">Другие пользователи не увидят точное время вашего последнего посещения.</div>
+    </div>
+    <button className={"privacy-switch " + (window.MessengerPrivacy && window.MessengerPrivacy.hideLastSeen() ? "on" : "")}
+      onClick={function(e){
+        var next=!(window.MessengerPrivacy && window.MessengerPrivacy.hideLastSeen());
+        if(window.MessengerPrivacy) window.MessengerPrivacy.save({hideLastSeen:next});
+        e.currentTarget.classList.toggle("on",next);
+      }} aria-label="Скрывать время последнего захода"></button>
+  </div>
+  <div className="privacy-row">
+    <div className="privacy-row-copy">
+      <div className="privacy-row-title">Разрешать звонки</div>
+      <div className="privacy-row-desc">Если выключить, пользователи не смогут начать аудиовызов с вами.</div>
+    </div>
+    <button className={"privacy-switch " + (window.MessengerPrivacy && window.MessengerPrivacy.allowCalls() ? "on" : "")}
+      onClick={function(e){
+        var next=!(window.MessengerPrivacy && window.MessengerPrivacy.allowCalls());
+        if(window.MessengerPrivacy) window.MessengerPrivacy.save({allowCalls:next});
+        e.currentTarget.classList.toggle("on",next);
+      }} aria-label="Разрешать звонки"></button>
+  </div>
+</div>
                 <div className="setting-card">
                     <h3 style={{marginTop:0}}>Быстрая реакция (двойной клик)</h3>
                     <div style={{display:'flex', gap:8, flexWrap:'wrap', marginTop:8}}>
@@ -4626,10 +4646,10 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                         <p className="muted">Нет активных устройств</p>
                     ) : (
                         devices.map(device => (
-                            <div className="device-item" key={device.id}>
-                                <span className="device-icon">📱</span>
+                            <div className={"device-item v13-device-item " + (device.current ? "is-current" : "")} key={device.id}>
+                                <div className="v13-device-icon">{device.type === 'mobile' ? '📱' : '💻'}</div>
                                 <div className="device-info">
-                                    <div className="device-name">{device.name}</div>
+                                    <div className="device-name">{device.name || 'Устройство'}</div>
                                     <div className="device-time">
                                         {device.current ? (
                                             <span className="device-current">● В сети сейчас</span>
@@ -4637,7 +4657,11 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                                             'Последний визит: ' + fmtLastSeen(device.lastSeen)
                                         )}
                                     </div>
+                                    {device.browser && <div className="v13-device-browser">{device.browser}</div>}
                                 </div>
+                                <button type="button" className="v13-device-logout" onClick={() => logoutDevice(device)}>
+                                    <Icon name="logout" size={16}/> Выйти
+                                </button>
                             </div>
                         ))
                     )}
@@ -4927,6 +4951,11 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                         </div>
                         <div className="muted" style={{ fontSize: 13 }}>{chat.about || 'Канал'}</div>
                         {isOwner && <div style={{ fontSize: 12, color: '#6750a4', marginTop: 2 }}>👑 Владелец канала</div>}
+                        <div className="v13-channel-id">
+                            <span className="v13-channel-id-label">ID канала</span>
+                            <code>{channelPublicId(chat) || chat.id}</code>
+                            <button type="button" onClick={() => copyChannelId(channelPublicId(chat) || chat.id)} aria-label="Скопировать ID">Копировать</button>
+                        </div>
                     </div>
                     <button className="iconbtn close" onClick={onClose}><Icon name="close"/></button>
                 </div>
@@ -7669,3 +7698,211 @@ body.dark .profile-card{
 html,body,#root{overscroll-behavior:none!important}
 body{overflow:hidden!important}
 </style>
+
+<style id="v13-beauty-overhaul">
+:root{
+  --v13-purple:#7c4dff;
+  --v13-purple2:#a875ff;
+  --v13-glass:rgba(255,255,255,.64);
+  --v13-line:rgba(255,255,255,.58);
+}
+body{
+  background:#f6f3fa!important;
+}
+body.dark{
+  background:#0e0d13!important;
+}
+.setting-card{
+  border-radius:30px!important;
+  padding:24px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.74),rgba(247,243,252,.58))!important;
+  border:1px solid rgba(255,255,255,.78)!important;
+  box-shadow:0 18px 55px rgba(55,35,90,.10),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  backdrop-filter:blur(30px) saturate(160%)!important;
+  -webkit-backdrop-filter:blur(30px) saturate(160%)!important;
+}
+body.dark .setting-card{
+  background:linear-gradient(145deg,rgba(29,28,38,.88),rgba(20,19,27,.76))!important;
+  border-color:rgba(255,255,255,.12)!important;
+  box-shadow:0 20px 65px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.07)!important;
+}
+.settings> .setting-card h3{
+  font-size:22px!important;letter-spacing:-.025em!important;
+}
+.settings .field input,.settings .field textarea{
+  border:1px solid rgba(110,90,150,.14)!important;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.03)!important;
+  min-height:48px!important;
+}
+body.dark .settings .field input,body.dark .settings .field textarea{
+  background:rgba(10,10,15,.52)!important;
+  border-color:rgba(255,255,255,.10)!important;
+}
+.profile-head{
+  padding:2px!important;
+}
+.profile-head .official-badge{
+  border-radius:999px!important;padding:4px 9px!important;
+  background:rgba(124,77,255,.14)!important;color:var(--v13-purple)!important;
+}
+body.dark .profile-head .official-badge{color:#c39bff!important;background:rgba(174,115,255,.14)!important}
+
+#privacy-settings-block{
+  order:20!important;
+  margin-top:2px!important;
+  padding:24px!important;
+  border-radius:30px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(247,243,252,.58))!important;
+  border:1px solid rgba(255,255,255,.78)!important;
+  box-shadow:0 18px 55px rgba(55,35,90,.10),inset 0 1px 0 rgba(255,255,255,.9)!important;
+}
+body.dark #privacy-settings-block{
+  background:linear-gradient(145deg,rgba(29,28,38,.90),rgba(20,19,27,.78))!important;
+  border-color:rgba(255,255,255,.12)!important;
+}
+.privacy-section-title{font-size:23px!important;font-weight:800!important;letter-spacing:-.03em!important}
+.privacy-section-subtitle{margin-top:5px!important;margin-bottom:20px!important}
+.privacy-row{
+  padding:17px 0!important;border-bottom:1px solid rgba(127,127,127,.13)!important;
+}
+.privacy-row:last-child{border-bottom:0!important;padding-bottom:2px!important}
+.privacy-switch{box-shadow:inset 0 0 0 1px rgba(0,0,0,.08),0 5px 18px rgba(90,55,140,.12)!important}
+
+.v13-device-item{
+  display:flex!important;align-items:center!important;gap:13px!important;
+  min-height:72px!important;padding:13px!important;margin:8px 0!important;
+  border-radius:20px!important;
+  background:rgba(127,127,127,.075)!important;
+  border:1px solid rgba(127,127,127,.12)!important;
+}
+body.dark .v13-device-item{
+  background:rgba(255,255,255,.045)!important;
+  border-color:rgba(255,255,255,.09)!important;
+}
+.v13-device-item.is-current{
+  background:linear-gradient(135deg,rgba(124,77,255,.13),rgba(174,115,255,.07))!important;
+  border-color:rgba(124,77,255,.24)!important;
+}
+.v13-device-icon{
+  width:46px!important;height:46px!important;display:grid!important;place-items:center!important;
+  border-radius:15px!important;background:rgba(124,77,255,.12)!important;font-size:23px!important;
+}
+.v13-device-browser{font-size:11px!important;opacity:.52!important;margin-top:3px!important}
+.v13-device-logout{
+  flex:0 0 auto!important;height:36px!important;padding:0 12px!important;
+  border:1px solid rgba(186,26,26,.18)!important;border-radius:12px!important;
+  background:rgba(186,26,26,.08)!important;color:#b4232d!important;
+  display:flex!important;align-items:center!important;gap:6px!important;cursor:pointer!important;
+}
+body.dark .v13-device-logout{color:#ff8b98!important;background:rgba(255,105,120,.08)!important;border-color:rgba(255,105,120,.16)!important}
+
+.v13-channel-id{
+  display:flex!important;align-items:center!important;gap:7px!important;
+  margin-top:9px!important;min-width:0!important;
+}
+.v13-channel-id-label{font-size:11px!important;opacity:.52!important;white-space:nowrap!important}
+.v13-channel-id code{
+  min-width:0!important;max-width:150px!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  padding:4px 7px!important;border-radius:8px!important;
+  background:rgba(127,127,127,.10)!important;font-size:10px!important;
+}
+.v13-channel-id button{
+  border:0!important;border-radius:9px!important;padding:5px 8px!important;
+  background:rgba(124,77,255,.12)!important;color:var(--v13-purple)!important;
+  font-size:10px!important;font-weight:700!important;cursor:pointer!important;
+}
+
+@media(max-width:880px){
+  /* Chat is full viewport when bottom navigation is hidden. */
+  .panels.mobile-chat-open{
+    height:100dvh!important;
+    height:100svh!important;
+  }
+  .panels.mobile-chat-open .chat{
+    height:100%!important;
+    min-height:0!important;
+  }
+  .panels.mobile-chat-open .composer{
+    flex:none!important;
+    min-height:56px!important;
+    padding-bottom:max(7px,env(safe-area-inset-bottom))!important;
+  }
+  .panels.mobile-chat-open .messages{
+    min-height:0!important;
+    padding-bottom:12px!important;
+  }
+  .panels.mobile-chat-open .chatbar{
+    flex:none!important;
+  }
+
+  /* Settings keeps its own bottom navigation space. */
+  .panels.mobile-settings-open{
+    height:calc(100dvh - 56px)!important;
+    height:calc(100svh - 56px)!important;
+  }
+  .panels.mobile-settings-open .panel{
+    padding-bottom:18px!important;
+  }
+  .mobile-nav{
+    height:58px!important;
+    min-height:58px!important;
+    padding-top:6px!important;
+    padding-bottom:max(6px,env(safe-area-inset-bottom))!important;
+    box-sizing:border-box!important;
+    background:rgba(248,246,252,.82)!important;
+    border-top:1px solid rgba(255,255,255,.78)!important;
+    box-shadow:0 -14px 40px rgba(40,25,70,.10)!important;
+    backdrop-filter:blur(30px) saturate(180%)!important;
+    -webkit-backdrop-filter:blur(30px) saturate(180%)!important;
+  }
+  body.dark .mobile-nav{
+    background:rgba(22,21,29,.84)!important;
+    border-top-color:rgba(255,255,255,.10)!important;
+    box-shadow:0 -14px 40px rgba(0,0,0,.28)!important;
+  }
+  .mobile-nav-item{font-weight:700!important}
+  .mobile-nav-item.active{color:var(--v13-purple)!important}
+
+  .settings{
+    width:100%!important;
+  }
+  .setting-card,#privacy-settings-block{
+    border-radius:24px!important;
+    padding:19px!important;
+    margin-bottom:12px!important;
+  }
+  .settings> .setting-card h3,#privacy-settings-block .privacy-section-title{font-size:20px!important}
+  .v13-device-item{padding:11px!important;gap:10px!important}
+  .v13-device-icon{width:42px!important;height:42px!important;border-radius:13px!important}
+  .v13-device-logout{height:34px!important;padding:0 9px!important;font-size:11px!important}
+  .v13-channel-id{flex-wrap:wrap!important}
+}
+</style>
+<script id="v13-layout-runtime">
+(function(){
+  function movePrivacy(){
+    var settings=document.querySelector(".settings"), privacy=document.getElementById("privacy-settings-block");
+    if(!settings||!privacy)return;
+    var cards=[].slice.call(settings.querySelectorAll(":scope > .setting-card"));
+    var profile=cards.find(function(c){
+      var h=c.querySelector("h3"); return h&&h.textContent.trim()==="Данные профиля";
+    });
+    if(profile && privacy.previousElementSibling!==profile) profile.after(privacy);
+  }
+  function cleanOldMobileRules(){
+    /* V12's broad rule is kept, but this runtime guarantees the intended state. */
+    var panels=document.querySelector(".panels");
+    if(!panels)return;
+    if(panels.classList.contains("mobile-chat-open")){
+      panels.style.height="100dvh";
+      panels.style.height="100svh";
+    }else if(panels.classList.contains("mobile-settings-open")){
+      panels.style.height="calc(100dvh - 58px)";
+    }
+  }
+  function tick(){movePrivacy();cleanOldMobileRules()}
+  tick();
+  new MutationObserver(tick).observe(document.body,{subtree:true,childList:true});
+  window.addEventListener("resize",tick,{passive:true});
+})();
+</script>
