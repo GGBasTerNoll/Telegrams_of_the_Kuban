@@ -883,61 +883,146 @@ body.dark .compose input,body.dark .compose textarea{
 
 .msg-sticker{font-size:64px;line-height:1;padding:4px 0}
 
-.voice-msg{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    min-width:180px
+/* ===== ГОЛОСОВЫЕ СООБЩЕНИЯ ===== */
+.voice-msg {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+    padding: 2px 0;
 }
 
-.voice-msg button{
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    background:rgba(255,255,255,.2);
-    display:grid;
-    place-items:center;
-    flex-shrink:0
+.voice-play-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(103, 80, 164, 0.12);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    transition: .2s;
+    border: none;
+    cursor: pointer;
+    color: #6750a4;
 }
 
-.mine .voice-msg button{background:rgba(0,0,0,.12)}
-
-.voice-bar{
-    flex:1;
-    height:4px;
-    background:rgba(0,0,0,.15);
-    border-radius:2px;
-    overflow:hidden
+.voice-play-btn:hover {
+    background: rgba(103, 80, 164, 0.2);
+    transform: scale(1.05);
 }
 
-.mine .voice-bar{background:rgba(255,255,255,.3)}
-
-.voice-fill{
-    height:100%;
-    background:currentColor;
-    border-radius:2px;
-    transition:width .1s linear
+.mine .voice-play-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }
 
-.recording-indicator{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    color:#ba1a1a;
-    font-size:13px;
-    font-weight:600;
-    padding:0 8px
+.mine .voice-play-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
-.rec-dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:#ba1a1a;
-    animation:recPulse 1s infinite
+body.dark .voice-play-btn {
+    background: rgba(187, 134, 252, 0.15);
+    color: #bb86fc;
 }
 
-@keyframes recPulse{50%{opacity:.3}}
+body.dark .voice-play-btn:hover {
+    background: rgba(187, 134, 252, 0.25);
+}
+
+body.dark .mine .voice-play-btn {
+    background: rgba(0, 0, 0, 0.2);
+    color: #000;
+}
+
+body.dark .mine .voice-play-btn:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.voice-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: height .2s;
+}
+
+.voice-bar:hover {
+    height: 6px;
+}
+
+.mine .voice-bar {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+body.dark .voice-bar {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.voice-fill {
+    height: 100%;
+    background: #6750a4;
+    border-radius: 2px;
+    transition: width .1s linear;
+    width: 0%;
+}
+
+.mine .voice-fill {
+    background: #fff;
+}
+
+body.dark .voice-fill {
+    background: #bb86fc;
+}
+
+body.dark .mine .voice-fill {
+    background: #000;
+}
+
+.voice-time {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.3px;
+    color: var(--txt);
+}
+
+.voice-listened {
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.voice-dot {
+    color: #6750a4;
+    font-size: 10px;
+}
+
+body.dark .voice-dot {
+    color: #bb86fc;
+}
+
+.voice-check {
+    color: #2e7d5a;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+
+body.dark .voice-check {
+    color: #4caf50;
+}
+
+.voice-duration {
+    font-size: 11px;
+    opacity: 0.6;
+    color: var(--muted);
+}
 
 .channel-id-row{
     display:flex;
@@ -4793,38 +4878,192 @@ function StatusTicks({ status }) {
     return <Icon name="check" size={16} stroke={2} className="ticks" />;
 }
 
-function VoicePlayer({ src, duration, mine }) {
+// ===== КОМПОНЕНТ ГОЛОСОВОГО ПЛЕЕРА =====
+function VoicePlayer({ src, duration, mine, messageId, chatId, me }) {
     const audioRef = useRef(null);
     const [playing, setPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [totalDuration, setTotalDuration] = useState(duration || 0);
+    const [isListened, setIsListened] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const progressRef = useRef(null);
+    const isDraggingRef = useRef(false);
 
+    // Проверяем, прослушано ли голосовое
     useEffect(() => {
-        const a = audioRef.current;
-        if (!a) return;
-        const onTime = () => setProgress(a.duration ? (a.currentTime / a.duration) * 100 : 0);
-        const onEnd = () => { setPlaying(false); setProgress(0); };
-        a.addEventListener('timeupdate', onTime);
-        a.addEventListener('ended', onEnd);
-        return () => { a.removeEventListener('timeupdate', onTime); a.removeEventListener('ended', onEnd); };
+        if (!messageId || !chatId || !window.db) return;
+        const listenRef = window.db.ref('chats/' + chatId + '/voiceListen/' + messageId + '/' + me.uid);
+        listenRef.on('value', snap => {
+            setIsListened(snap.val() === true);
+        });
+        return () => listenRef.off('value');
+    }, [messageId, chatId, me.uid]);
+
+    // Загрузка аудио и получение длительности
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const onLoadedMetadata = () => {
+            if (audio.duration && !isNaN(audio.duration)) {
+                setTotalDuration(audio.duration);
+                setIsLoaded(true);
+            }
+        };
+
+        const onError = () => {
+            console.warn('Audio load error');
+        };
+
+        audio.addEventListener('loadedmetadata', onLoadedMetadata);
+        audio.addEventListener('error', onError);
+
+        // Если аудио уже загружено
+        if (audio.readyState >= 2) {
+            onLoadedMetadata();
+        }
+
+        return () => {
+            audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+            audio.removeEventListener('error', onError);
+        };
     }, [src]);
 
-    function toggle() {
-        const a = audioRef.current;
-        if (!a) return;
-        if (playing) { a.pause(); setPlaying(false); }
-        else { a.play().then(() => setPlaying(true)).catch(() => {}); }
+    // Обновление прогресса
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const onTimeUpdate = () => {
+            if (!isDraggingRef.current) {
+                const current = audio.currentTime || 0;
+                const total = audio.duration || totalDuration || 1;
+                setCurrentTime(current);
+                setProgress((current / total) * 100);
+            }
+        };
+
+        const onEnded = () => {
+            setPlaying(false);
+            setProgress(100);
+            // Отмечаем как прослушано
+            if (messageId && chatId && window.db) {
+                window.db.ref('chats/' + chatId + '/voiceListen/' + messageId + '/' + me.uid).set(true).catch(() => {});
+            }
+        };
+
+        const onPlay = () => {
+            setPlaying(true);
+        };
+
+        const onPause = () => {
+            setPlaying(false);
+        };
+
+        audio.addEventListener('timeupdate', onTimeUpdate);
+        audio.addEventListener('ended', onEnded);
+        audio.addEventListener('play', onPlay);
+        audio.addEventListener('pause', onPause);
+
+        return () => {
+            audio.removeEventListener('timeupdate', onTimeUpdate);
+            audio.removeEventListener('ended', onEnded);
+            audio.removeEventListener('play', onPlay);
+            audio.removeEventListener('pause', onPause);
+        };
+    }, [totalDuration, messageId, chatId, me.uid]);
+
+    function togglePlay() {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        if (playing) {
+            audio.pause();
+        } else {
+            audio.play().catch(() => {});
+        }
     }
 
-    const label = duration ? Math.floor(duration) + ' сек' : 'Голосовое';
+    // Форматирование времени
+    function formatTime(seconds) {
+        if (!seconds || isNaN(seconds) || seconds === Infinity) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
+
+    // Обработка клика по прогресс-бару
+    function handleProgressClick(e) {
+        const bar = progressRef.current;
+        if (!bar) return;
+        const rect = bar.getBoundingClientRect();
+        const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        const audio = audioRef.current;
+        if (audio && audio.duration) {
+            const newTime = x * audio.duration;
+            audio.currentTime = newTime;
+            setCurrentTime(newTime);
+            setProgress(x * 100);
+        }
+    }
+
+    function handleMouseDown(e) {
+        isDraggingRef.current = true;
+        handleProgressClick(e);
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    function handleMouseMove(e) {
+        if (isDraggingRef.current) {
+            handleProgressClick(e);
+        }
+    }
+
+    function handleMouseUp() {
+        isDraggingRef.current = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+    }
+
+    // Длительность голосового
+    const durationDisplay = totalDuration && isFinite(totalDuration) ? formatTime(totalDuration) : (duration ? formatTime(duration) : '0:00');
+    const currentDisplay = formatTime(currentTime);
+
     return (
         <div className="voice-msg">
-            <audio ref={audioRef} src={src} preload="metadata"/>
-            <button type="button" onClick={toggle} aria-label={playing ? 'Пауза' : 'Воспроизвести'}>
-                <Icon name={playing ? 'pause' : 'play'} size={16} stroke={2}/>
+            <audio ref={audioRef} src={src} preload="metadata" />
+            <button 
+                type="button" 
+                onClick={togglePlay} 
+                aria-label={playing ? 'Пауза' : 'Воспроизвести'}
+                className="voice-play-btn"
+            >
+                {playing ? <Icon name="pause" size={16} stroke={2} /> : <Icon name="play" size={16} stroke={2} />}
             </button>
+            
             <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="voice-bar"><div className="voice-fill" style={{ width: progress + '%' }}/></div>
-                <div style={{ fontSize: 11, opacity: .7, marginTop: 4 }}>{label}</div>
+                <div 
+                    className="voice-bar" 
+                    ref={progressRef}
+                    onClick={handleProgressClick}
+                    onMouseDown={handleMouseDown}
+                >
+                    <div className="voice-fill" style={{ width: progress + '%' }} />
+                </div>
+                <div className="voice-time">
+                    {playing ? currentDisplay : durationDisplay}
+                </div>
+            </div>
+            
+            {/* Индикатор прослушано */}
+            <div className="voice-listened">
+                {isListened ? (
+                    <span className="voice-check">✓✓</span>
+                ) : (
+                    <span className="voice-dot">●</span>
+                )}
             </div>
         </div>
     );
@@ -6088,12 +6327,19 @@ const Message = React.memo(({ message }) => {
     }
 
     // Голосовое
-    if (message.type === 'voice' && message.voiceData) {
+     if (message.type === 'voice' && message.voiceData) {
         return (
             <div className={"row " + (mine ? "mine" : "theirs")}>
                 <div className="bubble-wrapper" id={"msg-" + message.id}>
                     <div className="bubble">
-                        <VoicePlayer src={message.voiceData} duration={message.voiceDuration} mine={mine}/>
+                        <VoicePlayer 
+                            src={message.voiceData} 
+                            duration={message.voiceDuration} 
+                            mine={mine}
+                            messageId={message.id}
+                            chatId={chatId}
+                            me={me}
+                        />
                         <div className="btime">
                             {fmtTime(message.ts)}
                             {mine && <StatusTicks status={message.status || 'sent'}/>}
@@ -6103,6 +6349,7 @@ const Message = React.memo(({ message }) => {
             </div>
         );
     }
+
 
     // Канал (поделиться)
     if (message.type === 'channel_share') {
