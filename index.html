@@ -5402,7 +5402,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             if (isChannel) {
                 if (chat.createdBy !== me.uid) throw new Error("Только владелец канала может публиковать посты");
                 const ref = window.db.ref("chats/" + chatId + "/posts").push();
-                const tsRef = window.db.ref(".sv");
+                const tsRef = window.db.ref("messages");
                 const data = { text:t, ts:window.SV_TS, senderId:me.uid, views:0, viewedBy:{}, reactions:{} };
                 await ref.set(data);
                 await window.db.ref("chatsMeta/" + chatId).update({
@@ -7364,3 +7364,215 @@ body:not(.dark) .msg-context-menu-v8{
  .msg-menu-item-v8{height:43px!important}
 }
 </style>
+
+<style id="channel-fix-v10">
+.channel-screen-v10{position:fixed!important;inset:0!important;z-index:50000!important;background:var(--bg,#f8f7fb)!important;overflow:hidden!important}
+body.dark .channel-screen-v10{background:#0b0b10!important}
+.channel-messages-v10{position:absolute!important;inset:64px 0 76px!important;overflow-y:auto!important;overflow-x:hidden!important}
+.channel-composer-v10{position:absolute!important;left:12px!important;right:12px!important;bottom:10px!important;z-index:20!important;display:flex!important;gap:8px!important;align-items:center!important;padding:8px!important;border-radius:22px!important;background:rgba(255,255,255,.78)!important;border:1px solid rgba(0,0,0,.07)!important;box-shadow:0 8px 35px rgba(0,0,0,.12)!important;backdrop-filter:blur(24px)!important}
+body.dark .channel-composer-v10{background:rgba(25,25,32,.86)!important;color:#fff!important;border-color:rgba(255,255,255,.10)!important}
+.channel-composer-v10 input,.channel-composer-v10 textarea{flex:1!important;min-width:0!important;border:0!important;outline:0!important;background:transparent!important;color:inherit!important;font:inherit!important}
+.channel-id-v10{font-size:12px!important;opacity:.62!important;margin-top:2px!important}
+</style>
+<script id="channel-runtime-fix-v10">
+(function(){
+  function toast(msg){
+    if(window.showToast) return window.showToast(msg);
+    var e=document.createElement("div");
+    e.style.cssText="position:fixed;z-index:999999;left:50%;bottom:90px;transform:translateX(-50%);padding:12px 16px;border-radius:14px;background:#a51d24;color:white;font-weight:700";
+    e.textContent=msg;document.body.appendChild(e);setTimeout(function(){e.remove()},2600);
+  }
+  function validId(v){return v!=null&&String(v).trim()!==""&&String(v)!==".sv"&&!/[.#$[\]]/.test(String(v))}
+  window.safeFirebasePathV10=function(p){
+    return String(p||"").split("/").filter(function(x){return x&&x!==".sv"}).map(function(x){return x.replace(/[.#$[\]]/g,"_")}).join("/");
+  };
+  window.sendChannelMessageV10=async function(channelId,text,me){
+    text=String(text||"").trim();
+    if(!validId(channelId)||!text){toast("Не удалось отправить сообщение");return false}
+    if(!window.db||!window.firebase||!firebase.database){toast("Firebase Database недоступен");return false}
+    try{
+      var ref=window.db.ref(window.safeFirebasePathV10("channels/"+channelId+"/messages"));
+      await ref.push({
+        text:text,
+        uid:me&&me.uid||(window.me&&window.me.uid)||null,
+        name:me&&me.name||(window.me&&window.me.name)||"Пользователь",
+        createdAt:firebase.database.ServerValue.TIMESTAMP
+      });
+      return true;
+    }catch(err){console.error("Channel send:",err);toast("Не удалось отправить сообщение");return false}
+  };
+  window.clearStaleScreensV10=function(){
+    document.querySelectorAll(".channel-screen-v10,[data-screen='channel']").forEach(function(e){
+      if(!e.classList.contains("active")&&!e.classList.contains("open"))e.remove();
+    });
+    document.body.style.overflow="hidden";
+  };
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){document.body.style.overflow="hidden"});
+  else document.body.style.overflow="hidden";
+})();
+</script>
+
+<style id="channel-tools-v11">
+/* Channel composer tools: voice + stickers + polls. No call button in channels. */
+.channel-composer-v11{
+  display:flex!important;align-items:center!important;gap:7px!important;
+}
+.channel-tool-v11{
+  width:40px!important;height:40px!important;flex:0 0 40px!important;
+  border:0!important;border-radius:14px!important;background:transparent!important;
+  color:inherit!important;font-size:20px!important;display:flex!important;
+  align-items:center!important;justify-content:center!important;cursor:pointer!important;
+}
+.channel-tool-v11:hover{background:rgba(127,127,127,.13)!important;transform:translateY(-1px)}
+.channel-send-v11{
+  width:42px!important;height:42px!important;border:0!important;border-radius:15px!important;
+  cursor:pointer!important;font-size:18px!important;
+}
+.channel-tools-popup-v11{
+  position:fixed!important;z-index:2147482000!important;width:min(350px,calc(100vw - 24px))!important;
+  max-height:min(430px,calc(100vh - 120px))!important;overflow:auto!important;
+  padding:12px!important;border-radius:22px!important;background:rgba(18,18,24,.97)!important;
+  color:#fff!important;border:1px solid rgba(255,255,255,.13)!important;
+  box-shadow:0 24px 80px rgba(0,0,0,.48)!important;
+  backdrop-filter:blur(28px) saturate(170%)!important;
+  -webkit-backdrop-filter:blur(28px) saturate(170%)!important;
+}
+body:not(.dark) .channel-tools-popup-v11{
+  background:rgba(250,248,253,.98)!important;color:#211d27!important;
+  border-color:rgba(0,0,0,.08)!important;
+}
+.channel-sticker-grid-v11{
+  display:grid!important;grid-template-columns:repeat(6,1fr)!important;gap:5px!important;
+}
+.channel-sticker-v11{
+  height:48px!important;border:0!important;background:transparent!important;border-radius:12px!important;
+  font-size:28px!important;cursor:pointer!important;
+}
+.channel-sticker-v11:hover{background:rgba(127,127,127,.13)!important;transform:scale(1.06)}
+.channel-poll-v11 label{display:block!important;font-size:12px!important;opacity:.65!important;margin:8px 0 4px}
+.channel-poll-v11 input{box-sizing:border-box!important;width:100%!important;height:40px!important;
+  border-radius:12px!important;border:1px solid rgba(127,127,127,.2)!important;
+  padding:0 11px!important;background:rgba(127,127,127,.08)!important;color:inherit!important}
+.channel-poll-v11 button{width:100%!important;margin-top:10px!important;height:42px!important;
+  border:0!important;border-radius:13px!important;cursor:pointer!important;font-weight:700!important}
+.channel-popup-title-v11{font-weight:750!important;font-size:16px!important;margin-bottom:10px!important}
+</style>
+
+<script id="channel-tools-runtime-v11">
+(function(){
+  var activePopup=null;
+
+  function closePopup(){
+    if(activePopup){activePopup.remove();activePopup=null}
+  }
+  function getChannelComposer(){
+    return document.querySelector(".channel-composer-v10,.channel-composer-v11");
+  }
+  function channelId(){
+    var root=document.querySelector(".channel-screen-v10,[data-channel-id],[data-channel]");
+    return (root&&(root.dataset.channelId||root.getAttribute("data-channel-id")||root.getAttribute("data-channel"))) ||
+      window.activeChannelId || window.currentChannelId || null;
+  }
+  function sendText(text){
+    var id=channelId();
+    if(window.sendChannelMessageV10) return window.sendChannelMessageV10(id,text,window.me||null);
+    if(window.showToast) window.showToast("Не удалось определить канал");
+  }
+  function popup(html,anchor){
+    closePopup();
+    activePopup=document.createElement("div");
+    activePopup.className="channel-tools-popup-v11";
+    activePopup.innerHTML=html;
+    document.body.appendChild(activePopup);
+    var a=anchor.getBoundingClientRect(), r=activePopup.getBoundingClientRect(), pad=10;
+    var left=Math.max(pad,Math.min(a.left,innerWidth-r.width-pad));
+    var top=a.top-r.height-8;
+    if(top<pad) top=Math.min(a.bottom+8,innerHeight-r.height-pad);
+    activePopup.style.left=Math.round(left)+"px";
+    activePopup.style.top=Math.round(Math.max(pad,top))+"px";
+    return activePopup;
+  }
+
+  function stickerPopup(anchor){
+    var packs=window.STICKER_PACKS_V5||window.STICKER_PACKS||[];
+    var list=[];
+    packs.forEach(function(p){(p.stickers||[]).forEach(function(x){list.push(x)})});
+    var html='<div class="channel-popup-title-v11">Стикеры</div><div class="channel-sticker-grid-v11">';
+    list.forEach(function(x){html+='<button class="channel-sticker-v11" type="button" data-sticker="'+x+'">'+x+'</button>'});
+    html+='</div>';
+    var p=popup(html,anchor);
+    p.querySelectorAll("[data-sticker]").forEach(function(b){
+      b.onclick=function(){
+        sendText(b.getAttribute("data-sticker"));
+        closePopup();
+      };
+    });
+  }
+
+  function pollPopup(anchor){
+    var html='<div class="channel-popup-title-v11">Создать опрос</div>'+
+      '<div class="channel-poll-v11"><label>Вопрос</label><input data-poll-q placeholder="Ваш вопрос">'+
+      '<label>Варианты</label><input data-poll-a placeholder="Вариант 1">'+
+      '<input data-poll-b placeholder="Вариант 2">'+
+      '<input data-poll-c placeholder="Вариант 3 (необязательно)">'+
+      '<button data-create-poll>Создать опрос</button></div>';
+    var p=popup(html,anchor);
+    p.querySelector("[data-create-poll]").onclick=async function(){
+      var q=p.querySelector("[data-poll-q]").value.trim();
+      var opts=[p.querySelector("[data-poll-a]").value,p.querySelector("[data-poll-b]").value,p.querySelector("[data-poll-c]").value]
+        .map(function(x){return x.trim()}).filter(Boolean);
+      if(!q||opts.length<2){if(window.showToast)window.showToast("Введите вопрос и минимум 2 варианта");return}
+      var id=channelId();
+      if(!id||!window.db){if(window.showToast)window.showToast("Не удалось определить канал");return}
+      try{
+        await window.db.ref(window.safeFirebasePathV10("channels/"+id+"/polls")).push({
+          question:q,options:opts,createdBy:(window.me&&window.me.uid)||null,
+          createdAt:firebase.database.ServerValue.TIMESTAMP
+        });
+        closePopup();
+        if(window.showToast)window.showToast("Опрос создан");
+      }catch(e){console.error(e);if(window.showToast)window.showToast("Не удалось создать опрос")}
+    };
+  }
+
+  function install(){
+    var c=getChannelComposer(); if(!c)return;
+    c.classList.add("channel-composer-v11");
+
+    /* Remove every call/phone action from channel composer/header. */
+    document.querySelectorAll(".channel-screen-v10 .chat-call-button,.channel-screen-v10 .chat-call-button-v5,.channel-call-button,[data-action='call']").forEach(function(e){e.remove()});
+
+    if(!c.querySelector("[data-channel-tool='stickers']")){
+      var stickers=document.createElement("button");
+      stickers.type="button";stickers.className="channel-tool-v11";
+      stickers.dataset.channelTool="stickers";stickers.title="Стикеры";stickers.textContent="😊";
+      stickers.onclick=function(e){e.preventDefault();e.stopPropagation();stickerPopup(stickers)};
+      c.insertBefore(stickers,c.firstElementChild);
+    }
+    if(!c.querySelector("[data-channel-tool='poll']")){
+      var poll=document.createElement("button");
+      poll.type="button";poll.className="channel-tool-v11";
+      poll.dataset.channelTool="poll";poll.title="Опрос";poll.textContent="📊";
+      poll.onclick=function(e){e.preventDefault();e.stopPropagation();pollPopup(poll)};
+      c.insertBefore(poll,c.firstElementChild);
+    }
+    if(!c.querySelector("[data-channel-tool='voice']")){
+      var voice=document.createElement("button");
+      voice.type="button";voice.className="channel-tool-v11";
+      voice.dataset.channelTool="voice";voice.title="Голосовое сообщение";voice.textContent="🎙️";
+      voice.onclick=function(){
+        if(window.startVoiceRecording) window.startVoiceRecording();
+        else if(window.startRecording) window.startRecording();
+        else if(window.showToast) window.showToast("Голосовые сообщения не подключены");
+      };
+      c.insertBefore(voice,c.firstElementChild);
+    }
+  }
+
+  document.addEventListener("click",function(e){
+    if(activePopup && !activePopup.contains(e.target) && !e.target.closest("[data-channel-tool]"))closePopup();
+  },true);
+  install();
+  new MutationObserver(install).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
