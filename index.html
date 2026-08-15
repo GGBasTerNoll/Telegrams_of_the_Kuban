@@ -1280,7 +1280,6 @@ body.dark .avatar-url-preview .remove-btn{
     margin-top:6px;
 }
 
-/* ГРУППА */
 .group-member-item{
     display:flex;
     align-items:center;
@@ -1522,7 +1521,6 @@ body.dark .toast.error{background:#cf6679;color:#000}
     overflow:auto;
 }
 
-/* ===== КОНТЕКСТНОЕ МЕНЮ ===== */
 .context-menu {
     position: fixed;
     z-index: 60;
@@ -1563,7 +1561,6 @@ body.dark .context-menu-item.danger:hover {
     background: rgba(207, 102, 121, 0.15);
 }
 
-/* ===== ВЫДЕЛЕНИЕ СООБЩЕНИЯ ПРИ ОТВЕТЕ ===== */
 .bubble-wrapper.highlight {
     background: rgba(103, 80, 164, 0.25) !important;
     border-radius: 16px;
@@ -1611,7 +1608,6 @@ body.dark .bubble-wrapper.highlight {
     }
 }
 
-/* ===== ОТВЕТ НА СООБЩЕНИЕ ===== */
 .reply-preview {
     padding: 8px 16px;
     background: var(--ch);
@@ -1648,7 +1644,6 @@ body.dark .reply-preview .reply-info {
     flex-shrink: 0;
 }
 
-/* ===== ПЕРЕСЫЛКА ===== */
 .forward-message-badge {
     font-size: 11px;
     opacity: 0.6;
@@ -1673,7 +1668,6 @@ body.dark .forward-modal .chat-list .person.active {
     background: #3700b3;
 }
 
-/* ===== КАНАЛЫ ===== */
 .channel-stats {
     display: flex;
     gap: 24px;
@@ -1835,7 +1829,6 @@ body.dark .toggle.active{
     gap:8px
 }
 
-/* ===== МОБИЛЬНАЯ НАВИГАЦИЯ ===== */
 .mobile-nav {
     display: none;
     position: fixed;
@@ -1883,9 +1876,7 @@ body.dark .mobile-nav-item.active {
     height: 26px;
 }
 
-/* ===== МОБИЛЬНЫЕ ОТСТУПЫ ===== */
 @media(max-width:880px){
-    /* Убираем лишние отступы */
     .m3 {
         padding-top: 0 !important;
         padding-bottom: 0 !important;
@@ -2312,7 +2303,6 @@ body.dark .mobile-nav-item.active {
     }
 }
 
-/* Галочка на аватарке - просто белая на синем */
 .avatar-wrap .verified-check {
     position: absolute;
     bottom: -2px;
@@ -2336,7 +2326,6 @@ body.dark .avatar-wrap .verified-check {
     border-color: #1a1a1e;
 }
 
-/* Для маленьких аватарок */
 .avatar-wrap .verified-check.small {
     width: 16px;
     height: 16px;
@@ -2345,7 +2334,6 @@ body.dark .avatar-wrap .verified-check {
     right: -1px;
 }
 
-/* Для больших аватарок */
 .avatar-wrap .verified-check.large {
     width: 24px;
     height: 24px;
@@ -2367,7 +2355,6 @@ body.dark .avatar-wrap .verified-check {
     }
 }
 
-/* ===== ГАЛОЧКА ВЕРИФИКАЦИИ ===== */
 .verified-check {
     position: absolute;
     bottom: -2px;
@@ -2386,12 +2373,10 @@ body.dark .avatar-wrap .verified-check {
     line-height: 1;
 }
 
-/* Для темной темы */
 body.dark .verified-check {
     border-color: #1a1a1e;
 }
 
-/* Галочка рядом с именем (в чате, списке) */
 .verified-text {
     display: inline-flex;
     align-items: center;
@@ -2407,7 +2392,6 @@ body.dark .verified-check {
     flex-shrink: 0;
 }
 
-/* Синяя галочка в чате */
 .verified-badge {
     display: inline-flex;
     align-items: center;
@@ -2422,7 +2406,6 @@ body.dark .verified-check {
     gap: 2px;
 }
 
-/* ===== Liquid Glass polish / stability pass ===== */
 :root{
   --glass-blur:26px;
   --glass-sat:145%;
@@ -2435,7 +2418,6 @@ body{
 }
 #root,.m3,.screen{min-height:100dvh;}
 
-/* Живой фон без влияния на скролл */
 .bg{pointer-events:none;will-change:transform;}
 .blob{will-change:transform,opacity;animation-timing-function:cubic-bezier(.37,0,.2,1)!important;}
 
@@ -2515,7 +2497,6 @@ body{
   scrollbar-gutter:stable;
 }
 
-/* Настройки: один предсказуемый скролл */
 .panel{min-height:0;overflow:hidden;}
 .settings{min-height:0;overflow:auto;overscroll-behavior:contain;padding-bottom:max(28px,env(safe-area-inset-bottom));scrollbar-gutter:stable;}
 .setting-card{
@@ -2565,12 +2546,10 @@ body.dark .device-current{color:#5fd992}
 body.dark .device-badge{background:rgba(95,217,146,.16);color:#5fd992}
 
 
-/* Чаты и сообщения: flex-цепочка не ломает scroll на мобильных */
 .panels,.list,.chat,.panel,.messages,.list-scroll{min-height:0;}
 .messages{overscroll-behavior:contain;scrollbar-gutter:stable;scroll-behavior:smooth;}
 .list-scroll{overscroll-behavior:contain;scrollbar-gutter:stable;}
 
-/* Убираем скачки при появлении клавиатуры */
 .composer{padding-bottom:max(8px,env(safe-area-inset-bottom));}
 input,textarea{font-size:16px;}
 
@@ -2637,7 +2616,6 @@ body.dark .modal,body.dark .setting-card,body.dark .reg-card{
 body.dark .search{background:rgba(48,47,57,.68);border-color:rgba(255,255,255,.08);}
 
 
-/* ===== CHAT STABILITY PATCH ===== */
 html, body, #root { width:100%; min-height:100%; }
 .m3, .screen, .shell { min-height:100dvh; }
 .panels, .chat { min-height:0; }
@@ -2687,7 +2665,6 @@ body.dark .msg-mention{color:#bb86fc}
         <p style="color:#49454f;max-width:320px;margin:0;">Загрузка приложения...</p>
         <div style="width:40px;height:40px;border:4px solid #e8def8;border-top-color:#6750a4;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
         <style>@keyframes spin{to{transform:rotate(360deg)}}
-/* ===== FINAL GLASS UI / CHAT COMPOSER ===== */
 :root{
   --glass-1:rgba(255,255,255,.46);
   --glass-2:rgba(255,255,255,.62);
@@ -2730,7 +2707,6 @@ body.dark .theirs .bubble{background:rgba(52,52,64,.60)!important}
 .mine .bubble{background:linear-gradient(135deg,rgba(103,80,164,.90),rgba(142,111,202,.82))!important;backdrop-filter:blur(18px) saturate(150%)!important;-webkit-backdrop-filter:blur(18px) saturate(150%)!important;color:#fff!important}
 body.dark .mine .bubble{background:linear-gradient(135deg,rgba(157,111,211,.88),rgba(108,78,151,.84))!important;color:#fff!important}
 
-/* Composer controls are available in every chat type */
 .composer .attach-btn,.composer .attach-button,.composer .voice-btn,
 .chatbar .attach-btn,.chatbar .attach-button,.chatbar .voice-btn{
   display:inline-flex!important;visibility:visible!important;opacity:1!important;
@@ -2746,7 +2722,6 @@ body.dark .composer input,body.dark .composer textarea{
   background:rgba(10,10,16,.28)!important;border-color:rgba(255,255,255,.12)!important;
 }
 
-/* Polls: readable in both themes, Telegram-like progress */
 .poll-block{
   width:min(100%,430px);
   padding:15px!important;
@@ -2781,7 +2756,6 @@ body.dark .poll-option.selected{
 .poll-percent,.poll-count,.poll-meta{color:var(--muted)!important}
 .poll-option button,.poll-option label{color:var(--txt)!important}
 
-/* Attach menu: stickers + poll only. Voice is intentionally NOT here. */
 .attach-menu{
   border-radius:20px!important;
   padding:8px!important;
@@ -2794,7 +2768,6 @@ body.dark .poll-option.selected{
 .attach-menu .attach-item:hover{background:rgba(127,127,127,.12)!important;transform:translateY(-1px)}
 .attach-menu .attach-item:active{transform:scale(.97)}
 
-/* More polished surfaces */
 .iconbtn,.send,.primary,.secondary{
   transition:transform .18s ease,box-shadow .18s ease,background .18s ease,filter .18s ease;
 }
@@ -2808,25 +2781,11 @@ body.dark .poll-option.selected{
   .poll-block{max-width:calc(100vw - 36px)}
 }
 
-</style>
+        </style>
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
-/* ===== PRIVACY SETTINGS API ===== */
 window.MessengerPrivacy = {
   get(){
     try{
@@ -2862,12 +2821,8 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 </script>
 <script>
-/* =====================================================================
-   ЕДИНАЯ РАБОЧАЯ СИСТЕМА АУДИОЗВОНКОВ (WebRTC + Firebase signaling)
-   Полный цикл: offer -> incoming ring -> answer -> ICE -> разговор -> hangup.
-   ===================================================================== */
 window.CallManager = (function(){
-  var state = null; // {role, chatId, peerUid, pc, stream, remoteAudio, overlay, ringtone, timerInt, startedAt, offCandidates, offSignal}
+  var state = null;
   var incomingWatchRef = null, incomingWatchHandler = null;
 
   function esc(v){return String(v||"").replace(/[&<>"']/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]})}
@@ -2879,7 +2834,6 @@ window.CallManager = (function(){
     setTimeout(function(){el.remove();},3200);
   }
 
-  /* Simple pleasant beep-based ringtone using WebAudio, no external assets needed. */
   function playRing(isOutgoing){
     try{
       var ctx = new (window.AudioContext||window.webkitAudioContext)();
@@ -2928,11 +2882,8 @@ window.CallManager = (function(){
     }
     if(window.db){
       if(s.role==="caller" && s.peerUid){
-        // Я звонил и положил трубку — убираю уведомление о входящем звонке у собеседника,
-        // иначе у него на экране так и останется висеть "входящий звонок".
         window.db.ref("incomingCalls/"+s.peerUid).remove().catch(function(){});
       } else if(window.me && window.me.uid){
-        // Я был вызываемым — убираю своё собственное уведомление.
         window.db.ref("incomingCalls/"+window.me.uid).remove().catch(function(){});
       }
     }
@@ -3130,8 +3081,6 @@ window.CallManager = (function(){
     state.overlay = buildOverlay(info.fromName, info.fromAvatar, "incoming");
     state.stopRing = playRing(false);
 
-    // Слушаем статус звонка СРАЗУ, ещё до нажатия "Принять" — если звонящий положит трубку
-    // во время звонка (пока мы не ответили), наш экран входящего вызова должен закрыться сам.
     state.offSignal = (function(){
       var ref=window.db.ref("calls/"+info.chatId);
       var handler=function(snap){
@@ -3192,9 +3141,7 @@ window.MessengerCallUI = {
 };
 </script>
 
-
 <script>
-/* ===== CHANNEL ID HELPERS ===== */
 window.channelPublicId = window.channelPublicId || function(ch){
   if(!ch) return "";
   return String(ch.username || ch.handle || ch.channelId || ch.id || ch.uid || "");
@@ -3240,14 +3187,8 @@ window.addEventListener("error", e => {
     console.error('Global error:', e);
     const root = document.getElementById('root');
     if (root) {
-        root.innerHTML = `
-            <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui,sans-serif;background:#f7f4fb;color:#1a1b20;flex-direction:column;gap:16px;padding:20px;text-align:center;">
-                <div style="font-size:48px;margin-bottom:8px;">⚠️</div>
-                <h2 style="margin:0;">Ошибка загрузки</h2>
-                <p style="color:#49454f;max-width:320px;margin:0;">${e.message || 'Неизвестная ошибка'}</p>
-                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:#6750a4;color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
-            </div>
-        `;
+        const safeMessage = String(e.message || 'Неизвестная ошибка').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        root.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui,sans-serif;background:#f7f4fb;color:#1a1b20;flex-direction:column;gap:16px;padding:20px;text-align:center;"><div style="font-size:48px;margin-bottom:8px;">⚠️</div><h2 style="margin:0;">Ошибка загрузки</h2><p style="color:#49454f;max-width:320px;margin:0;">' + safeMessage + '</p><button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:#6750a4;color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button></div>';
     }
 });
 
@@ -3261,19 +3202,49 @@ const depsOk = typeof React !== 'undefined' && typeof ReactDOM !== 'undefined' &
 if (!depsOk) {
     const root = document.getElementById('root');
     if (root) {
-        root.innerHTML = `
-            <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui,sans-serif;background:#f7f4fb;color:#1a1b20;flex-direction:column;gap:16px;padding:20px;text-align:center;">
-                <div style="font-size:48px;margin-bottom:8px;">⚠️</div>
-                <h2 style="margin:0;">Ошибка загрузки библиотек</h2>
-                <p style="color:#49454f;max-width:320px;margin:0;">Проверьте подключение к интернету и перезагрузите страницу.</p>
-                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:#6750a4;color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
-            </div>
-        `;
+        root.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui,sans-serif;background:#f7f4fb;color:#1a1b20;flex-direction:column;gap:16px;padding:20px;text-align:center;"><div style="font-size:48px;margin-bottom:8px;">⚠️</div><h2 style="margin:0;">Ошибка загрузки библиотек</h2><p style="color:#49454f;max-width:320px;margin:0;">Проверьте подключение к интернету и перезагрузите страницу.</p><button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:#6750a4;color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button></div>';
     }
     throw new Error('Dependencies not loaded');
 }
 
 const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error('ErrorBoundary caught:', error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',flexDirection:'column',gap:'16px',color:'#ba1a1a',fontFamily:'system-ui'}}><div style={{fontSize:'48px'}}>⚠️</div><h2>Произошла ошибка</h2><p>Попробуйте обновить страницу</p><button onClick={()=>location.reload()} style={{padding:'12px 32px',borderRadius:'25px',background:'#6750a4',color:'#fff',border:'none',fontSize:'16px',cursor:'pointer',fontWeight:'600'}}>Обновить</button></div>;
+    }
+    return this.props.children;
+  }
+}
+
+const MAX_MSG_LEN = 5000;
+const MAX_NAME_LEN = 100;
+const MAX_ABOUT_LEN = 500;
+
+function sanitizeString(v, maxLen = MAX_MSG_LEN) {
+  if (typeof v !== 'string') return '';
+  return v.substring(0, maxLen);
+}
+
+function sanitizeUrl(v) {
+  if (typeof v !== 'string') return '';
+  const trimmed = v.trim();
+  if (!trimmed) return '';
+  if (!/^https?:\/\/.+/i.test(trimmed)) return '';
+  if (/[<>"'`]/.test(trimmed)) return '';
+  return trimmed.substring(0, 500);
+}
 
 const AVATARS = [
     {id:"sun",emoji:"☀️",bg:"#ffd66b"},
@@ -3289,7 +3260,6 @@ const AVATARS = [
 const COLORS = ["#6750a4","#006a6a","#9b4057","#386a20","#8a4b00","#4c5f92","#6c5674"];
 const REACTIONS = ['❤️', '👍', '😂', '😮', '😢', '😡', '🥰', '🔥', '👏', '💯'];
 
-// ===== ИКОНКИ =====
 function Icon({ name, size=22, stroke=2.25, fill="none", className="" }) {
     const paths = {
         search: <><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></>,
@@ -3341,7 +3311,7 @@ function Icon({ name, size=22, stroke=2.25, fill="none", className="" }) {
 
 function avatarData(id) { return AVATARS.find(a=>a.id===id) || AVATARS[0]; }
 
-function initials(n) { return (n||"?") .trim() .split(/\s+/) .slice(0,2) .map(x=>x[0]) .join("") .toUpperCase(); }
+function initials(n) { return String(n||"?").trim().split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase(); }
 
 function avatarColor(key) {
     let h=0;
@@ -3398,7 +3368,7 @@ function safeDbKey(v) {
 }
 function chatIdFor(a,b) { return "dm_"+[safeDbKey(a),safeDbKey(b)].sort().join("_"); }
 
-function normalizeUsername(v) { return v.toLowerCase().replace(/^@/,"").replace(/[^a-z0-9_]/g,""); }
+function normalizeUsername(v) { return String(v||"").toLowerCase().replace(/^@/,"").replace(/[^a-z0-9_]/g,""); }
 
 function friendlyError(e) {
     if(!e) return "Неизвестная ошибка";
@@ -3430,7 +3400,7 @@ function friendlyError(e) {
     if(code === "auth/requires-recent-login") {
         return "Для этого действия требуется повторный вход. Выйдите и войдите снова.";
     }
-    return e.message || "Не удалось выполнить действие.";
+    return String(e.message || "Не удалось выполнить действие.");
 }
 
 function getDeviceInfo() {
@@ -3477,8 +3447,8 @@ async function requestNotifications() {
 function showBrowserNotification(title, text) {
     if(!("Notification" in window) || Notification.permission !== "granted") return;
     try {
-        const n = new Notification(title, {
-            body: text,
+        const n = new Notification(String(title || "Новое сообщение"), {
+            body: String(text || "").substring(0, 200),
             icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%236750a4'/><text x='50' y='67' text-anchor='middle' font-size='58'>💬</text></svg>",
             tag:"kuban-message"
         });
@@ -3491,21 +3461,23 @@ function Toast({ toast }) {
     return (
         <div className={"toast " + (toast.error ? "error" : "")}>
             <Icon name={toast.error ? "info" : "check"} size={19} />
-            {toast.text}
+            {String(toast.text || "")}
         </div>
     );
 }
 
 function Avatar({ name, uid, avatar, avatarUrl, size=48, online=false, group=false, verified=false }) {
     const a = avatarData(avatar);
+    const safeName = sanitizeString(name, MAX_NAME_LEN);
+    const safeAvatarUrl = sanitizeUrl(avatarUrl);
     
-    if (avatarUrl && avatarUrl.trim()) {
+    if (safeAvatarUrl) {
         return (
             <div className="avatar-wrap" style={{ width:size, height:size }}>
                 <div className="avatar" style={{
                     width:size,
                     height:size,
-                    backgroundImage: `url(${avatarUrl})`,
+                    backgroundImage: `url(${safeAvatarUrl})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}>
@@ -3541,10 +3513,10 @@ function Avatar({ name, uid, avatar, avatarUrl, size=48, online=false, group=fal
                 width:size,
                 height:size,
                 fontSize: group ? size*.38 : size*.34,
-                background: a ? a.bg : avatarColor(uid||name),
+                background: a ? a.bg : avatarColor(uid||safeName),
                 color:"#fff"
             }}>
-                {group ? "👥" : (a ? a.emoji : initials(name))}
+                {group ? "👥" : (a ? a.emoji : initials(safeName))}
             </div>
             {online && <span className="online"/>}
             {verified && (
@@ -3570,7 +3542,7 @@ function Avatar({ name, uid, avatar, avatarUrl, size=48, online=false, group=fal
         </div>
     );
 }
-// ===== ЭКРАН ВХОДА/РЕГИСТРАЦИИ =====
+
 function AuthScreen({ onAuth, show }) {
     const [mode, setMode] = useState('login');
     const [email, setEmail] = useState('');
@@ -3626,18 +3598,18 @@ function AuthScreen({ onAuth, show }) {
         setErr('');
         
         try {
-            const usernameCheck = await window.db.ref('usernames/' + u).get();
-            if (usernameCheck.exists()) {
+            const result = await window.auth.createUserWithEmailAndPassword(email, password);
+            const uid = result.user.uid;
+            
+            const claim = await window.db.ref("usernames/" + u).transaction(v => v === null ? uid : undefined);
+            if (!claim.committed) {
                 setErr('Этот юзернейм уже занят');
                 setBusy(false);
                 return;
             }
             
-            const result = await window.auth.createUserWithEmailAndPassword(email, password);
-            const uid = result.user.uid;
-            
             const profile = {
-                name: name.trim(),
+                name: name.trim().substring(0, MAX_NAME_LEN),
                 username: u,
                 about: '',
                 avatar: 'sun',
@@ -3649,7 +3621,6 @@ function AuthScreen({ onAuth, show }) {
             };
             
             await window.db.ref('users/' + uid).set(profile);
-            await window.db.ref('usernames/' + u).set(uid);
             
             await result.user.sendEmailVerification();
             show('Письмо с подтверждением отправлено на ' + email);
@@ -3716,7 +3687,6 @@ function AuthScreen({ onAuth, show }) {
     );
 }
 
-// ===== РЕГИСТРАЦИЯ =====
 function Register({ uid, onDone, show }) {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
@@ -3735,7 +3705,7 @@ function Register({ uid, onDone, show }) {
             const res = await window.db.ref("usernames/"+u).transaction(v => v === null ? uid : undefined);
             if(!res.committed) { setErr("Этот юзернейм уже занят"); setBusy(false); return; }
             const profile = { 
-                name:n, 
+                name:n.substring(0, MAX_NAME_LEN), 
                 username:u, 
                 about:"", 
                 avatar:"sun", 
@@ -3785,19 +3755,12 @@ function Register({ uid, onDone, show }) {
     );
 }
 
-
-
-// ===== ПРОФИЛЬ МОДАЛКА =====
-// ===== ПРОФИЛЬ МОДАЛКА =====
-// ===== ПРОФИЛЬ МОДАЛКА (С ПРИВЯЗКОЙ КАНАЛА) =====
-// ===== ПРОФИЛЬ МОДАЛКА (С ПРИВЯЗКОЙ КАНАЛА) =====
 function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
     const [channelId, setChannelId] = useState(user.channelId || '');
     const [tempChannelId, setTempChannelId] = useState(user.channelId || '');
     const [channel, setChannel] = useState(null);
     const [busy, setBusy] = useState(false);
 
-    // Загрузка информации о канале
     useEffect(() => {
         if (!channelId || !metas) return;
         const found = Object.values(metas).find(m => m.type === 'channel' && m.id === channelId);
@@ -3807,14 +3770,12 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
     async function saveChannel() {
         const id = tempChannelId.trim();
         if (!id) {
-            // Удаляем привязку
             await window.db.ref('users/' + user.uid + '/channelId').remove();
             setChannelId('');
             show('Канал отвязан');
             return;
         }
         
-        // Проверяем, существует ли канал
         const snap = await window.db.ref('chatsMeta/' + id).get();
         if (!snap.exists()) {
             show('Канал не найден', true);
@@ -3855,7 +3816,7 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
                     <Avatar name={user.name} uid={user.uid} avatar={user.avatar} avatarUrl={user.avatarUrl} size={56} verified={user.verified} />
                     <div>
                         <div style={{display:'flex', alignItems:'center', gap:6}}>
-                            <b>{user.name}</b>
+                            <b>{sanitizeString(user.name, MAX_NAME_LEN)}</b>
                             {user.verified && (
                                 <span className="verified-badge" style={{
                                     display: 'inline-flex',
@@ -3873,15 +3834,14 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
                                 </span>
                             )}
                         </div>
-                        <div className="muted">@{user.username}</div>
-                        {user.email && <div className="muted" style={{fontSize:12}}>{user.email}</div>}
+                        <div className="muted">@{sanitizeString(user.username)}</div>
+                        {user.email && <div className="muted" style={{fontSize:12}}>{sanitizeString(user.email)}</div>}
                     </div>
                     <button className="iconbtn close" onClick={onClose}><Icon name="close"/></button>
                 </div>
                 
-                {user.about && <p className="muted" style={{ margin:"0 0 18px" }}>{user.about}</p>}
+                {user.about && <p className="muted" style={{ margin:"0 0 18px" }}>{sanitizeString(user.about, MAX_ABOUT_LEN)}</p>}
                 
-                {/* Привязка канала к профилю */}
                 <div className="setting-card" style={{ margin: '0 0 16px 0', padding: 16 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ fontWeight: 600, fontSize: 14 }}>📢 Привязанный канал</span>
@@ -3905,8 +3865,8 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
                         }} onClick={openChannel}>
                             <Avatar name={channel.name} uid={channel.id} avatar={null} avatarUrl={channel.avatarUrl} size={40} group={false} verified={channel.verified} />
                             <div>
-                                <div style={{ fontWeight: 600 }}>{channel.name}</div>
-                                <div className="muted" style={{ fontSize: 12 }}>{channel.about || 'Канал'}</div>
+                                <div style={{ fontWeight: 600 }}>{sanitizeString(channel.name, MAX_NAME_LEN)}</div>
+                                <div className="muted" style={{ fontSize: 12 }}>{sanitizeString(channel.about, MAX_ABOUT_LEN) || 'Канал'}</div>
                             </div>
                             <span style={{ marginLeft: 'auto', fontSize: 12, color: '#1da1f2' }}>Подписаться →</span>
                         </div>
@@ -3949,8 +3909,6 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
     );
 }
 
-// ===== ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ (С ПЕРЕХОДОМ НА КАНАЛ) =====
-// ===== ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ (С ПЕРЕХОДОМ НА КАНАЛ) =====
 function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, metas }) {
     const [channel, setChannel] = useState(null);
 
@@ -3974,7 +3932,7 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
                     <Avatar name={person.name} uid={person.uid} avatar={person.avatar} avatarUrl={person.avatarUrl} size={70} online={!!presence?.online} verified={person.verified} />
                     <div>
                         <div style={{display:'flex', alignItems:'center', gap:6}}>
-                            <h2 style={{margin:0}}>{person.name}</h2>
+                            <h2 style={{margin:0}}>{sanitizeString(person.name, MAX_NAME_LEN)}</h2>
                             {person.verified && (
                                 <span className="verified-badge" style={{
                                     display: 'inline-flex',
@@ -3992,8 +3950,8 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
                                 </span>
                             )}
                         </div>
-                        <div className="muted">@{person.username}</div>
-                        {person.email && <div className="muted" style={{fontSize:12}}>{person.email}</div>}
+                        <div className="muted">@{sanitizeString(person.username)}</div>
+                        {person.email && <div className="muted" style={{fontSize:12}}>{sanitizeString(person.email)}</div>}
                         <div className="muted" style={{fontSize:12, marginTop:4}}>
                             {presence?.online ? "в сети" : fmtLastSeen(presence?.lastSeen)}
                         </div>
@@ -4004,18 +3962,17 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
                 <div className="setting-card" style={{ margin:0, padding:16 }}>
                     <b>О себе</b>
                     <p className="muted" style={{ margin:"8px 0 0", whiteSpace:"pre-wrap" }}>
-                        {person.about || "Пользователь пока ничего не написал о себе."}
+                        {sanitizeString(person.about, MAX_ABOUT_LEN) || "Пользователь пока ничего не написал о себе."}
                     </p>
                 </div>
                 
-                {/* Привязанный канал */}
                 {channel && (
                     <div className="setting-card" style={{ margin: '12px 0 0 0', padding: 16, cursor: 'pointer' }} onClick={openChannel}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                             <Avatar name={channel.name} uid={channel.id} avatar={null} avatarUrl={channel.avatarUrl} size={44} group={false} verified={channel.verified} />
                             <div>
                                 <div style={{ fontWeight: 600 }}>
-                                    📢 {channel.name}
+                                    📢 {sanitizeString(channel.name, MAX_NAME_LEN)}
                                     {channel.verified && (
                                         <span className="verified-badge" style={{
                                             display: 'inline-flex',
@@ -4033,7 +3990,7 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
                                         </span>
                                     )}
                                 </div>
-                                <div className="muted" style={{ fontSize: 12 }}>{channel.about || 'Канал'}</div>
+                                <div className="muted" style={{ fontSize: 12 }}>{sanitizeString(channel.about, MAX_ABOUT_LEN) || 'Канал'}</div>
                             </div>
                             <span style={{ marginLeft: 'auto', fontSize: 12, color: '#1da1f2' }}>Перейти →</span>
                         </div>
@@ -4048,7 +4005,6 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
     );
 }
 
-// ===== КОМПОНЕНТ ГАЛОЧКИ =====
 function VerifiedBadge({ size = 16, className = "" }) {
     return (
         <span 
@@ -4072,8 +4028,6 @@ function VerifiedBadge({ size = 16, className = "" }) {
     );
 }
 
-// ===== ПРОФИЛЬ ПОЛЬЗОВАТЕЛЯ =====
-// ===== ГРУППА =====
 function GroupModal({ users, me, onClose, onCreated, show }) {
     const [name, setName] = useState("");
     const [picked, setPicked] = useState({});
@@ -4094,7 +4048,7 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
             await ref.set({ 
                 id, 
                 type:"group", 
-                name:name.trim(), 
+                name:name.trim().substring(0, MAX_NAME_LEN), 
                 about:"Группа в Телеграммах по Кубани", 
                 members:m,
                 createdBy: me.uid,
@@ -4130,8 +4084,8 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
                             <input type="checkbox" checked={!!picked[u.uid]} onChange={e=>setPicked({...picked, [u.uid]:e.target.checked})} />
                             <Avatar name={u.name} uid={u.uid} avatar={u.avatar} avatarUrl={u.avatarUrl} size={42} verified={u.verified} />
                             <div>
-                                <b>{u.name}</b>
-                                <div className="muted">@{u.username}</div>
+                                <b>{sanitizeString(u.name, MAX_NAME_LEN)}</b>
+                                <div className="muted">@{sanitizeString(u.username)}</div>
                             </div>
                         </label>
                     ))}
@@ -4145,7 +4099,6 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
     );
 }
 
-// ===== МОДАЛКА ИНФОРМАЦИИ О ГРУППЕ =====
 function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
     const [members, setMembers] = useState([]);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -4185,9 +4138,9 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
         if (!confirm('Удалить участника из группы?')) return;
         setBusy(true);
         try {
+            await window.db.ref('chatsMeta/' + chat.id + '/members/' + uid).remove();
             const newMembers = { ...chat.members };
             delete newMembers[uid];
-            await window.db.ref('chatsMeta/' + chat.id + '/members').set(newMembers);
             const updatedChat = { ...chat, members: newMembers };
             onUpdate(updatedChat);
             show('Участник удалён');
@@ -4201,11 +4154,11 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
         if (!confirm('Вы уверены, что хотите покинуть группу?')) return;
         setBusy(true);
         try {
-            const newMembers = { ...chat.members };
-            delete newMembers[me.uid];
-            await window.db.ref('chatsMeta/' + chat.id + '/members').set(newMembers);
+            await window.db.ref('chatsMeta/' + chat.id + '/members/' + me.uid).remove();
             show('Вы покинули группу');
             onClose();
+            const newMembers = { ...chat.members };
+            delete newMembers[me.uid];
             onUpdate({ ...chat, members: newMembers });
         } catch(e) {
             show(friendlyError(e), true);
@@ -4234,7 +4187,7 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
                                 />
                                 <button className="primary" onClick={() => {
                                     if (newName.trim()) {
-                                        updateGroupInfo('name', newName.trim());
+                                        updateGroupInfo('name', newName.trim().substring(0, MAX_NAME_LEN));
                                         setEditingName(false);
                                     }
                                 }} disabled={busy}>
@@ -4250,7 +4203,7 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
                         ) : (
                             <div>
                                 <h2 style={{ margin: 0, fontSize: 20 }}>
-                                    {chat.name}
+                                    {sanitizeString(chat.name, MAX_NAME_LEN)}
                                     {isAdmin && (
                                         <button className="iconbtn" onClick={() => setEditingName(true)} style={{ marginLeft: 4 }}>
                                             <Icon name="edit" size={16} />
@@ -4278,7 +4231,7 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
                                 autoFocus
                             />
                             <button className="primary" onClick={() => {
-                                updateGroupInfo('about', newAbout.trim());
+                                updateGroupInfo('about', newAbout.trim().substring(0, MAX_ABOUT_LEN));
                                 setEditingAbout(false);
                             }} disabled={busy}>
                                 Сохранить
@@ -4301,7 +4254,7 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
                                 )}
                             </div>
                             <div className="group-about">
-                                {chat.about || 'Описание отсутствует'}
+                                {sanitizeString(chat.about, MAX_ABOUT_LEN) || 'Описание отсутствует'}
                             </div>
                         </div>
                     )}
@@ -4330,11 +4283,11 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
                                     />
                                     <div className="member-info">
                                         <div className="member-name">
-                                            {m.name}
+                                            {sanitizeString(m.name, MAX_NAME_LEN)}
                                             {isMe && ' (Вы)'}
                                             {m.verified && <span className="official-badge" style={{fontSize:10, marginLeft:4}}>Официальный</span>}
                                         </div>
-                                        <div className="member-username">@{m.username}</div>
+                                        <div className="member-username">@{sanitizeString(m.username)}</div>
                                     </div>
                                     {isCreator && (
                                         <span className="member-role">👑 Владелец</span>
@@ -4373,15 +4326,14 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
     );
 }
 
-// ===== НАСТРОЙКИ =====
 function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLastSeen, setHideLastSeen, allowCalls, setAllowCalls }) {
-    const [name, setName] = useState(user.name || "");
-    const [username, setUsername] = useState(user.username || "");
-    const [about, setAbout] = useState(user.about || "");
+    const [name, setName] = useState(sanitizeString(user.name, MAX_NAME_LEN));
+    const [username, setUsername] = useState(sanitizeString(user.username));
+    const [about, setAbout] = useState(sanitizeString(user.about, MAX_ABOUT_LEN));
     const [avatar, setAvatar] = useState(user.avatar || "sun");
-    const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl || "");
-    const [tempAvatarUrl, setTempAvatarUrl] = useState(user.avatarUrl || "");
-    const [email, setEmail] = useState(user.email || "");
+    const [avatarUrl, setAvatarUrl] = useState(sanitizeUrl(user.avatarUrl));
+    const [tempAvatarUrl, setTempAvatarUrl] = useState(sanitizeUrl(user.avatarUrl));
+    const [email, setEmail] = useState(sanitizeString(user.email));
     const [emailPassword, setEmailPassword] = useState("");
     const [busy, setBusy] = useState(false);
     const [emailBusy, setEmailBusy] = useState(false);
@@ -4399,7 +4351,6 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
         localStorage.setItem('quickReaction', quickReaction);
     }, [quickReaction]);
 
-    // Проверка прав администратора
     useEffect(() => {
         if (!user.uid) return;
         const adminRef = window.db.ref('admins/' + user.uid);
@@ -4436,7 +4387,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
         const devicesRef = window.db.ref('devices/' + user.uid);
         const handler = snap => {
             const data = snap.val() || {};
-            const deviceList = Object.keys(data).map(key => ({
+            const deviceList = Object.keys(data).slice(0, 100).map(key => ({
                 id: key,
                 ...data[key]
             })).sort((a, b) => (b.lastSeen || 0) - (a.lastSeen || 0));
@@ -4482,18 +4433,19 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 if(!tr.committed) { show("Этот юзернейм уже занят", true); setBusy(false); return; }
                 await window.db.ref("usernames/"+user.username).remove();
             }
-            const next = { ...user, name:n, username:u, about:about.trim(), avatar, avatarUrl: avatarUrl.trim(), emailVerified };
-            await window.db.ref("users/"+user.uid).set({ 
-                name:n, 
-                username:u, 
-                about:about.trim(), 
-                avatar, 
-                avatarUrl: avatarUrl.trim(),
-                email: user.email || email,
-                emailVerified: emailVerified,
-                verified: user.verified || false,
-                createdAt:user.createdAt || window.SV_TS 
-            });
+            
+            const safeAvatarUrl = sanitizeUrl(avatarUrl);
+            const updates = {
+                name: n.substring(0, MAX_NAME_LEN),
+                username: u,
+                about: about.trim().substring(0, MAX_ABOUT_LEN),
+                avatar: avatar,
+                avatarUrl: safeAvatarUrl,
+                emailVerified: emailVerified
+            };
+            
+            await window.db.ref("users/"+user.uid).update(updates);
+            const next = { ...user, ...updates };
             onSave(next);
             show("Профиль сохранён");
         } catch(e) { show(friendlyError(e), true); }
@@ -4506,7 +4458,9 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
     }
     
     function applyAvatarUrl() {
-        setAvatarUrl(tempAvatarUrl.trim());
+        const sanitized = sanitizeUrl(tempAvatarUrl);
+        if (!sanitized) { show("Некорректный URL", true); return; }
+        setAvatarUrl(sanitized);
         show("URL аватарки сохранён");
     }
     
@@ -4588,9 +4542,11 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
             const chatsSnap = await window.db.ref('chatsMeta').orderByChild('members/' + user.uid).equalTo(true).once('value');
             const updates = {};
             chatsSnap.forEach(child => {
-                updates[safeDbKey(child.key)] = null;
+                updates['chatsMeta/' + child.key + '/members/' + user.uid] = null;
             });
-            await window.db.ref('chatsMeta').update(updates);
+            if (Object.keys(updates).length > 0) {
+                await window.db.ref().update(updates);
+            }
             
             await window.auth.currentUser.delete();
             show('Аккаунт удалён');
@@ -4605,7 +4561,6 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
         setBusy(false);
     }
 
-    // Функции для выдачи галочек (только для админа)
     async function verifyUser() {
         const u = normalizeUsername(adminUsername);
         if (!u) { show('Введите юзернейм', true); return; }
@@ -4669,12 +4624,12 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                         <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={78} verified={user.verified} />
                         <div>
                             <div style={{display:'flex', alignItems:'center', gap:8}}>
-                                <h2 style={{margin:0}}>{name}</h2>
+                                <h2 style={{margin:0}}>{sanitizeString(name, MAX_NAME_LEN)}</h2>
                                 {user.verified && <span className="official-badge">Официальный аккаунт</span>}
                             </div>
-                            <div className="muted">@{normalizeUsername(username)}</div>
+                            <div className="muted">@{sanitizeString(username)}</div>
                             {user.email && <div className="muted" style={{fontSize:12, display:'flex', alignItems:'center', flexWrap:'wrap', gap:6, rowGap:4}}>
-                                <span style={{wordBreak:'break-all'}}>{user.email}</span>
+                                <span style={{wordBreak:'break-all'}}>{sanitizeString(user.email)}</span>
                                 {emailVerified ? 
                                     <span className="badge-verified" style={{padding:'2px 8px', borderRadius:8, background:'#2e7d5a', color:'#fff', fontSize:10, whiteSpace:'nowrap', flexShrink:0}}>✓ Подтверждён</span> :
                                     <span className="badge-not-verified" style={{padding:'2px 8px', borderRadius:8, background:'#ba1a1a', color:'#fff', fontSize:10, whiteSpace:'nowrap', flexShrink:0}}>Не подтверждён</span>
@@ -4759,7 +4714,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                         <div>
                             <div className="email-status">
                                 <Icon name="mail" size={18} />
-                                <span style={{flex:1}}>{user.email}</span>
+                                <span style={{flex:1}}>{sanitizeString(user.email)}</span>
                                 {emailVerified ? 
                                     <span className="badge-verified">✓ Подтверждён</span> :
                                     <span className="badge-not-verified">Не подтверждён</span>
@@ -4815,11 +4770,11 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                     {devices.length === 0 ? (
                         <p className="muted">Нет активных устройств</p>
                     ) : (
-                        devices.map(device => (
+                        devices.slice(0, 20).map(device => (
                             <div className="device-item" key={device.id}>
                                 <span className="device-icon">{deviceEmoji(device.name)}</span>
                                 <div className="device-info">
-                                    <div className="device-name">{device.name}</div>
+                                    <div className="device-name">{sanitizeString(device.name, 100)}</div>
                                     <div className="device-time">
                                         {device.current ? (
                                             <span className="device-current">● В сети сейчас</span>
@@ -4850,7 +4805,6 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                     <button className="secondary" onClick={enableNotifications}><Icon name="bell" size={18}/> Включить уведомления</button>
                 </div>
                 
-                {/* Админ-панель */}
                 {isAdmin && (
                     <div className="setting-card">
                         <h3 style={{marginTop:0}}>🔑 Администрирование</h3>
@@ -4904,7 +4858,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
         </div>
     );
 }
-// ===== СОЗДАНИЕ КАНАЛА =====
+
 function CreateChannelModal({ onClose, onCreated, show, me }) {
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
@@ -4932,10 +4886,10 @@ function CreateChannelModal({ onClose, onCreated, show, me }) {
             const channelData = {
                 id,
                 type: 'channel',
-                name: n,
+                name: n.substring(0, MAX_NAME_LEN),
                 username: u || '',
-                about: about.trim() || 'Канал в Телеграммах по Кубани',
-                avatarUrl: avatarUrl.trim() || '',
+                about: about.trim().substring(0, MAX_ABOUT_LEN) || 'Канал в Телеграммах по Кубани',
+                avatarUrl: sanitizeUrl(avatarUrl),
                 createdBy: me.uid,
                 createdAt: window.SV_TS,
                 isPrivate: isPrivate,
@@ -4960,8 +4914,10 @@ function CreateChannelModal({ onClose, onCreated, show, me }) {
     }
 
     function applyAvatarUrl() {
-        setAvatarUrl(tempAvatarUrl.trim());
-        show('URL аватарки сохранён');
+        const sanitized = sanitizeUrl(tempAvatarUrl);
+        if (!sanitized) { show("Некорректный URL", true); return; }
+        setAvatarUrl(sanitized);
+        show("URL аватарки сохранён");
     }
 
     function openHosting() {
@@ -5052,7 +5008,6 @@ function CreateChannelModal({ onClose, onCreated, show, me }) {
     );
 }
 
-// ===== ИНФОРМАЦИЯ О КАНАЛЕ =====
 function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
     const [subscribers, setSubscribers] = useState([]);
     const [isOwner, setIsOwner] = useState(false);
@@ -5111,13 +5066,14 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
     }
 
     async function updateAvatar() {
-        if (!tempAvatarUrl.trim()) return;
+        const sanitized = sanitizeUrl(tempAvatarUrl);
+        if (!sanitized) return;
         setBusy(true);
         try {
-            await window.db.ref('chatsMeta/' + chatId + '/avatarUrl').set(tempAvatarUrl.trim());
-            const updatedChat = { ...chat, avatarUrl: tempAvatarUrl.trim() };
+            await window.db.ref('chatsMeta/' + chatId + '/avatarUrl').set(sanitized);
+            const updatedChat = { ...chat, avatarUrl: sanitized };
             onUpdate(updatedChat);
-            setEditAvatarUrl(tempAvatarUrl.trim());
+            setEditAvatarUrl(sanitized);
             show('Аватарка обновлена');
         } catch(e) {
             show(friendlyError(e), true);
@@ -5145,15 +5101,15 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                     />
                     <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            <h2 style={{ margin: 0, fontSize: 20 }}>{chat.name}</h2>
+                            <h2 style={{ margin: 0, fontSize: 20 }}>{sanitizeString(chat.name, MAX_NAME_LEN)}</h2>
                             {chat.verified && (
                                 <span className="verified-badge">
                                     <Icon name="verified" size={14} stroke={0} fill="#fff" />
                                 </span>
                             )}
                         </div>
-                        <div className="muted" style={{ fontSize: 13 }}>{chat.about || 'Канал'}</div>
-                        {chat.username && <div style={{ fontSize: 13, color: '#6750a4', fontWeight: 600, marginTop: 2 }}>@{chat.username}</div>}
+                        <div className="muted" style={{ fontSize: 13 }}>{sanitizeString(chat.about, MAX_ABOUT_LEN) || 'Канал'}</div>
+                        {chat.username && <div style={{ fontSize: 13, color: '#6750a4', fontWeight: 600, marginTop: 2 }}>@{sanitizeString(chat.username)}</div>}
                         {isOwner && <div style={{ fontSize: 12, color: '#6750a4', marginTop: 2 }}>👑 Владелец канала</div>}
                     </div>
                     <button className="iconbtn close" onClick={onClose}><Icon name="close"/></button>
@@ -5166,7 +5122,6 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                     </div>
                 </div>
 
-                {/* Настройки канала (только для владельца) */}
                 {isOwner && (
                     <div className="channel-settings">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
@@ -5187,7 +5142,7 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                                     />
                                     <button className="primary" onClick={() => {
                                         if (editName.trim()) {
-                                            updateChannel('name', editName.trim());
+                                            updateChannel('name', editName.trim().substring(0, MAX_NAME_LEN));
                                             setEditing(false);
                                         }
                                     }} disabled={busy} style={{ marginTop: 4 }}>
@@ -5204,7 +5159,7 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                                         maxLength="200"
                                     />
                                     <button className="primary" onClick={() => {
-                                        updateChannel('about', editAbout.trim());
+                                        updateChannel('about', editAbout.trim().substring(0, MAX_ABOUT_LEN));
                                         setEditing(false);
                                     }} disabled={busy} style={{ marginTop: 4 }}>
                                         Сохранить описание
@@ -5247,7 +5202,6 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                     </div>
                 )}
 
-                {/* Список подписчиков (только для владельца) */}
                 {isOwner && (
                     <div style={{ marginTop: 12 }}>
                         <div style={{ fontWeight: 600, fontSize: 14, marginBottom: 8 }}>
@@ -5262,10 +5216,10 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                                         <Avatar name={s.name} uid={s.uid} avatar={s.avatar} avatarUrl={s.avatarUrl} size={32} verified={s.verified} />
                                         <div className="sub-info">
                                             <div className="sub-name">
-                                                {s.name}
+                                                {sanitizeString(s.name, MAX_NAME_LEN)}
                                                 {s.verified && <span className="official-badge" style={{fontSize:9, marginLeft:4}}>Официальный</span>}
                                             </div>
-                                            <div className="sub-username">@{s.username}</div>
+                                            <div className="sub-username">@{sanitizeString(s.username)}</div>
                                         </div>
                                     </div>
                                 ))
@@ -5281,9 +5235,6 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
         </div>
     );
 }
-// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
-// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
-// ===== ЧАТ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ДЛЯ КАНАЛОВ) =====
 
 const STICKER_PACKS = [
     { name: 'Смайлы', stickers: ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😋','😜','🤪','🤨','🧐','🤓','😎','🤩','🥳','😏','🙄','😴','🥺','😢','😭','😤','😡','🤯','🥵','🥶','😱','🤗','🤔','🫡','🤭','🤫','🤥','😐','😬','🥴','🤢','🤮','🤒'] },
@@ -5344,13 +5295,13 @@ function PollBlock({ poll, messageId, chatId, me, show, isChannel }) {
     };
     return <div className="poll-block">
         <div className="poll-title">📊 Опрос</div>
-        <div className="poll-question">{poll.question}</div>
+        <div className="poll-question">{sanitizeString(poll.question, 500)}</div>
         <div className="poll-options">
-            {(poll.options||[]).map((opt,i)=>{
+            {(Array.isArray(poll.options) ? poll.options : []).map((opt,i)=>{
                 const c=Number(counts[i]||0); const pct=total?Math.round(c/total*100):0; const selected=vote===i || myVote===i;
                 return <button key={i} className={'poll-option '+(selected?'selected':'')} onClick={()=>choose(i)} disabled={busy}>
                     <span className="poll-radio">{selected?'●':'○'}</span>
-                    <span className="poll-option-text">{opt}</span>
+                    <span className="poll-option-text">{sanitizeString(opt, 200)}</span>
                     {myVote!==undefined && <><span className="poll-option-percent">{pct}%</span><span className="poll-option-bar" style={{width:pct+'%'}}/></>}
                 </button>;
             })}
@@ -5365,18 +5316,17 @@ function PollCreator({ onClose, onCreate }) {
     const [anonymous,setAnonymous]=useState(false);
     const [busy,setBusy]=useState(false);
     const update=(i,v)=>setOptions(a=>a.map((x,n)=>n===i?v:x));
-    const create=async()=>{const q=question.trim(), opts=options.map(x=>x.trim()).filter(Boolean);if(!q||opts.length<2){return;}setBusy(true);try{await onCreate({question:q,options:opts,anonymous});onClose();}finally{setBusy(false);}};
+    const create=async()=>{const q=question.trim(), opts=options.map(x=>x.trim()).filter(Boolean);if(!q||opts.length<2){return;}setBusy(true);try{await onCreate({question:q.substring(0,500),options:opts.map(o=>o.substring(0,200)),anonymous});onClose();}finally{setBusy(false);}};
     return <div className="overlay" onClick={onClose}><div className="modal poll-creator" onClick={e=>e.stopPropagation()}>
         <div className="modal-head"><h2 style={{margin:0}}>📊 Создать опрос</h2><button className="iconbtn close" onClick={onClose}><Icon name="close"/></button></div>
-        <div className="field"><label>Вопрос</label><input autoFocus value={question} onChange={e=>setQuestion(e.target.value)} placeholder="Например: Куда пойдём сегодня?"/></div>
-        <div className="field"><label>Варианты ответа</label>{options.map((x,i)=><div key={i} style={{display:'flex',gap:8,marginBottom:8}}><input style={{flex:1}} value={x} onChange={e=>update(i,e.target.value)} placeholder={'Вариант '+(i+1)}/>{options.length>2&&<button className="iconbtn" onClick={()=>setOptions(a=>a.filter((_,n)=>n!==i))}><Icon name="close" size={17}/></button>}</div>)}</div>
+        <div className="field"><label>Вопрос</label><input autoFocus value={question} onChange={e=>setQuestion(e.target.value)} placeholder="Например: Куда пойдём сегодня?" maxLength="500"/></div>
+        <div className="field"><label>Варианты ответа</label>{options.map((x,i)=><div key={i} style={{display:'flex',gap:8,marginBottom:8}}><input style={{flex:1}} value={x} onChange={e=>update(i,e.target.value)} placeholder={'Вариант '+(i+1)} maxLength="200"/>{options.length>2&&<button className="iconbtn" onClick={()=>setOptions(a=>a.filter((_,n)=>n!==i))}><Icon name="close" size={17}/></button>}</div>)}</div>
         {options.length<10&&<button className="secondary" onClick={()=>setOptions(a=>[...a,''])}><Icon name="plus" size={17}/> Добавить вариант</button>}
         <label className="poll-check"><input type="checkbox" checked={anonymous} onChange={e=>setAnonymous(e.target.checked)}/> Анонимный опрос</label>
         <div className="modal-actions"><button className="secondary" onClick={onClose}>Отмена</button><button className="primary" disabled={busy||!question.trim()||options.filter(x=>x.trim()).length<2} onClick={create}>{busy?'Создание…':'Создать опрос'}</button></div>
     </div></div>;
 }
 
-// ===== СТАТУС ГАЛОЧЕК =====
 function StatusTicks({ status }) {
     if (status === "read") { return <Icon name="checks" size={16} stroke={2} className="ticks" />; }
     return <Icon name="check" size={16} stroke={2} className="ticks" />;
@@ -5391,11 +5341,9 @@ function getReactionCount(message) {
     return counts;
 }
 
-// ===== КОНТЕКСТНОЕ МЕНЮ (вынесено на верхний уровень модуля — стабильная идентичность компонента,
-// не пересоздаётся при каждом ре-рендере ChatView, поэтому не мерцает и не размонтируется зря) =====
 function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction, replyToMessage, setSelectedMessage, startEdit, deleteMessage }) {
     const menuRef = useRef(null);
-    const mine = message.senderId === me.uid;
+    const mine = String(message.senderId || "") === String(me.uid || "");
     const canEdit = mine && message.type !== 'sticker' && message.type !== 'voice' && message.type !== 'poll' && (!isChannel || chat.createdBy === me.uid);
     const [pos, setPos] = useState({ left: x, top: y, above: false, ready: false });
 
@@ -5414,7 +5362,6 @@ function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction,
         };
     }, [onClose]);
 
-    // Меряем реальный размер меню после рендера и вписываем его в экран — никогда не вылезает за края.
     useEffect(() => {
         const el = menuRef.current;
         if (!el) return;
@@ -5492,58 +5439,60 @@ function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction,
     );
 }
 
-// ===== СООБЩЕНИЕ (вынесено на верхний уровень модуля вместе с ContextMenu — см. комментарий выше) =====
-// ===== ССЫЛКИ И @УПОМИНАНИЯ В ТЕКСТЕ =====
 const RICH_TEXT_RE = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+|(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:com|ru|net|org|io|dev|app|me|to|xyz|info|biz|co|uk|de|fr|pro|shop|site|online|store|club|top|link|tech|su|by|kz|ua)(?:\/[^\s<>"']*)?|@[a-zA-Z0-9_]{3,32})/gi;
 function renderRichText(text, { me, users, metas, onSelectChat }) {
-    if (!text) return text;
-    const str = String(text);
+    const str = sanitizeString(text, MAX_MSG_LEN);
+    if (!str) return str;
     const nodes = [];
     let lastIndex = 0;
     let i = 0;
-    for (const m of str.matchAll(RICH_TEXT_RE)) {
-        const part = m[0];
-        const start = m.index;
-        if (start > lastIndex) nodes.push(str.slice(lastIndex, start));
-        if (part[0] === '@') {
-            const uname = normalizeUsername(part.slice(1));
-            const user = users && Object.values(users).find(u => u.username === uname);
-            const channel = !user && metas && Object.values(metas).find(c => c.type === 'channel' && c.username === uname);
-            if (user) {
-                nodes.push(
-                    <span key={i++} className="msg-mention" onClick={e => {
-                        e.stopPropagation();
-                        onSelectChat && onSelectChat({ type: 'dm', id: chatIdFor(me.uid, user.uid), uid: user.uid, name: user.name, username: user.username, avatar: user.avatar, avatarUrl: user.avatarUrl, verified: user.verified });
-                    }}>{part}</span>
-                );
-            } else if (channel) {
-                nodes.push(
-                    <span key={i++} className="msg-mention" onClick={e => {
-                        e.stopPropagation();
-                        onSelectChat && onSelectChat({ type: 'channel', id: channel.id, name: channel.name, about: channel.about, avatarUrl: channel.avatarUrl, verified: channel.verified, username: channel.username });
-                    }}>{part}</span>
-                );
+    try {
+        for (const m of str.matchAll(RICH_TEXT_RE)) {
+            const part = m[0];
+            const start = m.index;
+            if (start > lastIndex) nodes.push(str.slice(lastIndex, start));
+            if (part[0] === '@') {
+                const uname = normalizeUsername(part.slice(1));
+                const user = users && Object.values(users).find(u => u.username === uname);
+                const channel = !user && metas && Object.values(metas).find(c => c.type === 'channel' && c.username === uname);
+                if (user) {
+                    nodes.push(
+                        <span key={i++} className="msg-mention" onClick={e => {
+                            e.stopPropagation();
+                            onSelectChat && onSelectChat({ type: 'dm', id: chatIdFor(me.uid, user.uid), uid: user.uid, name: user.name, username: user.username, avatar: user.avatar, avatarUrl: user.avatarUrl, verified: user.verified });
+                        }}>{part}</span>
+                    );
+                } else if (channel) {
+                    nodes.push(
+                        <span key={i++} className="msg-mention" onClick={e => {
+                            e.stopPropagation();
+                            onSelectChat && onSelectChat({ type: 'channel', id: channel.id, name: channel.name, about: channel.about, avatarUrl: channel.avatarUrl, verified: channel.verified, username: channel.username });
+                        }}>{part}</span>
+                    );
+                } else {
+                    nodes.push(part);
+                }
             } else {
-                nodes.push(part);
+                const href = /^https?:\/\//i.test(part) ? part : 'https://' + part;
+                nodes.push(
+                    <a key={i++} href={href} target="_blank" rel="noopener noreferrer nofollow"
+                        className="msg-link" onClick={e => e.stopPropagation()}>
+                        {part}
+                    </a>
+                );
             }
-        } else {
-            const href = /^https?:\/\//i.test(part) ? part : 'https://' + part;
-            nodes.push(
-                <a key={i++} href={href} target="_blank" rel="noopener noreferrer nofollow"
-                    className="msg-link" onClick={e => e.stopPropagation()}>
-                    {part}
-                </a>
-            );
+            lastIndex = start + part.length;
         }
-        lastIndex = start + part.length;
+    } catch(e) {
+        return str;
     }
     if (lastIndex < str.length) nodes.push(str.slice(lastIndex));
     return nodes;
 }
 
 const MessageBubble = React.memo(function MessageBubble({ message, me, users, isChannel, isGroup, chatId, chat, show, highlightId, quickReaction, metas, onSelectChat, addReaction, deleteMessage, replyToMessage, startEdit, setSelectedMessage, scrollToMessage }) {
-    const mine = message.senderId === me.uid;
-    const sender = users[message.senderId];
+    const mine = String(message.senderId || "") === String(me.uid || "");
+    const sender = users[String(message.senderId || "")];
     const isDeleted = message.deletedFor && message.deletedFor[me.uid];
     const reactions = getReactionCount(message);
     const [showReactions, setShowReactions] = useState(false);
@@ -5553,7 +5502,7 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
     const longPressTimer = useRef(null);
     const isReplied = highlightId === message.id;
 
-    const views = message.views || 0;
+    const views = Number(message.views) || 0;
 
     if (isDeleted) {
         return (
@@ -5591,6 +5540,8 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
         setIsLongPress(false);
     }
 
+    const safeReplyToText = message.replyTo ? sanitizeString(message.replyTo.text, 200) : '';
+
     return (
         <>
             <div
@@ -5607,25 +5558,25 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                             <div className="quote-block" onClick={(e) => { e.stopPropagation(); scrollToMessage(message.replyTo.id); }}>
                                 <div className="quote-bar" />
                                 <div className="quote-body">
-                                    <div className="quote-sender">{message.replyTo.senderName}</div>
-                                    <div className="quote-text">{message.replyTo.text.substring(0, 50)}{message.replyTo.text.length > 50 && '...'}</div>
+                                    <div className="quote-sender">{sanitizeString(message.replyTo.senderName, 100)}</div>
+                                    <div className="quote-text">{safeReplyToText.substring(0, 50)}{safeReplyToText.length > 50 && '...'}</div>
                                 </div>
                             </div>
                         )}
                         {isGroup && !mine && (
                             <div style={{ fontSize:12, fontWeight:700, color:"#6750a4", marginBottom:3 }}>
-                                {sender?.name || "Участник"}
+                                {sanitizeString(sender?.name, MAX_NAME_LEN) || "Участник"}
                             </div>
                         )}
                         {message.type === 'voice' && message.voiceData ? (
                             <VoicePlayer src={message.voiceData} duration={message.voiceDuration} mine={mine} />
                         ) : message.type === 'sticker' ? (
-                            <div className="msg-sticker">{message.sticker || message.text}</div>
+                            <div className="msg-sticker">{sanitizeString(message.sticker || message.text, 50)}</div>
                         ) : message.type === 'poll' && message.poll ? (
                             <PollBlock poll={message.poll} messageId={message.id} chatId={chatId} me={me} show={show} isChannel={isChannel} />
                         ) : (
                             <div style={{ whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
-                                {message.forwardedFrom && <div style={{ fontSize: 11, opacity: 0.6, marginBottom: 2 }}>📎 Переслано из {message.forwardedFrom}</div>}
+                                {message.forwardedFrom && <div style={{ fontSize: 11, opacity: 0.6, marginBottom: 2 }}>📎 Переслано из {sanitizeString(message.forwardedFrom, 100)}</div>}
                                 {renderRichText(message.text, { me, users, metas, onSelectChat })}
                             </div>
                         )}
@@ -5687,11 +5638,9 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
         </>
     );
 }, (prev, next) => {
-    // Пропускаем ре-рендер бабла, если содержимое сообщения фактически не изменилось —
-    // это устраняет мерцание при перерисовке всего списка на каждый снапшот Firebase.
     const a = prev.message, b = next.message;
     if (a !== b) {
-        if (a.id !== b.id || a.text !== b.text || a.status !== b.status || a.ts !== b.ts ||
+        if (String(a.id||"") !== String(b.id||"") || String(a.text||"") !== String(b.text||"") || a.status !== b.status || a.ts !== b.ts ||
             a.edited !== b.edited || a.sticker !== b.sticker ||
             JSON.stringify(a.reactions || {}) !== JSON.stringify(b.reactions || {}) ||
             JSON.stringify(a.deletedFor || {}) !== JSON.stringify(b.deletedFor || {})) {
@@ -5700,8 +5649,8 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
     }
     const wasHighlighted = prev.highlightId === a.id;
     const isHighlighted = next.highlightId === b.id;
-    if (wasHighlighted !== isHighlighted) return false; // подсветка ответа включилась/выключилась
-    return true; // содержимое и подсветка не изменились — пропускаем ре-рендер
+    if (wasHighlighted !== isHighlighted) return false;
+    return true;
 });
 
 function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpdateChat, metas, onOpenChannel, onSelectChat }) {
@@ -5745,17 +5694,14 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     const pendingMessagesRef = useRef(new Map());
     const quickReaction = localStorage.getItem('quickReaction') || '❤️';
     
-    // Для каналов - отдельное состояние для постов
     const [posts, setPosts] = useState([]);
 
-    // Проверка подписки на канал
     useEffect(() => {
         if (!isChannel || !chat) return;
         setIsSubscribed(!!chat.subscribers?.[me.uid]);
         setSubscribersCount(Object.keys(chat.subscribers || {}).length);
     }, [chat, me.uid, isChannel]);
 
-    // Обновляем подписчиков при изменении
     useEffect(() => {
         if (!isChannel || !chatId || !window.db) return;
         const ref = window.db.ref('chatsMeta/' + chatId + '/subscribers');
@@ -5768,7 +5714,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         return () => ref.off('value', handler);
     }, [chatId, me.uid, isChannel]);
 
-    // Сброс при смене чата
     useEffect(() => {
         setMessages([]);
         setPosts([]);
@@ -5781,7 +5726,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         currentChatIdRef.current = chatId;
     }, [chatId]);
 
-    // Загрузка сообщений/постов — стабильная подписка без зависимости от массива messages.
     useEffect(() => {
         if (!window.db || !chatId) return;
         const currentId = chatId;
@@ -5797,8 +5741,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 .filter(m => m && m.id)
                 .sort((a,b) => Number(a.ts || 0) - Number(b.ts || 0));
 
-            // Убираем локальные optimistic-сообщения, когда Firebase уже прислал их с реальным id.
-            // Сравнение допускает небольшую разницу во времени между локальными часами и серверным ts.
             pendingMessagesRef.current.forEach((local, localId) => {
                 const exists = arr.some(m => m.senderId === local.senderId && m.text === local.text && Math.abs(Number(m.ts || 0) - Number(local.ts || 0)) < 20000);
                 if (exists) pendingMessagesRef.current.delete(localId);
@@ -5807,11 +5749,9 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             else setMessages(arr);
 
             if (!isChannel) {
-                // Одна пакетная запись вместо N отдельных — иначе каждая отметка "прочитано"
-                // сама порождает новый snapshot и весь список лишний раз перерисовывается (мерцание).
                 const updates = {};
                 arr.forEach(m => {
-                    if (m.senderId !== me.uid && m.status !== "read") {
+                    if (String(m.senderId||"") !== String(me.uid||"") && m.status !== "read") {
                         updates["chats/" + currentId + "/messages/" + m.id + "/status"] = "read";
                     }
                 });
@@ -5854,13 +5794,12 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         };
     }, []);
 
-    // ===== УЧЕТ ПРОСМОТРОВ ДЛЯ КАНАЛОВ =====
     useEffect(() => {
         if (!isChannel || posts.length === 0 || !window.db) return;
         
         const lastPost = posts[posts.length - 1];
         if (!lastPost || !lastPost.id) return;
-        if (lastPost.senderId === me.uid) return;
+        if (String(lastPost.senderId||"") === String(me.uid||"")) return;
         
         const viewRef = window.db.ref("chats/"+chatId+"/posts/"+lastPost.id+"/viewedBy/"+me.uid);
         
@@ -5892,7 +5831,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     }, [messages, posts, typing]);
 
     function change(e) {
-        setText(e.target.value);
+        const val = e.target.value.substring(0, MAX_MSG_LEN);
+        setText(val);
         autoGrow(e.target);
         if (!window.db || isChannel) return;
         const r = window.db.ref("typing/"+chatId+"/"+me.uid);
@@ -5906,8 +5846,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         el.style.height = 'auto';
         el.style.height = Math.min(el.scrollHeight, 124) + 'px';
     }
-    // На телефоне/планшете (тачскрин без точного указателя) Enter в поле ввода — обычный перенос
-    // строки, отправка только по кнопке. На ПК — Enter отправляет, Shift+Enter переносит строку.
     function isTouchDevice() {
         return typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
     }
@@ -5918,7 +5856,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         onSubmit();
     }
 
-    // ===== ФУНКЦИЯ ПОДПИСКИ/ОТПИСКИ =====
     async function toggleSubscribe() {
         if (!window.db) return;
         setSubscribing(true);
@@ -5947,8 +5884,11 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         setSubscribing(false);
     }
 
-
-    function sendSticker(sticker){ setShowAttachMenu(false); setShowStickerPanel(false); sendSpecial({type:'sticker',sticker,text:sticker}); }
+    function sendSticker(sticker){ 
+        setShowAttachMenu(false); 
+        setShowStickerPanel(false); 
+        sendSpecial({type:'sticker', sticker: sticker, text: sticker}); 
+    }
     async function sendSpecial(payload){
         if(!window.db||!chatId||sendingRef.current)return;
         if(isChannel && chat.createdBy!==me.uid){show('Только владелец канала может публиковать посты',true);return;}
@@ -5956,14 +5896,23 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         try{
             const path = isChannel ? 'posts' : 'messages';
             const ref=window.db.ref('chats/'+chatId+'/'+path).push();
+            const safeText = sanitizeString(payload.text||'', MAX_MSG_LEN);
             const data = isChannel
-                ? {senderId:me.uid,text:payload.text||'',ts:window.SV_TS,type:payload.type||'text',views:0,viewedBy:{},reactions:{}}
-                : {senderId:me.uid,text:payload.text||'',ts:window.SV_TS,status:'sent',type:payload.type||'text'};
-            if(payload.type==='sticker') data.sticker=payload.sticker;
+                ? {senderId:me.uid,text:safeText,ts:window.SV_TS,type:payload.type||'text',views:0,viewedBy:{},reactions:{}}
+                : {senderId:me.uid,text:safeText,ts:window.SV_TS,status:'sent',type:payload.type||'text'};
+            if(payload.type==='sticker') data.sticker=sanitizeString(payload.sticker, 50);
             if(payload.type==='voice'){data.voiceData=payload.voiceData;data.voiceDuration=payload.voiceDuration;}
-            if(!isChannel && replyTo){data.replyTo={id:replyTo.id,text:replyTo.text||'',senderId:replyTo.senderId,senderName:users[replyTo.senderId]?.name||'Неизвестный'};setReplyTo(null);}
+            if(!isChannel && replyTo){
+                data.replyTo={
+                    id:replyTo.id,
+                    text:sanitizeString(replyTo.text||'', MAX_MSG_LEN),
+                    senderId:replyTo.senderId,
+                    senderName:sanitizeString(users[replyTo.senderId]?.name||'Неизвестный', MAX_NAME_LEN)
+                };
+                setReplyTo(null);
+            }
             await ref.set(data);
-            const lastMessage = payload.type==='voice'?'🎤 Голосовое':payload.type==='sticker'?payload.sticker:payload.text;
+            const lastMessage = payload.type==='voice'?'🎤 Голосовое':payload.type==='sticker'?payload.sticker:safeText;
             if (isChannel) {
                 await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:'channel',lastMessage,lastTs:window.SV_TS,lastSender:me.uid});
             } else {
@@ -5979,9 +5928,9 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         try{
             const path=isChannel?'posts':'messages';
             const ref=window.db.ref('chats/'+chatId+'/'+path).push();
-            const poll={question:data.question,options:data.options,anonymous:!!data.anonymous,createdBy:me.uid,votes:{},counts:{}};
-            await ref.set({senderId:me.uid,text:'📊 Опрос: '+data.question,ts:window.SV_TS,status:'sent',type:'poll',poll});
-            await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:isChannel?'channel':(isGroup?'group':'dm'),lastMessage:'📊 Опрос: '+data.question,lastTs:window.SV_TS,lastSender:me.uid});
+            const poll={question:sanitizeString(data.question, 500),options:data.options.map(o=>sanitizeString(o, 200)),anonymous:!!data.anonymous,createdBy:me.uid,votes:{},counts:{}};
+            await ref.set({senderId:me.uid,text:'📊 Опрос: '+poll.question,ts:window.SV_TS,status:'sent',type:'poll',poll});
+            await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:isChannel?'channel':(isGroup?'group':'dm'),lastMessage:'📊 Опрос: '+poll.question,lastTs:window.SV_TS,lastSender:me.uid});
             if(!isChannel){const recipients=isGroup?Object.keys(chat.members||{}).filter(x=>x!==me.uid):[chat.uid];await Promise.all(recipients.map(uid=>window.db.ref('chatsMeta/'+chatId+'/unreadBy/'+uid).transaction(v=>(Number(v)||0)+1).catch(()=>null)));}
             show('Опрос создан');
         }catch(e){show(friendlyError(e),true);throw e;}
@@ -6006,6 +5955,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 if(recordCancelledRef.current) return;
                 const blob=new Blob(chunks,{type:rec.mimeType||mime||'audio/webm'});
                 if(blob.size<1000){show('Запись слишком короткая',true);return;}
+                if(blob.size>5*1024*1024){show('Голосовое сообщение слишком большое',true);return;}
                 const reader=new FileReader();reader.onload=()=>sendSpecial({type:'voice',voiceData:reader.result,voiceDuration:secs,text:'🎤 Голосовое'});reader.readAsDataURL(blob);
             };
             mediaRecorderRef.current=rec;rec.start(250);setRecording(true);setRecordSeconds(0);recordSecondsRef.current=0;
@@ -6021,7 +5971,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     }
 
     async function send() {
-        const t = text.trim();
+        const t = text.trim().substring(0, MAX_MSG_LEN);
         if (!t || sendingRef.current) return;
         if (!window.db) { show("Нет подключения к серверу", true); return; }
         if (!me?.uid) { show("Пользователь не авторизован", true); return; }
@@ -6030,9 +5980,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         sendingRef.current = true;
         setText("");
         if (!isChannel) window.db.ref("typing/" + chatId + "/" + me.uid).remove().catch(() => {});
-        // Firebase применяет запись локально мгновенно (до подтверждения сервером), поэтому
-        // отдельное "оптимистичное" сообщение в состоянии не нужно — оно только дублировалось
-        // и мерцало на долю секунды, пока не приходил настоящий снапшот.
 
         try {
             if (isChannel) {
@@ -6049,9 +5996,9 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 if (replyTo) {
                     data.replyTo = {
                         id:replyTo.id,
-                        text:replyTo.text || "",
+                        text:sanitizeString(replyTo.text || "", MAX_MSG_LEN),
                         senderId:replyTo.senderId,
-                        senderName:users[replyTo.senderId]?.name || "Неизвестный"
+                        senderName:sanitizeString(users[replyTo.senderId]?.name || "Неизвестный", MAX_NAME_LEN)
                     };
                     setReplyTo(null);
                     setHighlightId(null);
@@ -6077,7 +6024,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 }
                 await window.db.ref("chatsMeta/" + chatId).update(meta);
 
-                // Непрочитанные — отдельной операцией, чтобы ошибка Rules здесь не откатывала отправку.
                 const recipient = isGroup ? Object.keys(chat.members || {}).filter(uid => uid !== me.uid) : [chat.uid];
                 await Promise.all(recipient.map(uid =>
                     window.db.ref("chatsMeta/" + chatId + "/unreadBy/" + uid)
@@ -6087,7 +6033,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             }
         } catch (e) {
             console.error("Send error:", e);
-            // Возвращаем текст, чтобы пользователь не потерял его на телефоне при ошибке сети/Rules.
             setText(t);
             show(friendlyError(e), true);
         } finally {
@@ -6095,7 +6040,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         }
     }
 
-    // ===== РЕАКЦИИ =====
     async function addReaction(messageId, reaction) {
         try {
             const path = isChannel ? 
@@ -6111,7 +6055,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         }
     }
 
-    // ===== УДАЛЕНИЕ =====
     async function deleteMessage(messageId, forAll = false) {
         if (!confirm(forAll ? 'Удалить для всех?' : 'Удалить только для себя?')) return;
         try {
@@ -6136,7 +6079,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         setContextMenu(null);
     }
 
-    // ===== РЕДАКТИРОВАНИЕ =====
     function startEdit(message) {
         if (isChannel && chat.createdBy !== me.uid) return;
         if (message.type === 'sticker' || message.type === 'voice' || message.type === 'poll') {
@@ -6145,12 +6087,12 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         }
         setEditingMessage(message);
         setReplyTo(null);
-        setText(message.text || '');
+        setText(sanitizeString(message.text, MAX_MSG_LEN) || '');
         setContextMenu(null);
         setTimeout(() => document.querySelector('.compose input')?.focus(), 0);
     }
     async function saveEdit() {
-        const t = text.trim();
+        const t = text.trim().substring(0, MAX_MSG_LEN);
         if (!editingMessage) return;
         if (!t) { show('Сообщение не может быть пустым', true); return; }
         try {
@@ -6169,7 +6111,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     }
     function cancelEdit() { setEditingMessage(null); setText(''); }
 
-    // ===== ОТВЕТ =====
     function replyToMessage(message) {
         if (isChannel) {
             show('В каналах ответы не доступны', true);
@@ -6190,7 +6131,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         }, 3000);
     }
 
-    // ===== ПЕРЕХОД К ОРИГИНАЛУ ЦИТАТЫ =====
     function scrollToMessage(id) {
         const el = document.getElementById('msg-' + id);
         if (el) {
@@ -6202,7 +6142,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         }
     }
 
-    // ===== ПЕРЕСЛАТЬ =====
     function ForwardModal({ message, onClose }) {
         const [search, setSearch] = useState('');
         const [selectedChat, setSelectedChat] = useState(null);
@@ -6235,7 +6174,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         }, [metas, users, me.uid, chatId]);
         
         const filteredChats = search 
-            ? availableChats.filter(c => c.name.toLowerCase().includes(search.toLowerCase()))
+            ? availableChats.filter(c => sanitizeString(c.name).toLowerCase().includes(search.toLowerCase()))
             : availableChats;
         
         async function forwardMessage() {
@@ -6246,10 +6185,10 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 const mr = window.db.ref("chats/"+targetChatId+"/messages").push();
                 await mr.set({
                     senderId: me.uid,
-                    text: '📎 Пересланное сообщение:\n' + message.text,
+                    text: '📎 Пересланное сообщение:\n' + sanitizeString(message.text, MAX_MSG_LEN),
                     ts: window.SV_TS,
                     status: 'sent',
-                    forwardedFrom: chat.name || 'Чат'
+                    forwardedFrom: sanitizeString(chat.name, 100) || 'Чат'
                 });
                 const meta = { 
                     id: targetChatId, type: selectedChat.type || 'dm', 
@@ -6297,8 +6236,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                                 >
                                     <Avatar name={c.name} uid={c.uid || c.id} avatar={c.avatar} avatarUrl={c.avatarUrl} size={36} group={c.type === 'group'} verified={c.verified} />
                                     <div className="person-body">
-                                        <div className="person-name">{c.name}</div>
-                                        <div className="person-sub">{c.type === 'group' ? 'Группа' : c.type === 'channel' ? '📢 Канал' : '@' + (c.username || '')}</div>
+                                        <div className="person-name">{sanitizeString(c.name, MAX_NAME_LEN)}</div>
+                                        <div className="person-sub">{c.type === 'group' ? 'Группа' : c.type === 'channel' ? '📢 Канал' : '@' + sanitizeString(c.username)}</div>
                                     </div>
                                 </div>
                             ))
@@ -6315,7 +6254,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         );
     }
 
-    // ===== МЕНЮ ЧАТА =====
     function ChatMenu() {
         return (
             <div className="overlay" onClick={() => setShowChatMenu(false)}>
@@ -6358,7 +6296,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 const updates = {};
                 (isChannel ? posts : messages).forEach(m => { 
                     if (m.id) {
-                        updates["chats/"+safeDbKey(chatId)+"/" + (isChannel ? "posts" : "messages") + "/"+safeDbKey(m.id)+"/deletedFor/"+safeDbKey(me.uid)] = true; 
+                        updates["chats/"+chatId+"/" + (isChannel ? "posts" : "messages") + "/"+m.id+"/deletedFor/"+me.uid] = true; 
                     }
                 });
                 if (Object.keys(updates).length > 0) {
@@ -6409,7 +6347,6 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         setShowChatMenu(false);
     }
 
-
     return (
         <div className="chat">
             <div className="chatbar">
@@ -6428,7 +6365,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 </button>
                 <div className="chat-info">
                     <div className="chat-name">
-                        {chat.name}
+                        {sanitizeString(chat.name, MAX_NAME_LEN)}
                         {isChannel && chat.verified && (
                             <span className="verified-badge" style={{
                                 display: 'inline-flex',
@@ -6489,7 +6426,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 <div className="reply-preview">
                     <div>
                         <div className="reply-info">✏️ Редактирование</div>
-                        <div className="reply-text">{editingMessage.text.substring(0, 60)}{editingMessage.text.length > 60 && '...'}</div>
+                        <div className="reply-text">{sanitizeString(editingMessage.text, 60).substring(0, 60)}{editingMessage.text && editingMessage.text.length > 60 && '...'}</div>
                     </div>
                     <button className="iconbtn reply-close" onClick={cancelEdit}>
                         <Icon name="close" size={16} />
@@ -6499,8 +6436,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             {!editingMessage && replyTo && (
                 <div className="reply-preview">
                     <div>
-                        <div className="reply-info">Ответ {replyTo.senderName}</div>
-                        <div className="reply-text">{replyTo.text.substring(0, 60)}{replyTo.text.length > 60 && '...'}</div>
+                        <div className="reply-info">Ответ {sanitizeString(replyTo.senderName, 100)}</div>
+                        <div className="reply-text">{sanitizeString(replyTo.text, 60).substring(0, 60)}{replyTo.text && replyTo.text.length > 60 && '...'}</div>
                     </div>
                     <button className="iconbtn reply-close" onClick={() => { setReplyTo(null); setHighlightId(null); }}>
                         <Icon name="close" size={16} />
@@ -6513,7 +6450,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     <div className="empty">
                         <div className="empty-symbol"><Icon name={isChannel ? "megaphone" : isGroup ? "group" : "chat"} size={38} /></div>
                         <h2>{isChannel ? "Канал создан" : isGroup ? "Группа создана" : "Начните переписку"}</h2>
-                        <p>{isChannel ? "Напишите первый пост в канале" : isGroup ? "Отправьте первое сообщение участникам." : "Напишите " + chat.name.split(" ")[0] + " первым — сообщение придёт мгновенно."}</p>
+                        <p>{isChannel ? "Напишите первый пост в канале" : isGroup ? "Отправьте первое сообщение участникам." : "Напишите " + sanitizeString(chat.name, 20).split(" ")[0] + " первым — сообщение придёт мгновенно."}</p>
                     </div>
                 )}
                 {(isChannel ? posts : messages).filter(m => !m.deletedFor || !m.deletedFor[me.uid]).map(m => (
@@ -6536,10 +6473,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 )}
             </div>
             
-            {/* ===== КОМПОЗЕР ===== */}
             <div className="composer">
                 {isChannel && chat.createdBy !== me.uid ? (
-                    // КАНАЛ, НЕ ВЛАДЕЛЕЦ — кнопка подписки вместо поля ввода
                     <div style={{ 
                         display: 'flex', 
                         justifyContent: 'center', 
@@ -6654,21 +6589,18 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         </div>
     );
 }
-// ===== СПИСОК =====
-// ===== СПИСОК (С ПОИСКОМ КАНАЛОВ) =====
+
 function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateChannel, hideLastSeen }) {
     const [search, setSearch] = useState("");
     const [focused, setFocused] = useState(false);
     const q = normalizeUsername(search);
 
-    // Поиск людей — строго по юзернейму, и только когда есть запрос (без него люди не показываются).
     const people = useMemo(() => {
         if (!q) return [];
         const arr = Object.values(users).filter(u => u.uid !== me.uid);
         return arr.filter(u => u.username && u.username.startsWith(q)).sort((a,b) => a.username.localeCompare(b.username)).slice(0,30);
     }, [users, q, me.uid]);
 
-    // Поиск каналов (все каналы)
     const allChannels = useMemo(() => {
         const result = [];
         if (!metas) return result;
@@ -6679,7 +6611,6 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
         return result.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
     }, [metas]);
 
-    // Фильтрация каналов: по имени и юзернейму. Без запроса — рекомендуемые (по числу подписчиков).
     const filteredChannels = useMemo(() => {
         if (!q) {
             return [...allChannels]
@@ -6687,12 +6618,11 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
                 .slice(0, 15);
         }
         return allChannels.filter(c => 
-            (c.name && c.name.toLowerCase().includes(q.toLowerCase())) || 
+            (c.name && sanitizeString(c.name).toLowerCase().includes(q.toLowerCase())) || 
             (c.username && c.username.toLowerCase().includes(q.toLowerCase()))
         );
     }, [allChannels, q]);
 
-    // Чаты пользователя
     const chats = useMemo(() => {
         const result = [];
         Object.values(metas || {}).forEach(meta => {
@@ -6748,7 +6678,6 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
             <div className="list-scroll">
                 {showPeople ? (
                     <>
-                        {/* Люди — только по запросу, строго по юзернейму */}
                         {q && (
                             <>
                                 <div className="section-label">Люди</div>
@@ -6759,861 +6688,305 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
                             }}>
                                 <Avatar name={u.name} uid={u.uid} avatar={u.avatar} avatarUrl={u.avatarUrl} size={48} online={!!presence[u.uid]?.online} verified={u.verified} />
                                 <div className="person-body">
-                                    <div className="person-row"><span className="person-name">{u.name}</span></div>
-                                    <div className="person-sub">@{u.username}</div>
+                                    <div className="person-row"><span className="person-name">{sanitizeString(u.name, MAX_NAME_LEN)}</span></div>
+                                    <div className="person-sub">@{sanitizeString(u.username)}</div>
                                 </div>
                             </button>
                         )) : <div className="empty" style={{padding:30}}><p>Никого с таким юзернеймом не нашли.</p></div>}
                             </>
                         )}
                         
-                        {/* Каналы в поиске */}
                         {filteredChannels.length > 0 && (
                             <>
-                                <div className="section-label" style={{marginTop:16}}>{q ? '📢 Каналы' : '📢 Рекомендуемые каналы'}</div>
-                                {filteredChannels.map(c => {
-                                    const isSubscribed = c.subscribers && c.subscribers[me.uid];
-                                    return (
-                                        <button className={"person " + (active === c.id ? "active" : "")} key={c.id} onClick={() => {
-                                            onSelect({ type:"channel", id:c.id, name:c.name, about:c.about, avatarUrl:c.avatarUrl, verified:c.verified });
-                                            setSearch(""); setFocused(false);
-                                        }}>
-                                            <Avatar name={c.name} uid={c.id} avatar={null} avatarUrl={c.avatarUrl} size={48} group={false} verified={c.verified} />
-                                            <div className="person-body">
-                                                <div className="person-row">
-                                                    <span className="person-name">
-                                                        📢 {c.name}
-                                                        {c.verified && (
-                                                            <span className="verified-badge" style={{
-                                                                display: 'inline-flex',
-                                                                alignItems: 'center',
-                                                                justifyContent: 'center',
-                                                                background: '#1da1f2',
-                                                                color: '#fff',
-                                                                fontSize: 9,
-                                                                fontWeight: 700,
-                                                                padding: '1px 5px',
-                                                                borderRadius: 8,
-                                                                marginLeft: 3
-                                                            }}>
-                                                                ✓
-                                                            </span>
-                                                        )}
-                                                    </span>
-                                                    {isSubscribed && (
-                                                        <span style={{ fontSize: 11, color: '#2e7d5a' }}>✅ Подписан</span>
-                                                    )}
-                                                </div>
-                                                <div className="person-sub">{c.about || 'Канал'}</div>
-                                            </div>
-                                        </button>
-                                    );
-                                })}
+                                <div className="section-label" style={{marginTop:16}}>{q ? 'Каналы' : 'Рекомендуемые каналы'}</div>
+                                {filteredChannels.map(c => (
+                                    <button className={"chat-item " + (active?.id === c.id ? "active" : "")} key={c.id} onClick={() => {
+                                        onSelect({ type:"channel", id:c.id, name:c.name, username:c.username, avatarUrl:c.avatarUrl, verified:c.verified, subscribers:c.subscribers, createdBy:c.createdBy, about:c.about });
+                                        setSearch(""); setFocused(false);
+                                    }}>
+                                        <Avatar name={c.name} uid={c.id} avatar={null} avatarUrl={c.avatarUrl} size={48} verified={c.verified} />
+                                        <div className="person-body">
+                                            <div className="person-row"><span className="person-name">{sanitizeString(c.name, MAX_NAME_LEN)}</span></div>
+                                            <div className="person-sub">{Object.keys(c.subscribers||{}).length} подписчиков{c.username ? ' · @' + c.username : ''}</div>
+                                        </div>
+                                    </button>
+                                ))}
                             </>
                         )}
                     </>
                 ) : (
                     <>
-                        <div className="section-label">Переписки</div>
-                        {chats.length === 0 ? (
-                            <div className="empty" style={{padding:40}}>
-                                <div className="empty-symbol"><Icon name="chat" size={32} /></div>
-                                <p>Здесь появятся ваши переписки.<br/>Нажмите поиск и найдите человека или канал.<br/>Или создайте канал или группу.</p>
-                            </div>
-                        ) : chats.map(chat => {
-                            const isGroup = chat.type === "group";
-                            const isChannel = chat.type === "channel";
-                            return (
-                                <button className={"person " + (active === chat.id || active === chat.uid ? "active" : "")} key={chat.id} onClick={() => onSelect(chat)}>
-                                    <Avatar name={chat.name} uid={isGroup ? chat.id : isChannel ? chat.id : chat.uid} avatar={isGroup ? null : isChannel ? null : chat.avatar} avatarUrl={isChannel ? chat.avatarUrl : isGroup ? null : chat.avatarUrl} size={48} online={!isGroup && !isChannel && !!presence[chat.uid]?.online} group={isGroup} verified={isChannel ? chat.verified : false} />
-                                    <div className="person-body">
-                                        <div className="person-row">
-                                            <span className="person-name">
-                                                {isChannel ? '📢 ' : ''}{chat.name}
-                                                {isChannel && chat.verified && (
-                                                    <span className="verified-badge" style={{
-                                                        display: 'inline-flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        background: '#1da1f2',
-                                                        color: '#fff',
-                                                        fontSize: 9,
-                                                        fontWeight: 700,
-                                                        padding: '1px 5px',
-                                                        borderRadius: 8,
-                                                        marginLeft: 3
-                                                    }}>
-                                                        ✓
-                                                    </span>
-                                                )}
-                                            </span>
-                                            <span className="person-time">{fmtTime(chat.lastTs)}</span>
-                                        </div>
-                                        <div className="person-sub">
-                                            {!isGroup && !isChannel && chat.lastSender === me.uid && (
-                                                <span className="chat-preview-ticks">
-                                                    <Icon name="check" size={15} />
-                                                </span>
-                                            )}
-                                            <span style={{ minWidth:0, overflow:"hidden", textOverflow:"ellipsis" }}>
-                                                {isChannel ? (chat.subscribersCount || 0) + ' подписчиков' : 
-                                                 isGroup ? (Object.keys(chat.members||{}).length + ' участников') :
-                                                 chat.lastMessage || "@"+chat.username}
-                                            </span>
-                                            {chat.unread > 0 && <span className="badge">{chat.unread > 99 ? "99+" : chat.unread}</span>}
-                                        </div>
+                        {chats.map(c => (
+                            <button className={"chat-item " + (active?.id === c.id || (active?.uid && c.type === "dm" && active.uid === c.uid) ? "active" : "")} key={c.id || c.uid} onClick={() => onSelect(c)}>
+                                <Avatar
+                                    name={c.name}
+                                    uid={c.type === "channel" ? c.id : c.type === "group" ? c.id : c.uid}
+                                    avatar={c.type === "channel" ? null : c.type === "group" ? null : c.avatar}
+                                    avatarUrl={c.type === "channel" ? c.avatarUrl : c.type === "group" ? null : c.avatarUrl}
+                                    size={48}
+                                    online={c.type === "dm" && !!presence[c.uid]?.online}
+                                    group={c.type === "group"}
+                                    verified={c.verified}
+                                />
+                                <div className="person-body">
+                                    <div className="person-row">
+                                        <span className="person-name">{sanitizeString(c.name, MAX_NAME_LEN)}</span>
+                                        {c.unread > 0 && <span className="unread-badge">{c.unread}</span>}
                                     </div>
-                                </button>
-                            );
-                        })}
+                                    <div className="person-sub">
+                                        {c.isChannel ? Object.keys(c.subscribers||{}).length + ' подписчиков' :
+                                         c.type === "group" ? Object.keys(c.members||{}).length + ' участников' :
+                                         c.lastMessage || ''}
+                                    </div>
+                                </div>
+                            </button>
+                        ))}
                     </>
                 )}
             </div>
-            <button className="fab" onClick={onGroup} title="Создать"><Icon name="plus" size={27} /></button>
         </div>
     );
 }
 
-// ===== БОКОВАЯ ПАНЕЛЬ =====
-function Rail({ section, setSection, user, onProfile }) {
-    return (
-        <nav className="rail">
-            <div className="rail-items">
-                <button className={"rail-item " + (section === "chats" ? "active" : "")} onClick={()=>setSection("chats")}>
-                    <span className="rail-pill"><Icon name="chat"/></span>
-                    <span>Чаты</span>
-                </button>
-                <button className={"rail-item " + (section === "settings" ? "active" : "")} onClick={()=>setSection("settings")}>
-                    <span className="rail-pill"><Icon name="settings"/></span>
-                    <span>Настройки</span>
-                </button>
-            </div>
-            <button onClick={onProfile}>
-                <Avatar name={user.name} uid={user.uid} avatar={user.avatar} avatarUrl={user.avatarUrl} size={42} verified={user.verified} />
-            </button>
-        </nav>
-    );
-}
-
-// ===== МОБИЛЬНАЯ НАВИГАЦИЯ =====
-function MobileNav({ section, setSection, onProfile, user, mobileChat }) {
-    if (mobileChat) return null;
-    
-    return (
-        <nav className="mobile-nav">
-            <div className="mobile-nav-items">
-                <button 
-                    className={"mobile-nav-item " + (section === "chats" ? "active" : "")}
-                    onClick={() => setSection("chats")}
-                >
-                    <Icon name="chat" size={24} />
-                    <span>Чаты</span>
-                </button>
-                <button 
-                    className={"mobile-nav-item " + (section === "settings" ? "active" : "")}
-                    onClick={() => setSection("settings")}
-                >
-                    <Icon name="settings" size={24} />
-                    <span>Настройки</span>
-                </button>
-                <button 
-                    className={"mobile-nav-item"}
-                    onClick={onProfile}
-                >
-                    <Avatar name={user.name} uid={user.uid} avatar={user.avatar} avatarUrl={user.avatarUrl} size={28} verified={user.verified} />
-                    <span>Профиль</span>
-                </button>
-            </div>
-        </nav>
-    );
-}
-
-// ===== МЕНЮ СОЗДАНИЯ =====
-function CreateMenu({ onClose, onGroup, onChannel }) {
-    return (
-        <div className="overlay" onClick={onClose}>
-            <div className="modal" onClick={e=>e.stopPropagation()} style={{ maxWidth: 320 }}>
-                <div className="modal-head">
-                    <h2 style={{margin:0, fontSize:18}}>Создать</h2>
-                    <button className="iconbtn close" onClick={onClose}><Icon name="close"/></button>
-                </div>
-                <button className="primary" style={{width:'100%', marginBottom:8, justifyContent:'center'}} onClick={() => { onClose(); onGroup(); }}>
-                    <Icon name="group" size={18}/> Группу
-                </button>
-                <button className="primary" style={{width:'100%', justifyContent:'center'}} onClick={() => { onClose(); onChannel(); }}>
-                    <Icon name="channel" size={18}/> Канал
-                </button>
-            </div>
-        </div>
-    );
-}
-
-// ===== ГЛАВНОЕ ПРИЛОЖЕНИЕ =====
 function App() {
-    const [state, setState] = useState("loading");
     const [me, setMe] = useState(null);
     const [users, setUsers] = useState({});
     const [presence, setPresence] = useState({});
     const [metas, setMetas] = useState({});
-    const [section, setSection] = useState("chats");
     const [active, setActive] = useState(null);
-    const [profile, setProfile] = useState(false);
-    const [group, setGroup] = useState(false);
-    const [createChannel, setCreateChannel] = useState(false);
-    const [createMenu, setCreateMenu] = useState(false);
-    const [toast, setToast] = useState(null);
-    const [loadErr, setLoadErr] = useState("");
-
-    // CallManager (звонки) опирается на window.me, чтобы знать, кому звонят и от чьего имени.
-    useEffect(() => {
-        window.me = me;
-        if (me && me.uid && window.CallManager) {
-            window.CallManager.watchIncoming();
-        }
-        return () => {
-            if (window.CallManager) window.CallManager.stopWatchIncoming();
-        };
-    }, [me]);
-    const [mobileChat, setMobileChat] = useState(false);
-    const [showAuthScreen, setShowAuthScreen] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
+    const [showGroup, setShowGroup] = useState(false);
+    const [showCreateChannel, setShowCreateChannel] = useState(false);
     const [darkMode, setDarkMode] = useState(() => {
-        const saved = localStorage.getItem('kuban-dark-mode');
-        return saved ? JSON.parse(saved) : false;
+        try { return JSON.parse(localStorage.getItem('messenger_dark') || 'false'); } catch(e) { return false; }
     });
-    const [hideLastSeen, setHideLastSeen] = useState(() => {
-        const saved = localStorage.getItem('kuban-hide-lastseen');
-        if (saved) return JSON.parse(saved);
-        return window.MessengerPrivacy ? window.MessengerPrivacy.hideLastSeen() : false;
-    });
-    const [allowCalls, setAllowCalls] = useState(() => (
-        window.MessengerPrivacy ? window.MessengerPrivacy.allowCalls() : true
-    ));
-    const timer = useRef(null);
-    const presenceRef = useRef(null);
+    const [hideLastSeen, setHideLastSeen] = useState(() => window.MessengerPrivacy.hideLastSeen());
+    const [allowCalls, setAllowCalls] = useState(() => window.MessengerPrivacy.allowCalls());
+    const [toasts, setToasts] = useState([]);
+    const toastIdRef = useRef(0);
 
     useEffect(() => {
-        if (darkMode) {
-            document.body.classList.add('dark');
-        } else {
-            document.body.classList.remove('dark');
-        }
-        localStorage.setItem('kuban-dark-mode', JSON.stringify(darkMode));
+        document.body.classList.toggle('dark', darkMode);
+        localStorage.setItem('messenger_dark', JSON.stringify(darkMode));
     }, [darkMode]);
 
     useEffect(() => {
-        localStorage.setItem('kuban-hide-lastseen', JSON.stringify(hideLastSeen));
-        if (window.MessengerPrivacy) window.MessengerPrivacy.save({ hideLastSeen });
-    }, [hideLastSeen]);
-
-    useEffect(() => {
-        if (window.MessengerPrivacy) window.MessengerPrivacy.save({ allowCalls });
-    }, [allowCalls]);
-
-    const show = useCallback((text, error=false) => {
-        setToast({ text, error });
-        clearTimeout(timer.current);
-        timer.current = setTimeout(() => setToast(null), 3000);
-    }, []);
-
-    // Авторизация
-    useEffect(() => {
-        if (!window.auth) {
-            setLoadErr("Firebase не инициализирован");
-            return;
-        }
-        let unsub = window.auth.onAuthStateChanged(async fb => {
-            if(!fb) {
-                try { 
-                    await window.auth.signInAnonymously(); 
-                }
-                catch(e) { 
-                    setLoadErr(friendlyError(e)); 
-                    show(friendlyError(e), true); 
-                }
-                return;
-            }
-            try {
-                if (!window.db) throw new Error("Firebase не инициализирован");
-                const s = await window.db.ref("users/"+fb.uid).get();
-                if(s.exists()) { 
-                    const userData = s.val();
-                    if (fb.emailVerified !== userData.emailVerified) {
-                        await window.db.ref('users/' + fb.uid).update({ emailVerified: fb.emailVerified });
-                        userData.emailVerified = fb.emailVerified;
+        if (!window.auth) return;
+        const unsub = window.auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const snap = await window.db.ref('users/' + user.uid).get();
+                    if (snap.exists()) {
+                        const data = snap.val();
+                        if (user.emailVerified !== data.emailVerified) {
+                            await window.db.ref('users/' + user.uid).update({ emailVerified: user.emailVerified });
+                            data.emailVerified = user.emailVerified;
+                        }
+                        setMe({ uid: user.uid, ...data });
                     }
-                    setMe({ uid:fb.uid, ...userData }); 
-                    setState("ready"); 
-                } else { 
-                    setMe({ uid:fb.uid }); 
-                    setState("register"); 
-                }
-            } catch(e) { 
-                setLoadErr(friendlyError(e)); 
-                show(friendlyError(e), true); 
-            }
-        }, e => { 
-            setLoadErr(friendlyError(e)); 
-            show(friendlyError(e), true); 
-        });
-        return () => unsub && unsub();
-    }, []);
-
-    const handleRegisterDone = (result) => {
-        if (result && result.action === 'show-auth') {
-            setShowAuthScreen(true);
-        } else if (result && result.uid) {
-            setMe(result);
-            setState("ready");
-            setShowAuthScreen(false);
-        }
-    };
-
-    // Firebase listeners
-    useEffect(() => {
-        if(state !== "ready" || !me || !window.db) return;
-        
-        const uh = window.db.ref("users").on("value", s => {
-            const v = s.val() || {};
-            Object.keys(v).forEach(uid => { v[uid].uid = uid; });
-            setUsers(v);
-        }, e => show(friendlyError(e), true));
-        
-        const ph = window.db.ref("presence").on("value", s => {
-            const raw = s.val() || {};
-            const normalized = {};
-            Object.keys(raw).forEach(uid => {
-                const data = raw[uid];
-                if (data && data.online === true) {
-                    normalized[uid] = { online: true, lastSeen: data.lastSeen || Date.now() };
-                } else if (data && data.lastSeen) {
-                    const now = Date.now();
-                    const diff = (now - data.lastSeen) / 1000;
-                    if (diff < 10) {
-                        normalized[uid] = { online: true, lastSeen: data.lastSeen };
-                    } else {
-                        normalized[uid] = { online: false, lastSeen: data.lastSeen };
-                    }
-                } else {
-                    normalized[uid] = { online: false, lastSeen: null };
-                }
-            });
-            setPresence(normalized);
-        }, e => show(friendlyError(e), true));
-        
-        const mh = window.db.ref("chatsMeta").on("value", s => setMetas(s.val() || {}), e => show(friendlyError(e), true));
-        
-        const pr = window.db.ref("presence/"+me.uid);
-        presenceRef.current = pr;
-        pr.set({ online: document.visibilityState === "visible" && document.hasFocus(), lastSeen: window.SV_TS });
-        pr.onDisconnect().set({ online: false, lastSeen: window.SV_TS });
-        
-        const setOnline = () => pr.update({ online: true, lastSeen: window.SV_TS }).catch(() => {});
-        const setOffline = () => pr.update({ online: false, lastSeen: window.SV_TS }).catch(() => {});
-
-        const vis = () => {
-            if (document.visibilityState === "visible" && document.hasFocus()) setOnline();
-            else setOffline();
-        };
-        document.addEventListener("visibilitychange", vis);
-        window.addEventListener("focus", vis);
-        window.addEventListener("blur", vis);
-        
-        return () => {
-            window.db.ref("users").off("value", uh);
-            window.db.ref("presence").off("value", ph);
-            window.db.ref("chatsMeta").off("value", mh);
-            document.removeEventListener("visibilitychange", vis);
-            window.removeEventListener("focus", vis);
-            window.removeEventListener("blur", vis);
-            if (presenceRef.current) {
-                presenceRef.current.set({ online: false, lastSeen: window.SV_TS }).catch(() => {});
-            }
-        };
-    }, [state, me?.uid]);
-
-    // Уведомления о новых сообщениях
-    useEffect(() => {
-        if(state !== "ready" || !me || !window.db) return;
-        const ref = window.db.ref("chatsMeta");
-        let initialized = false;
-        let previous = {};
-        const handler = snap => {
-            const value = snap.val() || {};
-            if(!initialized) { previous = value; initialized = true; return; }
-            Object.keys(value).forEach(id => {
-                const old = previous[id];
-                const next = value[id];
-                if(!next || !next.lastTs) return;
-                if(old && old.lastTs === next.lastTs) return;
-                if(next.lastSender === me.uid) return;
-                const activeId = active?.id || (active?.uid ? chatIdFor(me.uid, active.uid) : null);
-                if(activeId === id && document.visibilityState === "visible") return;
-                let title = "Новое сообщение";
-                if(next.type === "group") { title = next.name || "Группа"; }
-                else if(next.type === "channel") { title = next.name || "Канал"; }
-                else { const sender = users[next.lastSender]; title = sender?.name || "Новое сообщение"; }
-                showBrowserNotification(title, next.lastMessage || "Новое сообщение");
-            });
-            previous = value;
-        };
-        ref.on("value", handler);
-        return () => { ref.off("value", handler); };
-    }, [state, me?.uid, active?.id, active?.uid, users]);
-
-    function select(chat) {
-        setActive(chat);
-        setSection("chats");
-        setMobileChat(true);
-        const id = chat.id || (chat.uid ? chatIdFor(me.uid, chat.uid) : null);
-        if(id && window.db) { 
-            if (chat.type === 'channel') {
-                // Для каналов не сбрасываем unread
+                } catch(e) { console.error('Auth state error:', e); }
             } else {
-                window.db.ref("chatsMeta/"+id+"/unreadBy/"+me.uid).set(0).catch(()=>{});
+                setMe(null);
+                setActive(null);
             }
-        }
+        });
+        return () => unsub();
+    }, []);
+
+    useEffect(() => {
+        if (!me || !window.db) return;
+        const ref = window.db.ref('users');
+        const handler = snap => setUsers(snap.val() || {});
+        ref.on('value', handler);
+        return () => ref.off('value', handler);
+    }, [me]);
+
+    useEffect(() => {
+        if (!me || !window.db) return;
+        const ref = window.db.ref('presence');
+        const handler = snap => setPresence(snap.val() || {});
+        ref.on('value', handler);
+        return () => ref.off('value', handler);
+    }, [me]);
+
+    useEffect(() => {
+        if (!me || !window.db) return;
+        const ref = window.db.ref('chatsMeta');
+        const handler = snap => setMetas(snap.val() || {});
+        ref.on('value', handler);
+        return () => ref.off('value', handler);
+    }, [me]);
+
+    useEffect(() => {
+        if (!me || !window.db) return;
+        const myPresenceRef = window.db.ref('presence/' + me.uid);
+        const setOnline = () => myPresenceRef.update({ online: true, lastSeen: window.SV_TS });
+        const setOffline = () => myPresenceRef.update({ online: false, lastSeen: window.SV_TS });
+        setOnline();
+        const interval = setInterval(setOnline, 60000);
+        const handleUnload = () => setOffline();
+        window.addEventListener('beforeunload', handleUnload);
+        const handleVisibility = () => {
+            if (document.visibilityState === 'visible') setOnline();
+            else myPresenceRef.update({ online: false, lastSeen: window.SV_TS });
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('beforeunload', handleUnload);
+            document.removeEventListener('visibilitychange', handleVisibility);
+            setOffline();
+        };
+    }, [me]);
+
+    function show(msg, isError = false) {
+        const id = ++toastIdRef.current;
+        setToasts(t => [...t, { id, msg, isError }]);
+        setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3500);
     }
 
-    function backToChats() { setMobileChat(false); }
-
-    async function logout() {
+    function handleSave(user) {
         if (!window.db) return;
-        try {
-            await window.db.ref("presence/"+me.uid).set({ online:false, lastSeen:window.SV_TS });
-            await window.auth.signOut();
-            setState("loading");
-            setMe(null);
-            setActive(null);
-            setMobileChat(false);
-        } catch(e) { show(friendlyError(e), true); }
-    }
-	
-	function openChannelFromProfile(channel) {
-        setActive(channel);
-        setSection("chats");
-        setMobileChat(true);
+        window.db.ref('users/' + user.uid).update(user).then(() => show('Сохранено')).catch(e => show(friendlyError(e), true));
     }
 
-    const activeChat = active ? (active.type === "dm" ? { ...users[active.uid], ...active, uid:active.uid, name: users[active.uid]?.name || active.name, username: users[active.uid]?.username || active.username, avatar: users[active.uid]?.avatar || active.avatar, avatarUrl: users[active.uid]?.avatarUrl || active.avatarUrl, verified: users[active.uid]?.verified || false } : metas[active.id] || active) : null;
-
-    const updateChat = (updatedChat) => {
-        if (active && active.id === updatedChat.id) {
-            setActive(updatedChat);
+    function handleLogout() {
+        if (window.auth) {
+            if (me && window.db) {
+                window.db.ref('presence/' + me.uid).update({ online: false, lastSeen: window.SV_TS }).catch(() => {});
+            }
+            window.auth.signOut();
         }
-        setMetas(prev => ({
-            ...prev,
-            [updatedChat.id]: updatedChat
-        }));
-    };
+        setMe(null);
+        setActive(null);
+    }
 
-    if(state === "loading") {
+    function handleGroupCreated(chat) {
+        setActive(chat);
+        setShowGroup(false);
+    }
+
+    function handleChannelCreated(chat) {
+        setActive(chat);
+        setShowCreateChannel(false);
+    }
+
+    function handleUpdateChat(updated) {
+        setActive(prev => prev ? { ...prev, ...updated } : prev);
+    }
+
+    function handleOpenChannel(channel) {
+        setActive({ type: 'channel', id: channel.id, name: channel.name, about: channel.about, avatarUrl: channel.avatarUrl, verified: channel.verified, username: channel.username, subscribers: channel.subscribers, createdBy: channel.createdBy });
+    }
+
+    function handleSelectChat(chat) {
+        setActive(chat);
+    }
+
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 720;
+
+    if (!me) {
         return (
             <div className="m3">
-                <div className="bg"><div className="blob b1"/><div className="blob b2"/><div className="blob b3"/></div>
-                <div className="screen empty">
-                    <div className="empty-symbol"><Icon name="chat" size={40} /></div>
-                    <h2>Телеграммы по Кубани</h2>
-                    <p>{loadErr || "Подключаемся к мессенджеру…"}</p>
-                    {loadErr && <button className="primary" onClick={()=>location.reload()}>Повторить</button>}
+                <div className="bg">
+                    <div className="blob b1"/>
+                    <div className="blob b2"/>
+                    <div className="blob b3"/>
                 </div>
-                <Toast toast={toast} />
+                <AuthScreen onAuth={setMe} show={show} />
             </div>
         );
     }
-
-    if (showAuthScreen) {
-        return (
-            <div className="m3">
-                <div className="bg"><div className="blob b1"/><div className="blob b2"/><div className="blob b3"/></div>
-                <AuthScreen onAuth={(user) => {
-                    setMe(user);
-                    setState("ready");
-                    setShowAuthScreen(false);
-                }} show={show} />
-                <Toast toast={toast} />
-            </div>
-        );
-    }
-
-    if(state === "register") {
-        return (
-            <div className="m3">
-                <div className="bg"><div className="blob b1"/><div className="blob b2"/><div className="blob b3"/></div>
-                <Register uid={me.uid} onDone={handleRegisterDone} show={show} />
-                <Toast toast={toast} />
-            </div>
-        );
-    }
-
-    const isMobile = window.innerWidth <= 880;
 
     return (
         <div className="m3">
-            <div className="bg"><div className="blob b1"/><div className="blob b2"/><div className="blob b3"/></div>
-            <div className="shell screen">
-                <Rail section={section} setSection={setSection} user={me} onProfile={()=>setProfile(true)} />
-                <div className={"panels " + (mobileChat ? "mobile-chat-open" : "") + (section === "settings" ? " mobile-settings-open" : "")}>
-                    {section === "settings" ? (
-                        <Settings 
-                            user={me} 
-                            onSave={u => setMe(u)} 
-                            onLogout={logout} 
-                            show={show} 
-                            darkMode={darkMode} 
-                            setDarkMode={setDarkMode} 
-                            hideLastSeen={hideLastSeen} 
-                            setHideLastSeen={setHideLastSeen} 
-                            allowCalls={allowCalls}
-                            setAllowCalls={setAllowCalls}
+            <div className="bg">
+                <div className="blob b1"/>
+                <div className="blob b2"/>
+                <div className="blob b3"/>
+            </div>
+            <div className="shell">
+                <div className={"panels" + (active && isMobile ? " mobile-chat-open" : "")}>
+                    <List
+                        me={me} users={users} presence={presence} metas={metas}
+                        active={active} onSelect={handleSelectChat}
+                        onGroup={() => setShowGroup(true)}
+                        onCreateChannel={() => setShowCreateChannel(true)}
+                        hideLastSeen={hideLastSeen}
+                    />
+                    {active ? (
+                        <ChatView
+                            me={me} chat={active} users={users} presence={presence}
+                            onBack={() => setActive(null)}
+                            show={show} hideLastSeen={hideLastSeen}
+                            onUpdateChat={handleUpdateChat} metas={metas}
+                            onOpenChannel={handleOpenChannel}
+                            onSelectChat={handleSelectChat}
                         />
                     ) : (
-                        <>
-                            <List 
-                                me={me} 
-                                users={users} 
-                                presence={presence} 
-                                metas={metas} 
-                                active={active?.uid || active?.id} 
-                                onSelect={select} 
-                                onGroup={() => setCreateMenu(true)}
-                                onCreateChannel={() => setCreateChannel(true)}
-                                hideLastSeen={hideLastSeen} 
-                            />
-                            {activeChat ? (
-                                <ChatView 
-    me={me} 
-    chat={activeChat} 
-    users={users} 
-    presence={presence} 
-    onBack={backToChats} 
-    show={show} 
-    hideLastSeen={hideLastSeen}
-    onUpdateChat={updateChat}
-    metas={metas}
-    onOpenChannel={openChannelFromProfile}
-    onSelectChat={select}
-/>
-                            ) : (
-                                <div className="empty">
-                                    <div className="empty-symbol"><Icon name="chat" size={40} /></div>
-                                    <h2>Выберите чат</h2>
-                                    <p>Или нажмите поиск и найдите человека по юзернейму.<br/>Или создайте канал или группу.</p>
-                                </div>
-                            )}
-                        </>
+                        <div className="chat" style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                            <div style={{textAlign:'center',color:'var(--muted)'}}>
+                                <Icon name="chat" size={48} />
+                                <p style={{marginTop:12}}>Выберите чат</p>
+                            </div>
+                        </div>
                     )}
                 </div>
+                <nav className="mobile-nav">
+                    <button className={"mobile-nav-item" + (!active ? " active" : "")} onClick={() => setActive(null)}>
+                        <span className="icon"><Icon name="chat" size={22}/></span>
+                        <span>Чаты</span>
+                    </button>
+                    <button className={"mobile-nav-item"} onClick={() => setShowSettings(true)}>
+                        <span className="icon"><Icon name="settings" size={22}/></span>
+                        <span>Настройки</span>
+                    </button>
+                </nav>
             </div>
-            {profile && (
-    <ProfileModal 
-        user={me} 
-        onClose={()=>setProfile(false)} 
-        onLogout={logout}
-        onOpenChannel={openChannelFromProfile}
-        metas={metas}
-        show={show}
-    />
-)}
-            {createMenu && (
-                <CreateMenu 
-                    onClose={() => setCreateMenu(false)}
-                    onGroup={() => setGroup(true)}
-                    onChannel={() => setCreateChannel(true)}
+            {showSettings && (
+                <Settings
+                    user={me} onSave={handleSave} onLogout={handleLogout}
+                    show={show} darkMode={darkMode} setDarkMode={setDarkMode}
+                    hideLastSeen={hideLastSeen} setHideLastSeen={v => { setHideLastSeen(v); window.MessengerPrivacy.save({ hideLastSeen: v }); }}
+                    allowCalls={allowCalls} setAllowCalls={v => { setAllowCalls(v); window.MessengerPrivacy.save({ allowCalls: v }); }}
                 />
             )}
-            {group && <GroupModal users={users} me={me} onClose={()=>setGroup(false)} onCreated={id => { setActive({ type:"group", id }); setMobileChat(true); }} show={show} />}
-            {createChannel && (
-                <CreateChannelModal 
-                    onClose={() => setCreateChannel(false)} 
-                    onCreated={(id) => {
-                        setActive({ type: 'channel', id });
-                        setMobileChat(true);
-                    }}
+            {showGroup && (
+                <GroupModal
+                    users={users} me={me}
+                    onClose={() => setShowGroup(false)}
+                    onCreated={handleGroupCreated}
+                    show={show}
+                />
+            )}
+            {showCreateChannel && (
+                <CreateChannelModal
+                    onClose={() => setShowCreateChannel(false)}
+                    onCreated={handleChannelCreated}
                     show={show}
                     me={me}
                 />
             )}
-            <Toast toast={toast} />
-            
-            {isMobile && <MobileNav section={section} setSection={setSection} onProfile={()=>setProfile(true)} user={me} mobileChat={mobileChat} />}
+            {showSettings && (
+                <ProfileModal
+                    user={me}
+                    onClose={() => setShowSettings(false)}
+                    onLogout={handleLogout}
+                    onOpenChannel={handleOpenChannel}
+                    metas={metas}
+                    show={show}
+                />
+            )}
+            {toasts.map(t => <Toast key={t.id} toast={t} />)}
         </div>
     );
 }
 
-// ===== РЕНДЕРИНГ =====
-try {
-    const root = document.getElementById('root');
-    if (root) {
-        ReactDOM.createRoot(root).render(<App />);
-    }
-} catch(e) {
-    const root = document.getElementById('root');
-    if (root) {
-        root.innerHTML = `
-            <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui,sans-serif;background:#f7f4fb;color:#1a1b20;flex-direction:column;gap:16px;padding:20px;text-align:center;">
-                <div style="font-size:48px;margin-bottom:8px;">⚠️</div>
-                <h2 style="margin:0;">Ошибка приложения</h2>
-                <p style="color:#49454f;max-width:320px;margin:0;">${e.message || 'Неизвестная ошибка'}</p>
-                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:#6750a4;color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
-            </div>
-        `;
-    }
-}
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <ErrorBoundary>
+        <App />
+    </ErrorBoundary>
+);
 </script>
-
 </body>
 </html>
-<style id="final-composer-visibility">
-@media (max-width:760px){
-  .chat .composer,
-  .chat .composer *{box-sizing:border-box}
-  .chat .composer .attach-btn,
-  .chat .composer .attach-button,
-  .chat .composer .voice-btn,
-  .chat .composer [aria-label*="влож" i],
-  .chat .composer [title*="влож" i],
-  .chat .composer [aria-label*="голос" i],
-  .chat .composer [title*="голос" i]{
-    display:inline-flex!important;
-    visibility:visible!important;
-  }
-}
-
-/* ===== FINAL TYPOGRAPHY ===== */
-html,body,#root,.m3,.m3 *{
-  font-family:'Google Sans Flex','Roboto Flex',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif!important;
-  font-variation-settings:'ROND' 100!important;
-  font-variant-numeric:tabular-nums;
-}
-
-/* ===== DARK LIQUID GLASS SURFACES ===== */
-body.dark .attach-menu,
-body.dark .modal,
-body.dark .reaction-picker,
-body.dark .setting-card,
-body.dark .dialog,
-body.dark .popup,
-body.dark .menu,
-body.dark [role="dialog"],
-body.dark [role="menu"]{
-  background:rgba(27,27,36,.76)!important;
-  color:#f7f4fb!important;
-  border:1px solid rgba(255,255,255,.13)!important;
-  box-shadow:0 24px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.10)!important;
-  backdrop-filter:blur(36px) saturate(185%)!important;
-  -webkit-backdrop-filter:blur(36px) saturate(185%)!important;
-}
-body.dark input,body.dark textarea,body.dark select{
-  color:#f7f4fb!important;
-  background:rgba(12,12,18,.46)!important;
-  border-color:rgba(255,255,255,.13)!important;
-}
-body.dark input::placeholder,body.dark textarea::placeholder{color:rgba(247,244,251,.52)!important}
-body.dark .attach-menu button,
-body.dark .modal button,
-body.dark .setting-card button{
-  color:#f7f4fb!important;
-}
-body:not(.dark) input,body:not(.dark) textarea,body:not(.dark) select{
-  color:#241f2b!important;
-}
-</style>
-
-<style id="channel-id-style">
-.channel-id-row{
-  display:flex;align-items:center;gap:8px;
-  margin-top:10px;padding:9px 11px;border-radius:13px;
-  background:rgba(127,127,127,.10);
-  border:1px solid rgba(127,127,127,.16);
-  color:var(--txt)!important;
-}
-.channel-id-row .channel-id-value{
-  min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  font-weight:650;
-}
-.channel-id-row button{
-  flex:0 0 auto;border:0;border-radius:10px;padding:6px 9px;
-  color:inherit;background:rgba(127,127,127,.12);cursor:pointer;
-}
-body.dark .channel-id-row{
-  background:rgba(255,255,255,.07);
-  border-color:rgba(255,255,255,.11);
-}
-</style>
-
-<style id="stickers-calls-glass-v10">
-/* ===== ЕДИНЫЙ ЖИДКОЕ СТЕКЛО ДИЗАЙН: СТИКЕРЫ + ЗВОНКИ ===== */
-.sticker-panel,.sticker-menu,.stickers,.emoji-panel,
-[class*="sticker-panel"],[class*="sticker-menu"]{
-  background:rgba(250,248,253,.90)!important;
-  color:#201c25!important;
-  border:1px solid rgba(255,255,255,.75)!important;
-  border-radius:24px!important;
-  box-shadow:0 24px 80px rgba(30,20,45,.20), inset 0 1px 0 rgba(255,255,255,.85)!important;
-  backdrop-filter:blur(30px) saturate(180%)!important;
-  -webkit-backdrop-filter:blur(30px) saturate(180%)!important;
-  overflow:hidden!important;
-}
-body.dark .sticker-panel,body.dark .sticker-menu,body.dark .stickers,body.dark .emoji-panel,
-body.dark [class*="sticker-panel"],body.dark [class*="sticker-menu"]{
-  background:rgba(24,24,31,.82)!important;
-  color:#f5f2f8!important;
-  border-color:rgba(255,255,255,.12)!important;
-  box-shadow:0 28px 90px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08)!important;
-}
-.sticker-grid{
-  display:grid!important;
-  grid-template-columns:repeat(6,minmax(0,1fr))!important;
-  gap:6px!important;
-  padding:12px!important;
-  max-height:min(340px,48vh)!important;
-  overflow-y:auto!important;
-  overflow-x:hidden!important;
-}
-.sticker-grid button,.sticker-item,.sticker-grid [role="button"]{
-  position:relative!important;
-  width:100%!important;height:56px!important;
-  margin:0!important;padding:4px!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  overflow:hidden!important;border:0!important;border-radius:15px!important;
-  background:transparent!important;font-size:29px!important;line-height:1!important;
-  transform:none!important;cursor:pointer!important;
-  transition:transform .14s ease,background .14s ease!important;
-}
-.sticker-grid button:hover,.sticker-item:hover,.sticker-grid [role="button"]:hover{
-  background:rgba(103,80,164,.10)!important;transform:scale(1.08)!important;
-}
-body.dark .sticker-grid button:hover,body.dark .sticker-item:hover{
-  background:rgba(187,134,252,.14)!important;
-}
-.sticker-grid img,.sticker-item img,.sticker-grid svg,.sticker-item svg{
-  width:40px!important;height:40px!important;object-fit:contain!important;transform:none!important;
-}
-.sticker-tabs{display:flex!important;gap:5px!important;padding:9px 11px 5px!important;overflow-x:auto!important;background:transparent!important;scrollbar-width:none!important}
-.sticker-tabs::-webkit-scrollbar{display:none!important}
-.sticker-tabs button{
-  flex:0 0 auto!important;min-width:40px!important;height:34px!important;border:0!important;
-  border-radius:12px!important;background:rgba(127,127,127,.11)!important;color:inherit!important;cursor:pointer!important;
-}
-body.dark .sticker-tabs button{background:rgba(255,255,255,.075)!important}
-.sticker-tabs button.active{background:rgba(103,80,164,.20)!important;box-shadow:inset 0 0 0 1px rgba(103,80,164,.28)!important}
-body.dark .sticker-tabs button.active{background:rgba(187,134,252,.20)!important;box-shadow:inset 0 0 0 1px rgba(187,134,252,.32)!important}
-@media(max-width:760px){
-  .sticker-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;max-height:42vh!important}
-  .sticker-grid button,.sticker-item{height:52px!important;font-size:27px!important}
-}
-
-/* ===== КНОПКА ЗВОНКА ===== */
-.chat-call-button{
-  display:inline-flex!important;align-items:center;justify-content:center!important;
-  width:40px!important;height:40px!important;border:0!important;border-radius:13px!important;
-  background:rgba(103,80,164,.15)!important;color:inherit!important;
-  cursor:pointer!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important;
-  transition:transform .15s ease,background .15s ease!important;
-}
-body.dark .chat-call-button{background:rgba(255,255,255,.10)!important}
-.chat-call-button:hover{transform:translateY(-1px) scale(1.04)!important;background:rgba(103,80,164,.24)!important}
-
-.call-denied-popup,.call-toast-v10{
-  position:fixed;left:50%;bottom:28px;transform:translateX(-50%);
-  z-index:100050;padding:13px 19px;border-radius:17px;max-width:min(340px,86vw);text-align:center;
-  background:rgba(20,20,27,.85);color:#fff;border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 20px 65px rgba(0,0,0,.42);backdrop-filter:blur(24px) saturate(160%);
-  -webkit-backdrop-filter:blur(24px) saturate(160%);font-weight:650;
-  animation:toastIn .22s ease-out;
-}
-@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-
-/* ===== ЭКРАН ЗВОНКА ===== */
-.call-overlay{
-  position:fixed!important;inset:0!important;z-index:100000!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  background:rgba(8,8,14,.50)!important;
-  backdrop-filter:blur(22px) saturate(160%)!important;
-  -webkit-backdrop-filter:blur(22px) saturate(160%)!important;
-  opacity:0;transition:opacity .22s ease;
-}
-.call-overlay.call-visible{opacity:1}
-.call-card{
-  width:min(380px,calc(100vw - 32px));padding:30px 26px;border-radius:30px;
-  background:rgba(28,26,36,.72);color:#fff;border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 30px 100px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.14);
-  backdrop-filter:blur(38px) saturate(190%);-webkit-backdrop-filter:blur(38px) saturate(190%);
-  text-align:center;
-  transform:scale(.92);transition:transform .25s cubic-bezier(.34,1.56,.64,1);
-}
-.call-overlay.call-visible .call-card{transform:scale(1)}
-.call-avatar{
-  width:88px;height:88px;border-radius:50%;margin:0 auto 16px;
-  display:flex;align-items:center;justify-content:center;font-size:38px;
-  background:rgba(255,255,255,.12);overflow:hidden;
-  box-shadow:0 8px 28px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.2);
-}
-.call-avatar img{width:100%;height:100%;object-fit:cover}
-.call-name{font-size:21px;font-weight:750}
-.call-status{margin:7px 0 22px;color:rgba(255,255,255,.66);font-variant-numeric:tabular-nums}
-.call-actions{display:flex;gap:12px;justify-content:center}
-.call-action{
-  min-width:64px;height:56px;padding:0 18px;border:0;border-radius:18px;color:#fff;
-  cursor:pointer;font-weight:700;font-size:20px;background:rgba(255,255,255,.12);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
-  transition:transform .15s ease,background .15s ease;
-}
-.call-action:hover{transform:translateY(-2px)}
-.call-action.end{background:#c84b63}
-.call-action.accept{background:#3fb374;animation:acceptPulse 1.4s ease-in-out infinite}
-@keyframes acceptPulse{0%,100%{box-shadow:0 0 0 0 rgba(63,179,116,.45)}50%{box-shadow:0 0 0 10px rgba(63,179,116,0)}}
-.call-action.mute.active{background:rgba(255,255,255,.28)}
-</style>
-
-<style id="message-menu-v10">
-/* ===== Всплывающее меню сообщения: жидкое стекло, всегда в границах экрана ===== */
-.context-menu{
-  position:fixed!important;z-index:2147483000!important;
-  width:236px!important;max-width:calc(100vw - 20px)!important;
-  box-sizing:border-box!important;
-  opacity:0;transform:scale(.94);
-  transition:opacity .16s cubic-bezier(.2,.8,.2,1),transform .16s cubic-bezier(.2,.8,.2,1)!important;
-  pointer-events:none;
-}
-.context-menu.cm-visible{opacity:1;transform:scale(1);pointer-events:auto}
-.context-menu.cm-above{transform-origin:center bottom}
-.context-menu:not(.cm-above){transform-origin:center top}
-.context-menu-inner{
-  padding:7px;border-radius:20px;overflow:hidden;
-  background:rgba(20,20,27,.94);color:#fff;
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 22px 70px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.09);
-  backdrop-filter:blur(30px) saturate(180%);
-  -webkit-backdrop-filter:blur(30px) saturate(180%);
-}
-body:not(.dark) .context-menu-inner{
-  background:rgba(250,248,253,.96);color:#211d27;
-  border-color:rgba(0,0,0,.08);
-  box-shadow:0 22px 70px rgba(50,35,70,.22),inset 0 1px 0 rgba(255,255,255,.95);
-}
-.context-menu-reactions{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:2px;padding:3px 2px 7px;margin:0 0 4px;
-  border-bottom:1px solid rgba(127,127,127,.18);white-space:nowrap;
-}
-.context-menu-reactions button{
-  flex:1 1 0;width:30px;height:34px;padding:0;
-  border:0;border-radius:11px;background:transparent;
-  color:inherit;font-size:19px;line-height:1;cursor:pointer;
-  transition:transform .12s ease,background .12s ease;
-}
-.context-menu-reactions button:hover{background:rgba(127,127,127,.14);transform:translateY(-2px) scale(1.08)}
-.context-menu-item{
-  width:100%;height:39px;padding:0 10px;margin:0;
-  border:0;border-radius:11px;background:transparent;
-  color:inherit;display:flex;align-items:center;gap:9px;
-  text-align:left;cursor:pointer;font:inherit;font-size:14px;
-}
-.context-menu-item:hover{background:rgba(127,127,127,.13)}
-.context-menu-item.danger{color:#e75b70}
-@media(max-width:760px){
-  .context-menu{width:244px!important}
-  .context-menu-item{height:43px}
-}
-</style>
