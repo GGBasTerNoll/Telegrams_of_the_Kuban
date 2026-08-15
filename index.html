@@ -18,6 +18,17 @@
 
 *{box-sizing:border-box}
 
+*{scrollbar-width:thin;scrollbar-color:rgba(103,80,164,.35) transparent;}
+*::-webkit-scrollbar{width:7px;height:7px;}
+*::-webkit-scrollbar-track{background:transparent;}
+*::-webkit-scrollbar-thumb{background:rgba(103,80,164,.32);border-radius:99px;}
+*::-webkit-scrollbar-thumb:hover{background:rgba(103,80,164,.5);}
+*::-webkit-scrollbar-corner{background:transparent;}
+body.dark{scrollbar-color:rgba(187,134,252,.32) transparent;}
+body.dark *{scrollbar-color:rgba(187,134,252,.32) transparent;}
+body.dark *::-webkit-scrollbar-thumb{background:rgba(187,134,252,.28);}
+body.dark *::-webkit-scrollbar-thumb:hover{background:rgba(187,134,252,.46);}
+
 html,body,#root{
     margin:0;
     width:100%;
@@ -742,6 +753,9 @@ body.dark .theirs .bubble{
     width:16px;
     height:16px
 }
+.ticks-sent{opacity:.62}
+.ticks-read{color:#5ec8ff;opacity:1}
+.mine .ticks-read{color:#bfe9ff}
 
 .typing{
     padding:13px 17px;
@@ -2396,14 +2410,6 @@ body.dark .verified-check {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #1da1f2;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 10px;
-    margin-left: 4px;
-    gap: 2px;
 }
 
 :root{
@@ -2650,7 +2656,11 @@ body.dark .msg-link{color:#8ab4f8}
 .msg-mention:hover{text-decoration:underline}
 .mine .msg-mention{color:#f2ecff}
 body.dark .msg-mention{color:#bb86fc}
-.voice-msg{min-width:210px;display:flex;align-items:center;gap:10px}.voice-msg audio{display:none}.voice-bar{height:5px;background:rgba(0,0,0,.12);border-radius:99px;overflow:hidden;cursor:pointer}.voice-fill{height:100%;background:#6750a4;border-radius:99px;transition:width .1s linear}.voice-time{font-size:11px;opacity:.7;margin-top:4px;font-variant-numeric:tabular-nums}.voice-play-btn{width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(103,80,164,.13);color:#6750a4;cursor:pointer;flex:none}.mine .voice-play-btn{background:rgba(255,255,255,.2);color:#fff}.mine .voice-fill{background:#fff}.poll-footer{display:flex;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,0,0,.07);font-size:12px;color:var(--muted)}
+.voice-msg{min-width:210px;display:flex;align-items:center;gap:10px}.voice-msg audio{display:none}.voice-bar{height:5px;background:rgba(0,0,0,.12);border-radius:99px;overflow:hidden;cursor:pointer}.voice-fill{height:100%;background:#6750a4;border-radius:99px;transition:width .1s linear}.voice-time{font-size:11px;opacity:.7;margin-top:4px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:5px}.voice-play-btn{width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(103,80,164,.13);color:#6750a4;cursor:pointer;flex:none}.mine .voice-play-btn{background:rgba(255,255,255,.2);color:#fff}.mine .voice-fill{background:#fff}.poll-footer{display:flex;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,0,0,.07);font-size:12px;color:var(--muted)}
+.voice-unheard-dot{width:7px;height:7px;border-radius:50%;background:#2ea6ff;flex-shrink:0}
+.mine .voice-unheard-dot{background:#fff}
+.voice-speed-btn{flex:none;height:22px;padding:0 8px;border:0;border-radius:99px;background:rgba(103,80,164,.14);color:#6750a4;font-size:11px;font-weight:700;cursor:pointer}
+.mine .voice-speed-btn{background:rgba(255,255,255,.22);color:#fff}
 @keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
 @media(max-width:640px){.attach-menu{bottom:52px;left:-4px;width:200px}.sticker-modal{align-self:end;margin-bottom:max(8px,env(safe-area-inset-bottom));max-height:70vh;border-radius:24px}.sticker-grid{grid-template-columns:repeat(6,1fr)}.sticker-grid button{font-size:27px}.voice-msg{min-width:180px}.poll-block{min-width:0;width:min(310px,78vw)}}
 
@@ -3182,6 +3192,105 @@ try {
 window.auth = window.firebase ? firebase.auth() : null;
 window.db = window.firebase ? firebase.database() : null;
 window.SV_TS = window.firebase ? firebase.database.ServerValue.TIMESTAMP : Date.now();
+
+// =====================================================================
+// СКВОЗНОЕ ШИФРОВАНИЕ ЛИЧНЫХ СООБЩЕНИЙ (ECDH P-256 + AES-GCM 256)
+// Реализовано через встроенный в браузер Web Crypto API, без сторонних
+// библиотек. Приватный ключ никогда не покидает устройство (только localStorage).
+// Область действия: только текст личных сообщений (DM). Группы и каналы —
+// многосторонние чаты, для них нужен отдельный протокол (не реализовано).
+// =====================================================================
+window.E2E = (function () {
+    const sharedKeyCache = new Map(); // otherUid -> CryptoKey (AES-GCM)
+    let myPrivateKeyPromise = null;
+
+    function b64encode(buf) {
+        const bytes = new Uint8Array(buf);
+        let bin = '';
+        for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+        return btoa(bin);
+    }
+    function b64decode(str) {
+        const bin = atob(str);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        return bytes.buffer;
+    }
+
+    async function getOrCreateKeyPair() {
+        const savedPriv = localStorage.getItem('kuban_e2e_priv');
+        const savedPub = localStorage.getItem('kuban_e2e_pub');
+        if (savedPriv && savedPub) {
+            const privateKey = await crypto.subtle.importKey(
+                'jwk', JSON.parse(savedPriv), { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveKey']
+            );
+            return { privateKey, publicKeyJwk: JSON.parse(savedPub) };
+        }
+        const pair = await crypto.subtle.generateKey(
+            { name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveKey']
+        );
+        const privJwk = await crypto.subtle.exportKey('jwk', pair.privateKey);
+        const pubJwk = await crypto.subtle.exportKey('jwk', pair.publicKey);
+        localStorage.setItem('kuban_e2e_priv', JSON.stringify(privJwk));
+        localStorage.setItem('kuban_e2e_pub', JSON.stringify(pubJwk));
+        return { privateKey: pair.privateKey, publicKeyJwk: pubJwk };
+    }
+
+    function myKeyPair() {
+        if (!myPrivateKeyPromise) myPrivateKeyPromise = getOrCreateKeyPair();
+        return myPrivateKeyPromise;
+    }
+
+    async function publishMyPublicKey(uid) {
+        if (!window.db || !uid) return;
+        const { publicKeyJwk } = await myKeyPair();
+        await window.db.ref('users/' + uid + '/publicKey').set(JSON.stringify(publicKeyJwk)).catch(() => {});
+    }
+
+    async function getSharedKey(otherUid, otherPublicKeyJwkStr) {
+        if (!otherUid || !otherPublicKeyJwkStr) return null;
+        if (sharedKeyCache.has(otherUid)) return sharedKeyCache.get(otherUid);
+        try {
+            const { privateKey } = await myKeyPair();
+            const theirPublicKey = await crypto.subtle.importKey(
+                'jwk', JSON.parse(otherPublicKeyJwkStr), { name: 'ECDH', namedCurve: 'P-256' }, false, []
+            );
+            const aesKey = await crypto.subtle.deriveKey(
+                { name: 'ECDH', public: theirPublicKey },
+                privateKey,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt', 'decrypt']
+            );
+            sharedKeyCache.set(otherUid, aesKey);
+            return aesKey;
+        } catch (e) {
+            console.warn('E2E: не удалось получить общий ключ', e);
+            return null;
+        }
+    }
+
+    async function encryptFor(otherUid, otherPublicKeyJwkStr, plaintext) {
+        const key = await getSharedKey(otherUid, otherPublicKeyJwkStr);
+        if (!key) return null;
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext));
+        return { iv: b64encode(iv), ct: b64encode(ct) };
+    }
+
+    async function decryptFrom(otherUid, otherPublicKeyJwkStr, payload) {
+        const key = await getSharedKey(otherUid, otherPublicKeyJwkStr);
+        if (!key) throw new Error('Нет общего ключа');
+        const pt = await crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv: new Uint8Array(b64decode(payload.iv)) },
+            key,
+            b64decode(payload.ct)
+        );
+        return new TextDecoder().decode(pt);
+    }
+
+    return { myKeyPair, publishMyPublicKey, getSharedKey, encryptFor, decryptFrom };
+})();
 
 window.addEventListener("error", e => {
     console.error('Global error:', e);
@@ -3757,7 +3866,7 @@ function Register({ uid, onDone, show }) {
 
 function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
     const [channelId, setChannelId] = useState(user.channelId || '');
-    const [tempChannelId, setTempChannelId] = useState(user.channelId || '');
+    const [tempChannelId, setTempChannelId] = useState('');
     const [channel, setChannel] = useState(null);
     const [busy, setBusy] = useState(false);
 
@@ -3766,6 +3875,19 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
         const found = Object.values(metas).find(m => m.type === 'channel' && m.id === channelId);
         setChannel(found || null);
     }, [channelId, metas]);
+
+    async function unlinkChannel() {
+        setBusy(true);
+        try {
+            await window.db.ref('users/' + user.uid + '/channelId').remove();
+            setChannelId('');
+            setTempChannelId('');
+            show('Канал отвязан');
+        } catch(e) {
+            show(friendlyError(e), true);
+        }
+        setBusy(false);
+    }
 
     async function saveChannel() {
         const id = tempChannelId.trim();
@@ -3793,6 +3915,25 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
         
         setBusy(true);
         try {
+            // Ищем канал по юзернейму (основной способ) либо по id (для обратной совместимости)
+            const uname = normalizeUsername(raw);
+            let id = null, data = null;
+            if (uname) {
+                const idSnap = await window.db.ref('channelUsernames/' + uname).get();
+                if (idSnap.exists()) id = idSnap.val();
+            }
+            if (!id) {
+                const bySnap = await window.db.ref('chatsMeta/' + raw).get();
+                if (bySnap.exists()) { id = raw; data = bySnap.val(); }
+            }
+            if (id && !data) {
+                const snap = await window.db.ref('chatsMeta/' + id).get();
+                data = snap.exists() ? snap.val() : null;
+            }
+            if (!id || !data) { show('Канал с таким юзернеймом не найден', true); setBusy(false); return; }
+            if (data.type !== 'channel') { show('Это не канал', true); setBusy(false); return; }
+            if (data.createdBy !== user.uid) { show('Вы не являетесь владельцем этого канала', true); setBusy(false); return; }
+
             await window.db.ref('users/' + user.uid + '/channelId').set(id);
             setChannelId(id);
             show('Канал привязан к профилю!');
@@ -3878,7 +4019,7 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
                         <div style={{ display: 'flex', gap: 8 }}>
                             <input 
                                 type="text" 
-                                placeholder="ID канала" 
+                                placeholder="@юзернейм канала" 
                                 value={tempChannelId} 
                                 onChange={e => setTempChannelId(e.target.value)}
                                 style={{ flex: 1 }}
@@ -3888,10 +4029,7 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
                             </button>
                         </div>
                         {channelId && (
-                            <button className="secondary danger" onClick={() => {
-                                setTempChannelId('');
-                                saveChannel();
-                            }} style={{ marginTop: 4, padding: '4px 12px', fontSize: 12 }}>
+                            <button className="secondary danger" onClick={unlinkChannel} disabled={busy} style={{ marginTop: 4, padding: '4px 12px', fontSize: 12 }}>
                                 Отвязать
                             </button>
                         )}
@@ -3974,19 +4112,8 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
                                 <div style={{ fontWeight: 600 }}>
                                     📢 {sanitizeString(channel.name, MAX_NAME_LEN)}
                                     {channel.verified && (
-                                        <span className="verified-badge" style={{
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            background: '#1da1f2',
-                                            color: '#fff',
-                                            fontSize: 9,
-                                            fontWeight: 700,
-                                            padding: '1px 5px',
-                                            borderRadius: 8,
-                                            marginLeft: 3
-                                        }}>
-                                            ✓
+                                        <span style={{marginLeft: 3, verticalAlign: 'middle', display: 'inline-flex'}}>
+                                            <VerifiedBadge size={14} />
                                         </span>
                                     )}
                                 </div>
@@ -4016,14 +4143,15 @@ function VerifiedBadge({ size = 16, className = "" }) {
                 width: size,
                 height: size,
                 borderRadius: '50%',
-                background: '#1da1f2',
-                color: '#fff',
-                fontSize: size * 0.65,
-                fontWeight: 700,
-                flexShrink: 0
+                background: '#2ea6ff',
+                boxShadow: '0 0 0 1px rgba(255,255,255,.35) inset, 0 1px 3px rgba(0,60,120,.35)',
+                flexShrink: 0,
+                verticalAlign: 'middle'
             }}
         >
-            ✓
+            <svg width={size * 0.62} height={size * 0.62} viewBox="0 0 24 24" fill="none">
+                <path d="M5 12.5 10 17.5 19 7" stroke="#fff" strokeWidth={3.6} strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
         </span>
     );
 }
@@ -4032,7 +4160,18 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
     const [name, setName] = useState("");
     const [picked, setPicked] = useState({});
     const [busy, setBusy] = useState(false);
+    const [avatarUrl, setAvatarUrl] = useState("");
+    const [tempAvatarUrl, setTempAvatarUrl] = useState("");
     const others = Object.values(users).filter(u => u.uid !== me.uid);
+
+    function applyAvatarUrl() {
+        setAvatarUrl(tempAvatarUrl.trim());
+        show('URL аватарки сохранён');
+    }
+    function openHosting() {
+        window.open('https://hostimg.pw', '_blank');
+        show('Открыт сайт hostimg.pw. Загрузите фото и скопируйте ссылку');
+    }
 
     async function create() {
         const members = Object.keys(picked).filter(k => picked[k]);
@@ -4050,6 +4189,7 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
                 type:"group", 
                 name:name.trim().substring(0, MAX_NAME_LEN), 
                 about:"Группа в Телеграммах по Кубани", 
+                avatarUrl: avatarUrl.trim() || '',
                 members:m,
                 createdBy: me.uid,
                 createdAt:window.SV_TS, 
@@ -4074,6 +4214,29 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
                     </div>
                     <button className="iconbtn close" onClick={onClose}><Icon name="close"/></button>
                 </div>
+
+                <div className="avatar-preview-large" style={{
+                    backgroundImage: avatarUrl ? `url(${avatarUrl})` : 'linear-gradient(135deg, #6750a4, #9b8ac4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 32
+                }}>
+                    {!avatarUrl && '👥'}
+                </div>
+                <div className="avatar-url-input" style={{marginTop: 8}}>
+                    <input 
+                        type="text" 
+                        placeholder="Ссылка на аватарку" 
+                        value={tempAvatarUrl} 
+                        onChange={e => setTempAvatarUrl(e.target.value)}
+                    />
+                    <button className="primary" onClick={applyAvatarUrl}>Применить</button>
+                </div>
+                <button className="secondary" onClick={openHosting} style={{width:'100%', marginTop:4, marginBottom: 8, justifyContent:'center'}}>
+                    📤 Загрузить фото через hostimg.pw
+                </button>
+
                 <div className="field">
                     <label>Название</label>
                     <input autoFocus placeholder="Например, Дворовая тусовка" value={name} onChange={e=>setName(e.target.value)} maxLength="50" />
@@ -4106,6 +4269,8 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
     const [newAbout, setNewAbout] = useState(chat.about || '');
     const [editingName, setEditingName] = useState(false);
     const [newName, setNewName] = useState(chat.name || '');
+    const [editingAvatar, setEditingAvatar] = useState(false);
+    const [tempAvatarUrl, setTempAvatarUrl] = useState(chat.avatarUrl || '');
     const [busy, setBusy] = useState(false);
 
     useEffect(() => {
@@ -4127,7 +4292,7 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
             update[field] = value;
             await window.db.ref('chatsMeta/' + chat.id).update(update);
             onUpdate({ ...chat, ...update });
-            show(field === 'about' ? 'Описание обновлено' : 'Название обновлено');
+            show(field === 'about' ? 'Описание обновлено' : field === 'avatarUrl' ? 'Аватарка обновлена' : 'Название обновлено');
         } catch(e) {
             show(friendlyError(e), true);
         }
@@ -4170,12 +4335,23 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
         <div className="overlay" onClick={onClose}>
             <div className="modal" onClick={e=>e.stopPropagation()} style={{ maxWidth: 500 }}>
                 <div className="modal-head">
-                    <Avatar 
-                        name={chat.name} 
-                        uid={chat.id} 
-                        size={56} 
-                        group={true} 
-                    />
+                    <div style={{ position: 'relative' }}>
+                        <Avatar 
+                            name={chat.name} 
+                            uid={chat.id} 
+                            avatarUrl={chat.avatarUrl}
+                            size={56} 
+                            group={true} 
+                        />
+                        {isAdmin && (
+                            <button className="iconbtn" onClick={() => setEditingAvatar(v => !v)} style={{
+                                position: 'absolute', bottom: -4, right: -4, width: 26, height: 26,
+                                background: 'var(--pc)', boxShadow: '0 2px 6px rgba(0,0,0,.25)'
+                            }}>
+                                <Icon name="edit" size={13} />
+                            </button>
+                        )}
+                    </div>
                     <div style={{ flex: 1 }}>
                         {editingName ? (
                             <div className="group-edit-field">
@@ -5246,30 +5422,75 @@ const STICKER_PACKS = [
     { name: 'Разное', stickers: ['🎮','🎧','🎵','📱','💻','⌚','📷','🎤','🎸','🎨','🧸','🎁','🎈','⚽','🏀','🏆','🚗','✈️','🌈','☀️','🌙','☁️','🌸','💡','📚','🎲','🧩','🎯'] }
 ];
 
-function VoicePlayer({ src, duration=0, mine=false }) {
+function VoicePlayer({ src, duration=0, mine=false, onEnded, playbackRate=1, onSpeedChange, onTogglePlay, isPlaying, listened=false, onListened, playerId }) {
     const audioRef = useRef(null);
     const [playing,setPlaying] = useState(false);
     const [progress,setProgress] = useState(0);
     const [current,setCurrent] = useState(0);
     const [total,setTotal] = useState(duration || 0);
+    const [durationFixed,setDurationFixed] = useState(false);
     useEffect(()=>{
         const a=audioRef.current; if(!a) return;
-        const time=()=>{ setCurrent(a.currentTime||0); setProgress(a.duration ? (a.currentTime/a.duration)*100 : 0); };
-        const meta=()=>setTotal(a.duration || duration || 0);
-        const end=()=>{setPlaying(false); setProgress(100);};
-        a.addEventListener('timeupdate',time); a.addEventListener('loadedmetadata',meta); a.addEventListener('ended',end);
-        return ()=>{a.removeEventListener('timeupdate',time);a.removeEventListener('loadedmetadata',meta);a.removeEventListener('ended',end);};
-    },[duration]);
-    const toggle=async()=>{const a=audioRef.current;if(!a)return;try{if(a.paused){await a.play();setPlaying(true);}else{a.pause();setPlaying(false);}}catch(e){console.error('Voice play error',e);}};
-    const seek=e=>{const a=audioRef.current;if(!a||!a.duration)return;const r=e.currentTarget.getBoundingClientRect();a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*a.duration;};
-    const fmt=n=>{n=Math.max(0,Math.floor(n||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0');};
+        const time=()=>{
+            setCurrent(a.currentTime||0);
+            if(isFinite(a.duration) && a.duration>0) setProgress((a.currentTime/a.duration)*100);
+            if(!listened && a.currentTime > (a.duration||total||0) * 0.7 && onListened) onListened();
+        };
+        const fixDuration=()=>{
+            // Известный баг Chrome: у webm-записей MediaRecorder duration===Infinity,
+            // пока не "прокрутить" файл целиком — из-за этого была ошибка Infinity:NaN
+            // и пустой прогресс-бар почти до самого конца голосового.
+            if(a.duration===Infinity || isNaN(a.duration)){
+                const onTU=()=>{
+                    a.removeEventListener('timeupdate',onTU);
+                    a.currentTime=0;
+                    setTotal(isFinite(a.duration)&&a.duration>0?a.duration:(duration||0));
+                    setDurationFixed(true);
+                };
+                a.addEventListener('timeupdate',onTU);
+                a.currentTime=1e9;
+            } else {
+                setTotal(a.duration||duration||0);
+                setDurationFixed(true);
+            }
+        };
+        const end=()=>{setPlaying(false); setProgress(100); setCurrent(0); if(onListened) onListened(); if(onEnded) onEnded();};
+        a.addEventListener('timeupdate',time); a.addEventListener('loadedmetadata',fixDuration); a.addEventListener('ended',end);
+        return ()=>{a.removeEventListener('timeupdate',time);a.removeEventListener('loadedmetadata',fixDuration);a.removeEventListener('ended',end);};
+    },[duration,listened]);
+    useEffect(()=>{ const a=audioRef.current; if(a) a.playbackRate = playbackRate||1; },[playbackRate]);
+    useEffect(()=>{
+        // Позволяет внешнему коду (последовательное воспроизведение подряд идущих голосовых) запускать/останавливать плеер.
+        const a=audioRef.current; if(!a) return;
+        if(isPlaying===true && a.paused){ a.play().then(()=>setPlaying(true)).catch(()=>{}); }
+        if(isPlaying===false && !a.paused){ a.pause(); setPlaying(false); }
+    },[isPlaying]);
+    const toggle=async()=>{
+        const a=audioRef.current;if(!a)return;
+        try{
+            if(a.paused){ if(onTogglePlay) onTogglePlay(playerId); await a.play();setPlaying(true); }
+            else{a.pause();setPlaying(false);}
+        }catch(e){console.error('Voice play error',e);}
+    };
+    const seek=e=>{const a=audioRef.current;if(!a||!isFinite(a.duration)||!a.duration)return;const r=e.currentTarget.getBoundingClientRect();a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*a.duration;};
+    const fmt=n=>{if(!isFinite(n))return '0:00';n=Math.max(0,Math.floor(n||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0');};
     return <div className="voice-msg" onClick={e=>e.stopPropagation()}>
         <audio ref={audioRef} src={src} preload="metadata" playsInline />
         <button className="voice-play-btn" onClick={toggle} aria-label={playing?'Пауза':'Воспроизвести'}><Icon name={playing?'pause':'play'} size={17}/></button>
         <div style={{flex:1,minWidth:0}}>
             <div className="voice-bar" onClick={seek}><div className="voice-fill" style={{width:progress+'%'}}/></div>
-            <div className="voice-time">{playing?fmt(current):fmt(total)}</div>
+            <div className="voice-time">
+                {playing?fmt(current):fmt(total)}
+                {!listened && <span className="voice-unheard-dot" aria-label="Не прослушано" />}
+            </div>
         </div>
+        {playing && onSpeedChange && (
+            <button className="voice-speed-btn" onClick={e=>{
+                e.stopPropagation();
+                const next = playbackRate>=2 ? 1 : playbackRate>=1.5 ? 2 : 1.5;
+                onSpeedChange(next);
+            }}>{playbackRate}x</button>
+        )}
     </div>;
 }
 
@@ -5328,8 +5549,8 @@ function PollCreator({ onClose, onCreate }) {
 }
 
 function StatusTicks({ status }) {
-    if (status === "read") { return <Icon name="checks" size={16} stroke={2} className="ticks" />; }
-    return <Icon name="check" size={16} stroke={2} className="ticks" />;
+    if (status === "read") { return <Icon name="checks" size={16} stroke={2.4} className="ticks ticks-read" />; }
+    return <Icon name="check" size={16} stroke={2.4} className="ticks ticks-sent" />;
 }
 
 function getReactionCount(message) {
@@ -5440,6 +5661,28 @@ function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction,
 }
 
 const RICH_TEXT_RE = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+|(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:com|ru|net|org|io|dev|app|me|to|xyz|info|biz|co|uk|de|fr|pro|shop|site|online|store|club|top|link|tech|su|by|kz|ua)(?:\/[^\s<>"']*)?|@[a-zA-Z0-9_]{3,32})/gi;
+// ===== ОТОБРАЖЕНИЕ ЗАШИФРОВАННОГО СООБЩЕНИЯ =====
+function EncryptedText({ message, me, chat, users, metas, onSelectChat }) {
+    const [plain, setPlain] = useState(null);
+    const [failed, setFailed] = useState(false);
+    useEffect(() => {
+        let cancelled = false;
+        setPlain(null);
+        setFailed(false);
+        const otherUid = message.senderId === me.uid ? chat.uid : message.senderId;
+        const otherPubKey = users[otherUid]?.publicKey;
+        if (!otherPubKey) { setFailed(true); return; }
+        window.E2E.decryptFrom(otherUid, otherPubKey, { iv: message.iv, ct: message.text })
+            .then(t => { if (!cancelled) setPlain(t); })
+            .catch(() => { if (!cancelled) setFailed(true); });
+        return () => { cancelled = true; };
+    }, [message.id, message.text, message.iv, me.uid, chat.uid]);
+
+    if (failed) return <span style={{ opacity: 0.6, fontStyle: 'italic' }}>🔒 Не удалось расшифровать</span>;
+    if (plain === null) return <span style={{ opacity: 0.55 }}>🔒 Расшифровка…</span>;
+    return <>{renderRichText(plain, { me, users, metas, onSelectChat })}</>;
+}
+
 function renderRichText(text, { me, users, metas, onSelectChat }) {
     const str = sanitizeString(text, MAX_MSG_LEN);
     if (!str) return str;
@@ -5569,7 +5812,22 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                             </div>
                         )}
                         {message.type === 'voice' && message.voiceData ? (
-                            <VoicePlayer src={message.voiceData} duration={message.voiceDuration} mine={mine} />
+                            <VoicePlayer
+                                src={message.voiceData}
+                                duration={message.voiceDuration}
+                                mine={mine}
+                                playerId={message.id}
+                                playbackRate={voiceSpeed}
+                                onSpeedChange={setVoiceSpeed}
+                                isPlaying={playingVoiceId === message.id}
+                                listened={mine || !!message.listenedBy?.[me.uid]}
+                                onListened={() => markVoiceListened(message.id)}
+                                onTogglePlay={(id) => setPlayingVoiceId(id)}
+                                onEnded={() => {
+                                    const nextId = nextVoiceMap[message.id];
+                                    setPlayingVoiceId(nextId || null);
+                                }}
+                            />
                         ) : message.type === 'sticker' ? (
                             <div className="msg-sticker">{sanitizeString(message.sticker || message.text, 50)}</div>
                         ) : message.type === 'poll' && message.poll ? (
@@ -5582,6 +5840,7 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                         )}
 
                         <div className="btime">
+                            {message.encrypted && <span style={{ opacity: 0.7, marginRight: 3 }} title="Сквозное шифрование">🔒</span>}
                             {message.edited && <span style={{ opacity: 0.65, marginRight: 4 }}>изменено</span>}
                             {fmtTime(message.ts)}
                             {!isChannel && mine && <StatusTicks status={message.status || "sent"} />}
@@ -5643,7 +5902,8 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
         if (String(a.id||"") !== String(b.id||"") || String(a.text||"") !== String(b.text||"") || a.status !== b.status || a.ts !== b.ts ||
             a.edited !== b.edited || a.sticker !== b.sticker ||
             JSON.stringify(a.reactions || {}) !== JSON.stringify(b.reactions || {}) ||
-            JSON.stringify(a.deletedFor || {}) !== JSON.stringify(b.deletedFor || {})) {
+            JSON.stringify(a.deletedFor || {}) !== JSON.stringify(b.deletedFor || {}) ||
+            JSON.stringify(a.listenedBy || {}) !== JSON.stringify(b.listenedBy || {})) {
             return false;
         }
     }
@@ -5670,6 +5930,16 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     const [showStickerPanel, setShowStickerPanel] = useState(false);
     const [showPollCreator, setShowPollCreator] = useState(false);
     const [recording, setRecording] = useState(false);
+
+    // Статус "выбирает стикер / создаёт опрос / записывает голосовое" — как в Telegram.
+    useEffect(() => {
+        if (!window.db || isChannel || !chatId) return;
+        const r = window.db.ref("typing/"+chatId+"/"+me.uid);
+        if (showStickerPanel) { r.set("sticker"); r.onDisconnect().remove(); }
+        else if (showPollCreator) { r.set("poll"); r.onDisconnect().remove(); }
+        else if (recording) { r.set("voice"); r.onDisconnect().remove(); }
+        else { r.remove().catch(() => {}); }
+    }, [showStickerPanel, showPollCreator, recording, chatId, isChannel, me.uid]);
     const [recordSeconds, setRecordSeconds] = useState(0);
     const mediaRecorderRef = useRef(null);
     const recordStreamRef = useRef(null);
@@ -5774,7 +6044,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             typingHandler = snap => {
                 if (currentChatIdRef.current !== currentId) return;
                 const val = snap.val() || {};
-                setTyping(Object.keys(val).some(uid => uid !== me.uid && val[uid] === true));
+                const otherStatus = Object.keys(val).map(uid => uid !== me.uid && val[uid]).find(v => v);
+                setTyping(otherStatus || false);
             };
             typingRef.on("value", typingHandler, errorHandler);
         }
@@ -5836,7 +6107,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         autoGrow(e.target);
         if (!window.db || isChannel) return;
         const r = window.db.ref("typing/"+chatId+"/"+me.uid);
-        r.set(true);
+        r.set("text");
         r.onDisconnect().remove();
         clearTimeout(typingTimer.current);
         typingTimer.current = setTimeout(() => r.remove(), 1200);
@@ -5893,6 +6164,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         if(!window.db||!chatId||sendingRef.current)return;
         if(isChannel && chat.createdBy!==me.uid){show('Только владелец канала может публиковать посты',true);return;}
         sendingRef.current=true;
+        wasNearBottomRef.current = true;
         try{
             const path = isChannel ? 'posts' : 'messages';
             const ref=window.db.ref('chats/'+chatId+'/'+path).push();
@@ -5925,6 +6197,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     }
     async function createPoll(data){
         if(isChannel && chat.createdBy!==me.uid){show('Только владелец канала может создавать опросы',true);return;}
+        wasNearBottomRef.current = true;
         try{
             const path=isChannel?'posts':'messages';
             const ref=window.db.ref('chats/'+chatId+'/'+path).push();
@@ -5979,6 +6252,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
 
         sendingRef.current = true;
         setText("");
+        wasNearBottomRef.current = true;
         if (!isChannel) window.db.ref("typing/" + chatId + "/" + me.uid).remove().catch(() => {});
 
         try {
@@ -5993,6 +6267,18 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             } else {
                 const ref = window.db.ref("chats/" + chatId + "/messages").push();
                 const data = { senderId:me.uid, text:t, ts:window.SV_TS, status:"sent" };
+
+                // Сквозное шифрование — только для чистых личных переписок (не групп).
+                if (!isGroup && chat.uid && chat.uid !== me.uid) {
+                    const theirPubKey = users[chat.uid]?.publicKey;
+                    if (theirPubKey) {
+                        try {
+                            const enc = await window.E2E.encryptFor(chat.uid, theirPubKey, t);
+                            if (enc) { data.encrypted = true; data.iv = enc.iv; data.text = enc.ct; }
+                        } catch (e) { console.warn('E2E encrypt failed, sending plaintext', e); }
+                    }
+                }
+
                 if (replyTo) {
                     data.replyTo = {
                         id:replyTo.id,
@@ -6008,7 +6294,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 const meta = {
                     id:chatId,
                     type:isGroup ? "group" : "dm",
-                    lastMessage:t,
+                    lastMessage: data.encrypted ? '🔒 Сообщение' : t,
                     lastTs:window.SV_TS,
                     lastSender:me.uid,
                     lastStatus:"sent"
@@ -6089,7 +6375,26 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         setReplyTo(null);
         setText(sanitizeString(message.text, MAX_MSG_LEN) || '');
         setContextMenu(null);
-        setTimeout(() => document.querySelector('.compose input')?.focus(), 0);
+        if (message.encrypted && chat.uid) {
+            const theirPubKey = users[chat.uid]?.publicKey;
+            if (theirPubKey) {
+                try {
+                    const plain = await window.E2E.decryptFrom(chat.uid, theirPubKey, { iv: message.iv, ct: message.text });
+                    setText(plain);
+                } catch (e) {
+                    show('Не удалось расшифровать сообщение для редактирования', true);
+                    setEditingMessage(null);
+                    return;
+                }
+            } else {
+                show('Нет ключа собеседника для расшифровки', true);
+                setEditingMessage(null);
+                return;
+            }
+        } else {
+            setText(message.text || '');
+        }
+        setTimeout(() => document.querySelector('.compose textarea')?.focus(), 0);
     }
     async function saveEdit() {
         const t = text.trim().substring(0, MAX_MSG_LEN);
@@ -6099,9 +6404,26 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             const path = isChannel ?
                 'chats/' + chatId + '/posts/' + editingMessage.id :
                 'chats/' + chatId + '/messages/' + editingMessage.id;
-            await window.db.ref(path).update({ text: t, edited: true });
+
+            const update = { edited: true };
+            let previewText = t;
+            if (!isChannel && !isGroup && editingMessage.encrypted && chat.uid) {
+                const theirPubKey = users[chat.uid]?.publicKey;
+                let encrypted = false;
+                if (theirPubKey) {
+                    try {
+                        const enc = await window.E2E.encryptFor(chat.uid, theirPubKey, t);
+                        if (enc) { update.encrypted = true; update.iv = enc.iv; update.text = enc.ct; encrypted = true; previewText = '🔒 Сообщение'; }
+                    } catch (e) { console.warn('E2E re-encrypt on edit failed', e); }
+                }
+                if (!encrypted) { update.encrypted = false; update.text = t; }
+            } else {
+                update.text = t;
+            }
+
+            await window.db.ref(path).update(update);
             if (!isChannel) {
-                await window.db.ref('chatsMeta/' + chatId).update({ lastMessage: t });
+                await window.db.ref('chatsMeta/' + chatId).update({ lastMessage: previewText });
             }
             setEditingMessage(null);
             setText('');
@@ -6182,6 +6504,32 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             setBusy(true);
             try {
                 const targetChatId = selectedChat.id;
+                const originalSenderName = users[message.senderId]?.name || chat.name || 'Чат';
+
+                let plainText = message.text || '';
+                if (message.encrypted && chat.uid) {
+                    const theirPubKey = users[chat.uid]?.publicKey;
+                    if (theirPubKey) {
+                        try { plainText = await window.E2E.decryptFrom(chat.uid, theirPubKey, { iv: message.iv, ct: message.text }); }
+                        catch (e) { show('Не удалось расшифровать сообщение для пересылки', true); setBusy(false); return; }
+                    } else {
+                        show('Нет ключа для расшифровки этого сообщения', true); setBusy(false); return;
+                    }
+                }
+
+                const forwardData = { senderId: me.uid, ts: window.SV_TS, status: 'sent', forwardedFrom: originalSenderName };
+                let previewText = plainText;
+                if (selectedChat.type === 'dm' && selectedChat.uid && selectedChat.uid !== me.uid) {
+                    const targetPubKey = users[selectedChat.uid]?.publicKey;
+                    if (targetPubKey) {
+                        try {
+                            const enc = await window.E2E.encryptFor(selectedChat.uid, targetPubKey, plainText);
+                            if (enc) { forwardData.encrypted = true; forwardData.iv = enc.iv; forwardData.text = enc.ct; previewText = '🔒 Сообщение'; }
+                        } catch (e) { console.warn('E2E encrypt on forward failed', e); }
+                    }
+                }
+                if (!forwardData.encrypted) forwardData.text = plainText;
+
                 const mr = window.db.ref("chats/"+targetChatId+"/messages").push();
                 await mr.set({
                     senderId: me.uid,
@@ -6192,7 +6540,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 });
                 const meta = { 
                     id: targetChatId, type: selectedChat.type || 'dm', 
-                    lastMessage: '📎 Пересланное сообщение', lastTs: window.SV_TS, lastSender: me.uid 
+                    lastMessage: '📎 ' + previewText, lastTs: window.SV_TS, lastSender: me.uid 
                 };
                 if (selectedChat.type === 'group') {
                     meta.members = selectedChat.members || {};
@@ -6356,7 +6704,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                         name={isChannel ? chat.name : isGroup ? chat.name : chat.name} 
                         uid={isChannel ? chat.id : isGroup ? chat.id : chat.uid} 
                         avatar={isChannel ? null : isGroup ? null : chat.avatar} 
-                        avatarUrl={isChannel ? chat.avatarUrl : isGroup ? null : chat.avatarUrl} 
+                        avatarUrl={chat.avatarUrl} 
                         size={44} 
                         online={!isChannel && !isGroup && !!presence[chat.uid]?.online} 
                         group={isChannel ? false : isGroup}
@@ -6367,40 +6715,23 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     <div className="chat-name">
                         {sanitizeString(chat.name, MAX_NAME_LEN)}
                         {isChannel && chat.verified && (
-                            <span className="verified-badge" style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                background: '#1da1f2',
-                                color: '#fff',
-                                fontSize: 10,
-                                fontWeight: 700,
-                                padding: '2px 6px',
-                                borderRadius: 10,
-                                marginLeft: 4
-                            }}>
-                                ✓
+                            <span style={{marginLeft: 4, verticalAlign: 'middle', display: 'inline-flex'}}>
+                                <VerifiedBadge size={16} />
                             </span>
                         )}
                         {!isChannel && !isGroup && chat.verified && (
-                            <span className="verified-badge" style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                background: '#1da1f2',
-                                color: '#fff',
-                                fontSize: 10,
-                                fontWeight: 700,
-                                padding: '2px 6px',
-                                borderRadius: 10,
-                                marginLeft: 4
-                            }}>
-                                ✓
+                            <span style={{marginLeft: 4, verticalAlign: 'middle', display: 'inline-flex'}}>
+                                <VerifiedBadge size={16} />
                             </span>
                         )}
                     </div>
                     <div className="chat-status">
-                        {typing ? "печатает…" : isChannel ? 
+                        {typing ? (
+                            typing === 'voice' ? 'записывает голосовое…' :
+                            typing === 'sticker' ? 'выбирает стикер…' :
+                            typing === 'poll' ? 'создаёт опрос…' :
+                            'печатает…'
+                        ) : isChannel ? 
                             (subscribersCount + ' подписчиков' + (chat.username ? ' · @' + chat.username : '')) :
                             isGroup ? 
                             (Object.keys(chat.members||{}).length + " участников") : 
@@ -6462,6 +6793,9 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                         addReaction={addReaction} deleteMessage={deleteMessage}
                         replyToMessage={replyToMessage} startEdit={startEdit}
                         setSelectedMessage={setSelectedMessage} scrollToMessage={scrollToMessage}
+                        voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed}
+                        playingVoiceId={playingVoiceId} setPlayingVoiceId={setPlayingVoiceId}
+                        nextVoiceMap={nextVoiceMap} markVoiceListened={markVoiceListened}
                     />
                 ))}
                 {typing && (
