@@ -2309,7 +2309,7 @@ body.dark .mobile-nav-item.active {
     right: -2px;
     width: 20px;
     height: 20px;
-    border-radius: '50%';
+    border-radius: 50%;
     background: #1da1f2;
     display: flex;
     align-items: center;
@@ -6698,4 +6698,295 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
                         
                         {filteredChannels.length > 0 && (
                             <>
-                                <div className="section-label" style={{marginTop:16}}>{q ? '
+                                <div className="section-label" style={{marginTop:16}}>{q ? 'Каналы' : 'Рекомендуемые каналы'}</div>
+                                {filteredChannels.map(c => (
+                                    <button className={"chat-item " + (active?.id === c.id ? "active" : "")} key={c.id} onClick={() => {
+                                        onSelect({ type:"channel", id:c.id, name:c.name, username:c.username, avatarUrl:c.avatarUrl, verified:c.verified, subscribers:c.subscribers, createdBy:c.createdBy, about:c.about });
+                                        setSearch(""); setFocused(false);
+                                    }}>
+                                        <Avatar name={c.name} uid={c.id} avatar={null} avatarUrl={c.avatarUrl} size={48} verified={c.verified} />
+                                        <div className="person-body">
+                                            <div className="person-row"><span className="person-name">{sanitizeString(c.name, MAX_NAME_LEN)}</span></div>
+                                            <div className="person-sub">{Object.keys(c.subscribers||{}).length} подписчиков{c.username ? ' · @' + c.username : ''}</div>
+                                        </div>
+                                    </button>
+                                ))}
+                            </>
+                        )}
+                    </>
+                ) : (
+                    <>
+                        {chats.map(c => (
+                            <button className={"chat-item " + (active?.id === c.id || (active?.uid && c.type === "dm" && active.uid === c.uid) ? "active" : "")} key={c.id || c.uid} onClick={() => onSelect(c)}>
+                                <Avatar
+                                    name={c.name}
+                                    uid={c.type === "channel" ? c.id : c.type === "group" ? c.id : c.uid}
+                                    avatar={c.type === "channel" ? null : c.type === "group" ? null : c.avatar}
+                                    avatarUrl={c.type === "channel" ? c.avatarUrl : c.type === "group" ? null : c.avatarUrl}
+                                    size={48}
+                                    online={c.type === "dm" && !!presence[c.uid]?.online}
+                                    group={c.type === "group"}
+                                    verified={c.verified}
+                                />
+                                <div className="person-body">
+                                    <div className="person-row">
+                                        <span className="person-name">{sanitizeString(c.name, MAX_NAME_LEN)}</span>
+                                        {c.unread > 0 && <span className="unread-badge">{c.unread}</span>}
+                                    </div>
+                                    <div className="person-sub">
+                                        {c.isChannel ? Object.keys(c.subscribers||{}).length + ' подписчиков' :
+                                         c.type === "group" ? Object.keys(c.members||{}).length + ' участников' :
+                                         c.lastMessage || ''}
+                                    </div>
+                                </div>
+                            </button>
+                        ))}
+                    </>
+                )}
+            </div>
+        </div>
+    );
+}
+
+function App() {
+    const [me, setMe] = useState(null);
+    const [users, setUsers] = useState({});
+    const [presence, setPresence] = useState({});
+    const [metas, setMetas] = useState({});
+    const [active, setActive] = useState(null);
+    const [showSettings, setShowSettings] = useState(false);
+    const [showGroup, setShowGroup] = useState(false);
+    const [showCreateChannel, setShowCreateChannel] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('messenger_dark') || 'false'); } catch(e) { return false; }
+    });
+    const [hideLastSeen, setHideLastSeen] = useState(() => window.MessengerPrivacy.hideLastSeen());
+    const [allowCalls, setAllowCalls] = useState(() => window.MessengerPrivacy.allowCalls());
+    const [toasts, setToasts] = useState([]);
+    const toastIdRef = useRef(0);
+
+    useEffect(() => {
+        document.body.classList.toggle('dark', darkMode);
+        localStorage.setItem('messenger_dark', JSON.stringify(darkMode));
+    }, [darkMode]);
+
+    useEffect(() => {
+        if (!window.auth) return;
+        const unsub = window.auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const snap = await window.db.ref('users/' + user.uid).get();
+                    if (snap.exists()) {
+                        const data = snap.val();
+                        if (user.emailVerified !== data.emailVerified) {
+                            await window.db.ref('users/' + user.uid).update({ emailVerified: user.emailVerified });
+                            data.emailVerified = user.emailVerified;
+                        }
+                        setMe({ uid: user.uid, ...data });
+                    }
+                } catch(e) { console.error('Auth state error:', e); }
+            } else {
+                setMe(null);
+                setActive(null);
+            }
+        });
+        return () => unsub();
+    }, []);
+
+    useEffect(() => {
+        if (!me || !window.db) return;
+        const ref = window.db.ref('users');
+        const handler = snap => setUsers(snap.val() || {});
+        ref.on('value', handler);
+        return () => ref.off('value', handler);
+    }, [me]);
+
+    useEffect(() => {
+        if (!me || !window.db) return;
+        const ref = window.db.ref('presence');
+        const handler = snap => setPresence(snap.val() || {});
+        ref.on('value', handler);
+        return () => ref.off('value', handler);
+    }, [me]);
+
+    useEffect(() => {
+        if (!me || !window.db) return;
+        const ref = window.db.ref('chatsMeta');
+        const handler = snap => setMetas(snap.val() || {});
+        ref.on('value', handler);
+        return () => ref.off('value', handler);
+    }, [me]);
+
+    useEffect(() => {
+        if (!me || !window.db) return;
+        const myPresenceRef = window.db.ref('presence/' + me.uid);
+        const setOnline = () => myPresenceRef.update({ online: true, lastSeen: window.SV_TS });
+        const setOffline = () => myPresenceRef.update({ online: false, lastSeen: window.SV_TS });
+        setOnline();
+        const interval = setInterval(setOnline, 60000);
+        const handleUnload = () => setOffline();
+        window.addEventListener('beforeunload', handleUnload);
+        const handleVisibility = () => {
+            if (document.visibilityState === 'visible') setOnline();
+            else myPresenceRef.update({ online: false, lastSeen: window.SV_TS });
+        };
+        document.addEventListener('visibilitychange', handleVisibility);
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener('beforeunload', handleUnload);
+            document.removeEventListener('visibilitychange', handleVisibility);
+            setOffline();
+        };
+    }, [me]);
+
+    function show(msg, isError = false) {
+        const id = ++toastIdRef.current;
+        setToasts(t => [...t, { id, msg, isError }]);
+        setTimeout(() => setToasts(t => t.filter(x => x.id !== id)), 3500);
+    }
+
+    function handleSave(user) {
+        if (!window.db) return;
+        window.db.ref('users/' + user.uid).update(user).then(() => show('Сохранено')).catch(e => show(friendlyError(e), true));
+    }
+
+    function handleLogout() {
+        if (window.auth) {
+            if (me && window.db) {
+                window.db.ref('presence/' + me.uid).update({ online: false, lastSeen: window.SV_TS }).catch(() => {});
+            }
+            window.auth.signOut();
+        }
+        setMe(null);
+        setActive(null);
+    }
+
+    function handleGroupCreated(chat) {
+        setActive(chat);
+        setShowGroup(false);
+    }
+
+    function handleChannelCreated(chat) {
+        setActive(chat);
+        setShowCreateChannel(false);
+    }
+
+    function handleUpdateChat(updated) {
+        setActive(prev => prev ? { ...prev, ...updated } : prev);
+    }
+
+    function handleOpenChannel(channel) {
+        setActive({ type: 'channel', id: channel.id, name: channel.name, about: channel.about, avatarUrl: channel.avatarUrl, verified: channel.verified, username: channel.username, subscribers: channel.subscribers, createdBy: channel.createdBy });
+    }
+
+    function handleSelectChat(chat) {
+        setActive(chat);
+    }
+
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 720;
+
+    if (!me) {
+        return (
+            <div className="m3">
+                <div className="bg">
+                    <div className="blob b1"/>
+                    <div className="blob b2"/>
+                    <div className="blob b3"/>
+                </div>
+                <AuthScreen onAuth={setMe} show={show} />
+            </div>
+        );
+    }
+
+    return (
+        <div className="m3">
+            <div className="bg">
+                <div className="blob b1"/>
+                <div className="blob b2"/>
+                <div className="blob b3"/>
+            </div>
+            <div className="shell">
+                <div className={"panels" + (active && isMobile ? " mobile-chat-open" : "")}>
+                    <List
+                        me={me} users={users} presence={presence} metas={metas}
+                        active={active} onSelect={handleSelectChat}
+                        onGroup={() => setShowGroup(true)}
+                        onCreateChannel={() => setShowCreateChannel(true)}
+                        hideLastSeen={hideLastSeen}
+                    />
+                    {active ? (
+                        <ChatView
+                            me={me} chat={active} users={users} presence={presence}
+                            onBack={() => setActive(null)}
+                            show={show} hideLastSeen={hideLastSeen}
+                            onUpdateChat={handleUpdateChat} metas={metas}
+                            onOpenChannel={handleOpenChannel}
+                            onSelectChat={handleSelectChat}
+                        />
+                    ) : (
+                        <div className="chat" style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                            <div style={{textAlign:'center',color:'var(--muted)'}}>
+                                <Icon name="chat" size={48} />
+                                <p style={{marginTop:12}}>Выберите чат</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <nav className="mobile-nav">
+                    <button className={"mobile-nav-item" + (!active ? " active" : "")} onClick={() => setActive(null)}>
+                        <span className="icon"><Icon name="chat" size={22}/></span>
+                        <span>Чаты</span>
+                    </button>
+                    <button className={"mobile-nav-item"} onClick={() => setShowSettings(true)}>
+                        <span className="icon"><Icon name="settings" size={22}/></span>
+                        <span>Настройки</span>
+                    </button>
+                </nav>
+            </div>
+            {showSettings && (
+                <Settings
+                    user={me} onSave={handleSave} onLogout={handleLogout}
+                    show={show} darkMode={darkMode} setDarkMode={setDarkMode}
+                    hideLastSeen={hideLastSeen} setHideLastSeen={v => { setHideLastSeen(v); window.MessengerPrivacy.save({ hideLastSeen: v }); }}
+                    allowCalls={allowCalls} setAllowCalls={v => { setAllowCalls(v); window.MessengerPrivacy.save({ allowCalls: v }); }}
+                />
+            )}
+            {showGroup && (
+                <GroupModal
+                    users={users} me={me}
+                    onClose={() => setShowGroup(false)}
+                    onCreated={handleGroupCreated}
+                    show={show}
+                />
+            )}
+            {showCreateChannel && (
+                <CreateChannelModal
+                    onClose={() => setShowCreateChannel(false)}
+                    onCreated={handleChannelCreated}
+                    show={show}
+                    me={me}
+                />
+            )}
+            {showSettings && (
+                <ProfileModal
+                    user={me}
+                    onClose={() => setShowSettings(false)}
+                    onLogout={handleLogout}
+                    onOpenChannel={handleOpenChannel}
+                    metas={metas}
+                    show={show}
+                />
+            )}
+            {toasts.map(t => <Toast key={t.id} toast={t} />)}
+        </div>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <ErrorBoundary>
+        <App />
+    </ErrorBoundary>
+);
+</script>
+</body>
+</html>
