@@ -524,7 +524,8 @@ body.dark .fab{
     min-width:0;
     height:100%;
     display:flex;
-    flex-direction:column
+    flex-direction:column;
+    transition: transform .25s ease;
 }
 
 .chatbar{
@@ -626,6 +627,7 @@ body.dark .online{
 .row{
     display:flex;
     margin-bottom:4px;
+    position: relative;
 }
 .row.mine{
     justify-content:flex-end !important;
@@ -633,6 +635,23 @@ body.dark .online{
 .row.theirs{
     justify-content:flex-start !important;
 }
+.swipe-reply-hint{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(103,80,164,.16);
+    color: #6750a4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+.row.theirs .swipe-reply-hint{ left: 6px; }
+.row.mine .swipe-reply-hint{ right: 6px; }
+body.dark .swipe-reply-hint{ background: rgba(187,134,252,.2); color:#bb86fc; }
 
 .bubble-wrapper {
     position: relative;
@@ -640,6 +659,7 @@ body.dark .online{
     display: flex;
     flex-direction: column;
     min-width: 50px;
+    transition: transform .2s ease;
 }
 
 .row.mine .bubble-wrapper{ align-items: flex-end; }
@@ -756,6 +776,46 @@ body.dark .theirs .bubble{
 .ticks-sent{opacity:.62}
 .ticks-read{color:#5ec8ff;opacity:1}
 .mine .ticks-read{color:#bfe9ff}
+
+.date-divider{
+    position: sticky;
+    top: 8px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    pointer-events: none;
+}
+.date-divider span{
+    background: rgba(103,80,164,.85);
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: 650;
+    padding: 5px 14px;
+    border-radius: 99px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 14px rgba(50,35,70,.18);
+}
+body.dark .date-divider span{
+    background: rgba(187,134,252,.28);
+}
+
+.pinned-bar{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: rgba(103,80,164,.07);
+    border-bottom: 1px solid rgba(103,80,164,.12);
+    cursor: pointer;
+    color: #6750a4;
+}
+.pinned-bar:hover{background: rgba(103,80,164,.12)}
+body.dark .pinned-bar{background: rgba(187,134,252,.08); border-bottom-color: rgba(187,134,252,.14); color:#bb86fc}
+body.dark .pinned-bar:hover{background: rgba(187,134,252,.13)}
+.pinned-bar-body{flex:1; min-width:0}
+.pinned-bar-title{font-size:11.5px; font-weight:700; opacity:.85}
+.pinned-bar-text{font-size:13px; color:var(--txt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 
 .typing{
     padding:13px 17px;
@@ -3253,6 +3313,37 @@ window.SV_TS = window.firebase ? firebase.database.ServerValue.TIMESTAMP : Date.
 // Область действия: только текст личных сообщений (DM). Группы и каналы —
 // многосторонние чаты, для них нужен отдельный протокол (не реализовано).
 // =====================================================================
+// =====================================================================
+// ЗАГРУЗКА ФОТО ПРЯМО ИЗ МЕССЕНДЖЕРА (без перехода на сторонние сайты)
+// Использует бесплатный API imgbb.com — поддерживает CORS для запросов из
+// браузера через FormData (multipart), ключ получить за ~1 минуту на
+// https://api.imgbb.com/ и подставить сюда. Без ключа кнопка "Выбрать фото"
+// покажет подсказку и предложит старый способ через hostimg.pw.
+// =====================================================================
+window.IMGBB_API_KEY = '41299df5c87071bd814e8f53bca1b02f';
+
+window.uploadImageFile = async function (file) {
+    if (!file) throw new Error('Файл не выбран');
+    if (!file.type || !file.type.startsWith('image/')) throw new Error('Можно загружать только изображения');
+    if (file.size > 32 * 1024 * 1024) throw new Error('Файл слишком большой (максимум 32 МБ)');
+    if (!window.IMGBB_API_KEY) {
+        const err = new Error('Загрузка фото не настроена: нужен бесплатный ключ с api.imgbb.com');
+        err.noApiKey = true;
+        throw err;
+    }
+    const form = new FormData();
+    form.append('image', file);
+    const res = await fetch('https://api.imgbb.com/1/upload?key=' + window.IMGBB_API_KEY, {
+        method: 'POST',
+        body: form
+    });
+    const json = await res.json().catch(() => null);
+    if (!res.ok || !json || !json.success) {
+        throw new Error((json && json.error && json.error.message) || 'Не удалось загрузить фото');
+    }
+    return json.data.url || json.data.display_url;
+};
+
 window.E2E = (function () {
     const sharedKeyCache = new Map(); // otherUid -> CryptoKey (AES-GCM)
     let myPrivateKeyPromise = null;
@@ -3384,6 +3475,43 @@ if (!depsOk) {
 
 const { useState, useEffect, useMemo, useRef, useCallback } = React;
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error('ErrorBoundary caught:', error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',flexDirection:'column',gap:'16px',color:'#ba1a1a',fontFamily:'system-ui'}}><div style={{fontSize:'48px'}}>⚠️</div><h2>Произошла ошибка</h2><p>Попробуйте обновить страницу</p><button onClick={()=>location.reload()} style={{padding:'12px 32px',borderRadius:'25px',background:'#6750a4',color:'#fff',border:'none',fontSize:'16px',cursor:'pointer',fontWeight:'600'}}>Обновить</button></div>;
+    }
+    return this.props.children;
+  }
+}
+
+const MAX_MSG_LEN = 5000;
+const MAX_NAME_LEN = 100;
+const MAX_ABOUT_LEN = 500;
+
+function sanitizeString(v, maxLen = MAX_MSG_LEN) {
+  if (typeof v !== 'string') return '';
+  return v.substring(0, maxLen);
+}
+
+function sanitizeUrl(v) {
+  if (typeof v !== 'string') return '';
+  const trimmed = v.trim();
+  if (!trimmed) return '';
+  if (!/^https?:\/\/.+/i.test(trimmed)) return '';
+  if (/[<>"'`]/.test(trimmed)) return '';
+  return trimmed.substring(0, 500);
+}
+
 const AVATARS = [
     {id:"sun",emoji:"☀️",bg:"#ffd66b"},
     {id:"leaf",emoji:"🍃",bg:"#b8e6c8"},
@@ -3439,7 +3567,8 @@ function Icon({ name, size=22, stroke=2.25, fill="none", className="" }) {
         channel: <><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></>,
         verified: <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>,
         subscribers: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
-        megaphone: <><path d="M20 4L8 9v6l12 5V4z"/><path d="M4 12h4"/><path d="M4 18h4"/><path d="M4 6h4"/></>
+        megaphone: <><path d="M20 4L8 9v6l12 5V4z"/><path d="M4 12h4"/><path d="M4 18h4"/><path d="M4 6h4"/></>,
+        pin: <><path d="M12 17v5"/><path d="M9 3h6l1 6 3 3v2H5v-2l3-3z"/></>
     };
     return (
         <svg className={"icon "+className} width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
@@ -3469,6 +3598,20 @@ function deviceEmoji(name) {
     if (n.includes('windows')) return '🖥️';
     if (n.includes('linux')) return '🖥️';
     return '💻';
+}
+
+function fmtDateLabel(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    const now = new Date();
+    const startOf = x => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+    const diffDays = Math.round((startOf(now) - startOf(d)) / 86400000);
+    if (diffDays === 0) return 'Сегодня';
+    if (diffDays === 1) return 'Вчера';
+    if (diffDays === 2) return 'Позавчера';
+    const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+    const label = d.getDate() + ' ' + months[d.getMonth()];
+    return d.getFullYear() === now.getFullYear() ? label : label + ' ' + d.getFullYear();
 }
 
 function fmtLastSeen(ts, hideTime = false) {
@@ -4192,11 +4335,31 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
     const [busy, setBusy] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState("");
     const [tempAvatarUrl, setTempAvatarUrl] = useState("");
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
     const others = Object.values(users).filter(u => u.uid !== me.uid);
 
     function applyAvatarUrl() {
-        setAvatarUrl(tempAvatarUrl.trim());
+        const safe = sanitizeUrl(tempAvatarUrl);
+        if (!safe) { show('Некорректная ссылка (нужен http:// или https://)', true); return; }
+        setAvatarUrl(safe);
         show('URL аватарки сохранён');
+    }
+    async function handleFilePick(e) {
+        const file = e.target.files && e.target.files[0];
+        e.target.value = '';
+        if (!file) return;
+        setUploading(true);
+        try {
+            const url = await window.uploadImageFile(file);
+            setAvatarUrl(url);
+            setTempAvatarUrl(url);
+            show('Фото загружено!');
+        } catch (err) {
+            if (err.noApiKey) show('Загрузка фото не настроена — используйте ссылку через hostimg.pw ниже', true);
+            else show(err.message || 'Не удалось загрузить фото', true);
+        }
+        setUploading(false);
     }
     function openHosting() {
         window.open('https://hostimg.pw', '_blank');
@@ -4263,8 +4426,12 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
                     />
                     <button className="primary" onClick={applyAvatarUrl}>Применить</button>
                 </div>
+                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
+                <button className="primary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{width:'100%', marginTop:4, marginBottom: 4, justifyContent:'center'}}>
+                    {uploading ? 'Загрузка…' : '📷 Выбрать фото с устройства'}
+                </button>
                 <button className="secondary" onClick={openHosting} style={{width:'100%', marginTop:4, marginBottom: 8, justifyContent:'center'}}>
-                    📤 Загрузить фото через hostimg.pw
+                    📤 Или через hostimg.pw (ссылкой)
                 </button>
 
                 <div className="field">
@@ -4426,6 +4593,31 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
                     <button className="iconbtn close" onClick={onClose}><Icon name="close"/></button>
                 </div>
 
+                {editingAvatar && (
+                    <div className="group-edit-field" style={{ marginBottom: 16 }}>
+                        <input
+                            type="text"
+                            placeholder="Ссылка на аватарку (http:// или https://)"
+                            value={tempAvatarUrl}
+                            onChange={e => setTempAvatarUrl(e.target.value)}
+                        />
+                        <button className="primary" onClick={() => {
+                            const safe = sanitizeUrl(tempAvatarUrl);
+                            if (!safe && tempAvatarUrl.trim()) { show('Некорректная ссылка (нужен http:// или https://)', true); return; }
+                            updateGroupInfo('avatarUrl', safe);
+                            setEditingAvatar(false);
+                        }} disabled={busy}>
+                            Сохранить
+                        </button>
+                        <button className="secondary" onClick={() => {
+                            setTempAvatarUrl(chat.avatarUrl || '');
+                            setEditingAvatar(false);
+                        }}>
+                            Отмена
+                        </button>
+                    </div>
+                )}
+
                 <div style={{ marginBottom: 16 }}>
                     {editingAbout ? (
                         <div className="group-edit-field">
@@ -4541,6 +4733,8 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
     const [avatar, setAvatar] = useState(user.avatar || "sun");
     const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl || "");
     const [tempAvatarUrl, setTempAvatarUrl] = useState(user.avatarUrl || "");
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
     const [email, setEmail] = useState(user.email || "");
     const [emailPassword, setEmailPassword] = useState("");
     const [busy, setBusy] = useState(false);
@@ -4666,7 +4860,9 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
     }
     
     function applyAvatarUrl() {
-        setAvatarUrl(tempAvatarUrl.trim());
+        const safe = sanitizeUrl(tempAvatarUrl);
+        if (!safe) { show("Некорректная ссылка (нужен http:// или https://)", true); return; }
+        setAvatarUrl(safe);
         show("URL аватарки сохранён");
     }
     
@@ -4676,6 +4872,23 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
         show("Аватарка по ссылке удалена");
     }
     
+    async function handleFilePick(e) {
+        const file = e.target.files && e.target.files[0];
+        e.target.value = '';
+        if (!file) return;
+        setUploading(true);
+        try {
+            const url = await window.uploadImageFile(file);
+            setAvatarUrl(url);
+            setTempAvatarUrl(url);
+            show('Фото загружено!');
+        } catch (err) {
+            if (err.noApiKey) show('Загрузка фото не настроена — используйте ссылку через hostimg.pw ниже', true);
+            else show(err.message || 'Не удалось загрузить фото', true);
+        }
+        setUploading(false);
+    }
+
     function openHosting() {
         window.open('https://hostimg.pw', '_blank');
         show('Открыт сайт hostimg.pw. Загрузите фото и скопируйте ссылку в поле выше');
@@ -4875,13 +5088,19 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                             />
                             <button className="primary" onClick={applyAvatarUrl}>Применить</button>
                         </div>
+                        <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
+                        <div className="avatar-url-input" style={{ marginTop: 8 }}>
+                            <button className="primary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{ width:'100%', justifyContent:'center' }}>
+                                {uploading ? 'Загрузка…' : '📷 Выбрать фото с устройства'}
+                            </button>
+                        </div>
                         <div className="avatar-url-input" style={{ marginTop: 8 }}>
                             <button className="secondary" onClick={openHosting} style={{ width:'100%', justifyContent:'center' }}>
-                                📤 Загрузить фото через hostimg.pw
+                                📤 Или через hostimg.pw (ссылкой)
                             </button>
                         </div>
                         <div className="upload-hint">
-                            💡 Загрузите фото на hostimg.pw, скопируйте ссылку и вставьте в поле выше
+                            💡 Выберите фото с устройства или вставьте прямую ссылку на изображение
                         </div>
                         {avatarUrl && (
                             <div className="avatar-url-preview">
@@ -5073,6 +5292,8 @@ function CreateChannelModal({ onClose, onCreated, show, me }) {
     const [tempAvatarUrl, setTempAvatarUrl] = useState('');
     const [isPrivate, setIsPrivate] = useState(false);
     const [busy, setBusy] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
 
     async function createChannel() {
         const n = name.trim();
@@ -5120,8 +5341,27 @@ function CreateChannelModal({ onClose, onCreated, show, me }) {
     }
 
     function applyAvatarUrl() {
-        setAvatarUrl(tempAvatarUrl.trim());
+        const safe = sanitizeUrl(tempAvatarUrl);
+        if (!safe) { show('Некорректная ссылка (нужен http:// или https://)', true); return; }
+        setAvatarUrl(safe);
         show('URL аватарки сохранён');
+    }
+
+    async function handleFilePick(e) {
+        const file = e.target.files && e.target.files[0];
+        e.target.value = '';
+        if (!file) return;
+        setUploading(true);
+        try {
+            const url = await window.uploadImageFile(file);
+            setAvatarUrl(url);
+            setTempAvatarUrl(url);
+            show('Фото загружено!');
+        } catch (err) {
+            if (err.noApiKey) show('Загрузка фото не настроена — используйте ссылку через hostimg.pw ниже', true);
+            else show(err.message || 'Не удалось загрузить фото', true);
+        }
+        setUploading(false);
     }
 
     function openHosting() {
@@ -5156,8 +5396,12 @@ function CreateChannelModal({ onClose, onCreated, show, me }) {
                     />
                     <button className="primary" onClick={applyAvatarUrl}>Применить</button>
                 </div>
+                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
+                <button className="primary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{width:'100%', marginTop:4, marginBottom:4, justifyContent:'center'}}>
+                    {uploading ? 'Загрузка…' : '📷 Выбрать фото с устройства'}
+                </button>
                 <button className="secondary" onClick={openHosting} style={{width:'100%', marginTop:4, justifyContent:'center'}}>
-                    📤 Загрузить фото через hostimg.pw
+                    📤 Или через hostimg.pw (ссылкой)
                 </button>
                 
                 <div className="field">
@@ -5223,6 +5467,8 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
     const [editAvatarUrl, setEditAvatarUrl] = useState(chat.avatarUrl || '');
     const [tempAvatarUrl, setTempAvatarUrl] = useState(chat.avatarUrl || '');
     const [busy, setBusy] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
     const chatId = chat.id;
 
     useEffect(() => {
@@ -5271,18 +5517,38 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
     }
 
     async function updateAvatar() {
-        if (!tempAvatarUrl.trim()) return;
+        const safe = sanitizeUrl(tempAvatarUrl);
+        if (!safe) { show('Некорректная ссылка (нужен http:// или https://)', true); return; }
         setBusy(true);
         try {
-            await window.db.ref('chatsMeta/' + chatId + '/avatarUrl').set(tempAvatarUrl.trim());
-            const updatedChat = { ...chat, avatarUrl: tempAvatarUrl.trim() };
+            await window.db.ref('chatsMeta/' + chatId + '/avatarUrl').set(safe);
+            const updatedChat = { ...chat, avatarUrl: safe };
             onUpdate(updatedChat);
-            setEditAvatarUrl(tempAvatarUrl.trim());
+            setEditAvatarUrl(safe);
             show('Аватарка обновлена');
         } catch(e) {
             show(friendlyError(e), true);
         }
         setBusy(false);
+    }
+
+    async function handleFilePick(e) {
+        const file = e.target.files && e.target.files[0];
+        e.target.value = '';
+        if (!file) return;
+        setUploading(true);
+        try {
+            const url = await window.uploadImageFile(file);
+            setTempAvatarUrl(url);
+            await window.db.ref('chatsMeta/' + chatId + '/avatarUrl').set(url);
+            onUpdate({ ...chat, avatarUrl: url });
+            setEditAvatarUrl(url);
+            show('Фото загружено и сохранено!');
+        } catch (err) {
+            if (err.noApiKey) show('Загрузка фото не настроена — используйте ссылку через hostimg.pw ниже', true);
+            else show(err.message || 'Не удалось загрузить фото', true);
+        }
+        setUploading(false);
     }
 
     function openHosting() {
@@ -5394,8 +5660,12 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                                             Применить
                                         </button>
                                     </div>
+                                    <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
+                                    <button className="primary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{ marginTop: 4, width: '100%', justifyContent: 'center' }}>
+                                        {uploading ? 'Загрузка…' : '📷 Выбрать фото с устройства'}
+                                    </button>
                                     <button className="secondary" onClick={openHosting} style={{ marginTop: 4, width: '100%', justifyContent: 'center' }}>
-                                        📤 Загрузить фото через hostimg.pw
+                                        📤 Или через hostimg.pw (ссылкой)
                                     </button>
                                 </div>
                             </>
@@ -5594,7 +5864,7 @@ function getReactionCount(message) {
 
 // ===== КОНТЕКСТНОЕ МЕНЮ (вынесено на верхний уровень модуля — стабильная идентичность компонента,
 // не пересоздаётся при каждом ре-рендере ChatView, поэтому не мерцает и не размонтируется зря) =====
-function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction, replyToMessage, setSelectedMessage, startEdit, deleteMessage }) {
+function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction, replyToMessage, setSelectedMessage, startEdit, deleteMessage, onPin, onUnpin, pinnedId }) {
     const menuRef = useRef(null);
     const mine = message.senderId === me.uid;
     const canEdit = mine && message.type !== 'sticker' && message.type !== 'voice' && message.type !== 'poll' && (!isChannel || chat.createdBy === me.uid);
@@ -5666,6 +5936,13 @@ function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction,
                     <Icon name="share" size={18} />
                     <span>Переслать</span>
                 </button>
+
+                {onPin && (
+                    <button className="context-menu-item" onClick={() => { pinnedId === message.id ? onUnpin() : onPin(message); onClose(); }}>
+                        <Icon name="pin" size={18} />
+                        <span>{pinnedId === message.id ? 'Открепить' : 'Закрепить'}</span>
+                    </button>
+                )}
 
                 {canEdit && (
                     <button className="context-menu-item" onClick={() => { startEdit(message); onClose(); }}>
@@ -5764,7 +6041,7 @@ function renderRichText(text, { me, users, metas, onSelectChat }) {
     return nodes;
 }
 
-const MessageBubble = React.memo(function MessageBubble({ message, me, users, isChannel, isGroup, chatId, chat, show, highlightId, quickReaction, metas, onSelectChat, addReaction, deleteMessage, replyToMessage, startEdit, setSelectedMessage, scrollToMessage, voiceSpeed, setVoiceSpeed, playingVoiceId, setPlayingVoiceId, nextVoiceMap, markVoiceListened }) {
+const MessageBubble = React.memo(function MessageBubble({ message, me, users, isChannel, isGroup, chatId, chat, show, highlightId, quickReaction, metas, onSelectChat, addReaction, deleteMessage, replyToMessage, startEdit, setSelectedMessage, scrollToMessage, voiceSpeed, setVoiceSpeed, playingVoiceId, setPlayingVoiceId, nextVoiceMap, markVoiceListened, pinnedId, onPin, onUnpin }) {
     const mine = message.senderId === me.uid;
     const sender = users[message.senderId];
     const isDeleted = message.deletedFor && message.deletedFor[me.uid];
@@ -5775,6 +6052,8 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
     const [isLongPress, setIsLongPress] = useState(false);
     const longPressTimer = useRef(null);
     const isReplied = highlightId === message.id;
+    const swipeRef = useRef({ startX: 0, startY: 0, dragging: false });
+    const [dragX, setDragX] = useState(0);
 
     const views = message.views || 0;
 
@@ -5796,6 +6075,8 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
     }
 
     function handleTouchStart(e) {
+        const t = e.touches[0];
+        swipeRef.current = { startX: t.clientX, startY: t.clientY, dragging: false };
         longPressTimer.current = setTimeout(() => {
             setIsLongPress(true);
             const touch = e.touches[0];
@@ -5807,11 +6088,34 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
     function handleTouchEnd(e) {
         clearTimeout(longPressTimer.current);
         if (isLongPress) { e.preventDefault(); setIsLongPress(false); }
+        // Свайп на сообщении -> ответить: на чужом свайп влево, на своём свайп вправо.
+        if (!isChannel && swipeRef.current.dragging) {
+            const threshold = 56;
+            if ((!mine && dragX < -threshold) || (mine && dragX > threshold)) {
+                replyToMessage(message);
+            }
+        }
+        swipeRef.current.dragging = false;
+        setDragX(0);
     }
 
     function handleTouchMove(e) {
-        clearTimeout(longPressTimer.current);
-        setIsLongPress(false);
+        const t = e.touches[0];
+        const dx = t.clientX - swipeRef.current.startX;
+        const dy = t.clientY - swipeRef.current.startY;
+        if (!swipeRef.current.dragging && Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) {
+            swipeRef.current.dragging = true;
+            clearTimeout(longPressTimer.current);
+            setIsLongPress(false);
+        }
+        if (swipeRef.current.dragging && !isChannel) {
+            // Разрешаем тянуть только в "правильную" сторону для каждого типа сообщения.
+            const allowed = mine ? Math.max(0, dx) : Math.min(0, dx);
+            setDragX(Math.max(-72, Math.min(72, allowed)));
+        } else {
+            clearTimeout(longPressTimer.current);
+            setIsLongPress(false);
+        }
     }
 
     return (
@@ -5824,7 +6128,12 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                 onTouchEnd={handleTouchEnd}
                 onTouchMove={handleTouchMove}
             >
-                <div className={"bubble-wrapper" + (isReplied ? ' highlight' : '')} id={"msg-" + message.id}>
+                {!isChannel && dragX !== 0 && (
+                    <div className="swipe-reply-hint" style={{ opacity: Math.min(1, Math.abs(dragX) / 56) }}>
+                        <Icon name="back" size={18} style={{ transform: mine ? 'scaleX(-1)' : 'none' }} />
+                    </div>
+                )}
+                <div className={"bubble-wrapper" + (isReplied ? ' highlight' : '')} id={"msg-" + message.id} style={dragX ? { transform: `translateX(${dragX}px)`, transition: 'none' } : undefined}>
                     <div className={"bubble" + (message.type === 'sticker' ? ' sticker-bubble' : '')}>
                         {!isChannel && message.replyTo && (
                             <div className="quote-block" onClick={(e) => { e.stopPropagation(); scrollToMessage(message.replyTo.id); }}>
@@ -5925,6 +6234,7 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                     me={me} isChannel={isChannel} chat={chat}
                     addReaction={addReaction} replyToMessage={replyToMessage}
                     setSelectedMessage={setSelectedMessage} startEdit={startEdit} deleteMessage={deleteMessage}
+                    onPin={onPin} onUnpin={onUnpin} pinnedId={pinnedId}
                 />
             )}
         </>
@@ -5952,6 +6262,7 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
         const isPlayingNow = next.playingVoiceId === b.id;
         if (wasPlaying !== isPlayingNow) return false;
     }
+    if (prev.pinnedId !== next.pinnedId && (prev.pinnedId === a.id || next.pinnedId === b.id)) return false;
     return true; // содержимое и подсветка не изменились — пропускаем ре-рендер
 });
 
@@ -6157,6 +6468,30 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     }, [posts, isChannel, chatId, me.uid]);
 
     const wasNearBottomRef = useRef(true);
+
+    // ===== ЖЕСТ "НАЗАД" СВАЙПОМ ОТ ЛЕВОГО КРАЯ (как в iOS) =====
+    const swipeBackRef = useRef({ active: false, startX: 0, startY: 0 });
+    const [swipeBackX, setSwipeBackX] = useState(0);
+    function handleChatTouchStart(e) {
+        const t = e.touches[0];
+        // Жест начинается только если палец стартует у самого левого края экрана.
+        if (t.clientX > 24) { swipeBackRef.current.active = false; return; }
+        swipeBackRef.current = { active: true, startX: t.clientX, startY: t.clientY };
+    }
+    function handleChatTouchMove(e) {
+        if (!swipeBackRef.current.active) return;
+        const t = e.touches[0];
+        const dx = t.clientX - swipeBackRef.current.startX;
+        const dy = t.clientY - swipeBackRef.current.startY;
+        if (Math.abs(dy) > Math.abs(dx) + 15) { swipeBackRef.current.active = false; setSwipeBackX(0); return; }
+        if (dx > 0) setSwipeBackX(Math.min(dx, window.innerWidth));
+    }
+    function handleChatTouchEnd() {
+        if (!swipeBackRef.current.active) return;
+        swipeBackRef.current.active = false;
+        if (swipeBackX > 90) { onBack && onBack(); }
+        setSwipeBackX(0);
+    }
     useEffect(() => {
         const el = scroll.current;
         if (!el) return;
@@ -6173,7 +6508,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     }, [messages, posts, typing]);
 
     function change(e) {
-        setText(e.target.value);
+        setText(e.target.value.substring(0, MAX_MSG_LEN));
         autoGrow(e.target);
         if (!window.db || isChannel) return;
         const r = window.db.ref("typing/"+chatId+"/"+me.uid);
@@ -6197,6 +6532,33 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         if (e.key !== 'Enter' || e.shiftKey || isTouchDevice()) return;
         e.preventDefault();
         onSubmit();
+    }
+
+    // ===== ЗАКРЕПЛЁННОЕ СООБЩЕНИЕ =====
+    const pinnedId = chat.pinnedMessageId || null;
+    async function pinMessage(message) {
+        if (!window.db || !chatId) return;
+        try {
+            const preview = message.type === 'voice' ? '🎤 Голосовое' :
+                message.type === 'sticker' ? (message.sticker || 'Стикер') :
+                message.encrypted ? '🔒 Сообщение' :
+                (message.text || '').slice(0, 80);
+            await window.db.ref('chatsMeta/' + chatId).update({
+                pinnedMessageId: message.id,
+                pinnedMessagePreview: preview,
+                pinnedMessageSender: users[message.senderId]?.name || 'Кто-то'
+            });
+            onUpdateChat({ ...chat, pinnedMessageId: message.id, pinnedMessagePreview: preview, pinnedMessageSender: users[message.senderId]?.name || 'Кто-то' });
+            show('Сообщение закреплено');
+        } catch (e) { show(friendlyError(e), true); }
+    }
+    async function unpinMessage() {
+        if (!window.db || !chatId) return;
+        try {
+            await window.db.ref('chatsMeta/' + chatId).update({ pinnedMessageId: null, pinnedMessagePreview: null, pinnedMessageSender: null });
+            onUpdateChat({ ...chat, pinnedMessageId: null, pinnedMessagePreview: null, pinnedMessageSender: null });
+            show('Сообщение откреплено');
+        } catch (e) { show(friendlyError(e), true); }
     }
 
     // ===== ФУНКЦИЯ ПОДПИСКИ/ОТПИСКИ =====
@@ -6236,16 +6598,17 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         sendingRef.current=true;
         wasNearBottomRef.current = true;
         try{
+            const safeText = sanitizeString(payload.text||'', MAX_MSG_LEN);
             const path = isChannel ? 'posts' : 'messages';
             const ref=window.db.ref('chats/'+chatId+'/'+path).push();
             const data = isChannel
-                ? {senderId:me.uid,text:payload.text||'',ts:window.SV_TS,type:payload.type||'text',views:0,viewedBy:{},reactions:{}}
-                : {senderId:me.uid,text:payload.text||'',ts:window.SV_TS,status:'sent',type:payload.type||'text'};
-            if(payload.type==='sticker') data.sticker=payload.sticker;
+                ? {senderId:me.uid,text:safeText,ts:window.SV_TS,type:payload.type||'text',views:0,viewedBy:{},reactions:{}}
+                : {senderId:me.uid,text:safeText,ts:window.SV_TS,status:'sent',type:payload.type||'text'};
+            if(payload.type==='sticker') data.sticker=sanitizeString(payload.sticker, 32);
             if(payload.type==='voice'){data.voiceData=payload.voiceData;data.voiceDuration=payload.voiceDuration;}
-            if(!isChannel && replyTo){data.replyTo={id:replyTo.id,text:replyTo.text||'',senderId:replyTo.senderId,senderName:users[replyTo.senderId]?.name||'Неизвестный'};setReplyTo(null);}
+            if(!isChannel && replyTo){data.replyTo={id:replyTo.id,text:sanitizeString(replyTo.text||'', 200),senderId:replyTo.senderId,senderName:sanitizeString(users[replyTo.senderId]?.name||'Неизвестный', MAX_NAME_LEN)};setReplyTo(null);}
             await ref.set(data);
-            const lastMessage = payload.type==='voice'?'🎤 Голосовое':payload.type==='sticker'?payload.sticker:payload.text;
+            const lastMessage = payload.type==='voice'?'🎤 Голосовое':payload.type==='sticker'?data.sticker:safeText;
             if (isChannel) {
                 await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:'channel',lastMessage,lastTs:window.SV_TS,lastSender:me.uid});
             } else {
@@ -6304,7 +6667,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     }
 
     async function send() {
-        const t = text.trim();
+        const t = text.trim().substring(0, MAX_MSG_LEN);
         if (!t || sendingRef.current) return;
         if (!window.db) { show("Нет подключения к серверу", true); return; }
         if (!me?.uid) { show("Пользователь не авторизован", true); return; }
@@ -6345,9 +6708,9 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 if (replyTo) {
                     data.replyTo = {
                         id:replyTo.id,
-                        text: data.encrypted ? '🔒 Сообщение' : (replyTo.text || ""),
+                        text: data.encrypted ? '🔒 Сообщение' : sanitizeString(replyTo.text || "", 200),
                         senderId:replyTo.senderId,
-                        senderName:users[replyTo.senderId]?.name || "Неизвестный"
+                        senderName:sanitizeString(users[replyTo.senderId]?.name || "Неизвестный", MAX_NAME_LEN)
                     };
                     setReplyTo(null);
                     setHighlightId(null);
@@ -6464,7 +6827,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         setTimeout(() => document.querySelector('.compose textarea')?.focus(), 0);
     }
     async function saveEdit() {
-        const t = text.trim();
+        const t = text.trim().substring(0, MAX_MSG_LEN);
         if (!editingMessage) return;
         if (!t) { show('Сообщение не может быть пустым', true); return; }
         try {
@@ -6762,7 +7125,14 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
 
 
     return (
-        <div className="chat">
+        <div 
+            className="chat"
+            onTouchStart={handleChatTouchStart}
+            onTouchMove={handleChatTouchMove}
+            onTouchEnd={handleChatTouchEnd}
+            onTouchCancel={handleChatTouchEnd}
+            style={swipeBackX ? { transform: `translateX(${swipeBackX}px)`, transition: 'none' } : undefined}
+        >
             <div className="chatbar">
                 <button className="iconbtn mobile-only" onClick={onBack} aria-label="Назад"><Icon name="back"/></button>
                 <button onClick={() => isChannel ? setChannelInfo(true) : isGroup ? setGroupInfo(true) : setProfile(other)}>
@@ -6818,6 +7188,19 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     </button>
                 </div>
             </div>
+
+            {pinnedId && (
+                <div className="pinned-bar" onClick={() => scrollToMessage(pinnedId)}>
+                    <Icon name="pin" size={16} />
+                    <div className="pinned-bar-body">
+                        <div className="pinned-bar-title">{chat.pinnedMessageSender ? chat.pinnedMessageSender + ' закрепил(а)' : 'Закреплённое сообщение'}</div>
+                        <div className="pinned-bar-text">{chat.pinnedMessagePreview || 'Сообщение'}</div>
+                    </div>
+                    <button className="iconbtn" onClick={e => { e.stopPropagation(); unpinMessage(); }} aria-label="Открепить">
+                        <Icon name="close" size={16} />
+                    </button>
+                </div>
+            )}
             
             {editingMessage && (
                 <div className="reply-preview">
@@ -6850,20 +7233,34 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                         <p>{isChannel ? "Напишите первый пост в канале" : isGroup ? "Отправьте первое сообщение участникам." : "Напишите " + chat.name.split(" ")[0] + " первым — сообщение придёт мгновенно."}</p>
                     </div>
                 )}
-                {(isChannel ? posts : messages).filter(m => !m.deletedFor || !m.deletedFor[me.uid]).map(m => (
-                    <MessageBubble
-                        key={m.id} message={m}
-                        me={me} users={users} isChannel={isChannel} isGroup={isGroup}
-                        chatId={chatId} chat={chat} show={show} highlightId={highlightId}
-                        quickReaction={quickReaction} metas={metas} onSelectChat={onSelectChat}
-                        addReaction={addReaction} deleteMessage={deleteMessage}
-                        replyToMessage={replyToMessage} startEdit={startEdit}
-                        setSelectedMessage={setSelectedMessage} scrollToMessage={scrollToMessage}
-                        voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed}
-                        playingVoiceId={playingVoiceId} setPlayingVoiceId={setPlayingVoiceId}
-                        nextVoiceMap={nextVoiceMap} markVoiceListened={markVoiceListened}
-                    />
-                ))}
+                {(() => {
+                    const list = (isChannel ? posts : messages).filter(m => !m.deletedFor || !m.deletedFor[me.uid]);
+                    let lastDay = null;
+                    const out = [];
+                    list.forEach(m => {
+                        const day = m.ts ? new Date(m.ts).toDateString() : null;
+                        if (day && day !== lastDay) {
+                            out.push(<div className="date-divider" key={"date-" + m.id}><span>{fmtDateLabel(m.ts)}</span></div>);
+                            lastDay = day;
+                        }
+                        out.push(
+                            <MessageBubble
+                                key={m.id} message={m}
+                                me={me} users={users} isChannel={isChannel} isGroup={isGroup}
+                                chatId={chatId} chat={chat} show={show} highlightId={highlightId}
+                                quickReaction={quickReaction} metas={metas} onSelectChat={onSelectChat}
+                                addReaction={addReaction} deleteMessage={deleteMessage}
+                                replyToMessage={replyToMessage} startEdit={startEdit}
+                                setSelectedMessage={setSelectedMessage} scrollToMessage={scrollToMessage}
+                                voiceSpeed={voiceSpeed} setVoiceSpeed={setVoiceSpeed}
+                                playingVoiceId={playingVoiceId} setPlayingVoiceId={setPlayingVoiceId}
+                                nextVoiceMap={nextVoiceMap} markVoiceListened={markVoiceListened}
+                                pinnedId={pinnedId} onPin={pinMessage} onUnpin={unpinMessage}
+                            />
+                        );
+                    });
+                    return out;
+                })()}
                 {typing && (
                     <div className="row theirs">
                         <div className="bubble typing">
@@ -7492,6 +7889,33 @@ function App() {
 
     function backToChats() { setMobileChat(false); }
 
+    // ===== ЖЕСТ "НАЗАД" СВАЙПОМ ВПРАВО ОТ ЛЕВОГО КРАЯ ЭКРАНА (как в iOS) =====
+    const swipeState = useRef({ startX: 0, startY: 0, tracking: false });
+    function handlePanelsTouchStart(e) {
+        if (!mobileChat && section !== "settings") return;
+        const t = e.touches[0];
+        if (t.clientX > 30) { swipeState.current.tracking = false; return; }
+        swipeState.current = { startX: t.clientX, startY: t.clientY, tracking: true };
+    }
+    function handlePanelsTouchMove(e) {
+        if (!swipeState.current.tracking) return;
+        const t = e.touches[0];
+        const dx = t.clientX - swipeState.current.startX;
+        const dy = t.clientY - swipeState.current.startY;
+        if (Math.abs(dy) > Math.abs(dx) + 10) { swipeState.current.tracking = false; }
+    }
+    function handlePanelsTouchEnd(e) {
+        if (!swipeState.current.tracking) return;
+        swipeState.current.tracking = false;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - swipeState.current.startX;
+        const dy = t.clientY - swipeState.current.startY;
+        if (dx > 80 && Math.abs(dy) < 60) {
+            if (mobileChat) setMobileChat(false);
+            else if (section === "settings") setSection("chats");
+        }
+    }
+
     async function logout() {
         if (!window.db) return;
         try {
@@ -7568,7 +7992,12 @@ function App() {
             <div className="bg"><div className="blob b1"/><div className="blob b2"/><div className="blob b3"/></div>
             <div className="shell screen">
                 <Rail section={section} setSection={setSection} user={me} onProfile={()=>setProfile(true)} />
-                <div className={"panels " + (mobileChat ? "mobile-chat-open" : "") + (section === "settings" ? " mobile-settings-open" : "")}>
+                <div 
+                    className={"panels " + (mobileChat ? "mobile-chat-open" : "") + (section === "settings" ? " mobile-settings-open" : "")}
+                    onTouchStart={handlePanelsTouchStart}
+                    onTouchMove={handlePanelsTouchMove}
+                    onTouchEnd={handlePanelsTouchEnd}
+                >
                     {section === "settings" ? (
                         <Settings 
                             user={me} 
@@ -7660,7 +8089,7 @@ function App() {
 try {
     const root = document.getElementById('root');
     if (root) {
-        ReactDOM.createRoot(root).render(<App />);
+        ReactDOM.createRoot(root).render(<ErrorBoundary><App /></ErrorBoundary>);
     }
 } catch(e) {
     const root = document.getElementById('root');
