@@ -2724,7 +2724,7 @@ html, body, #root { width:100%; min-height:100%; }
 body.dark .attach-menu{background:rgba(34,34,40,.92);border-color:rgba(255,255,255,.1)}
 .attach-menu button{width:100%;display:flex;align-items:center;gap:12px;border:0;background:transparent;padding:11px 12px;border-radius:13px;color:var(--txt);font:inherit;cursor:pointer;text-align:left}.attach-menu button:hover{background:rgba(103,80,164,.1)}.attach-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(103,80,164,.12);font-size:18px}
 .sticker-modal{width:min(420px,100%);max-height:min(78vh,560px);overflow:auto;background:rgba(255,255,255,.88);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:28px;padding:18px;box-shadow:0 24px 70px rgba(30,15,50,.25);animation:popIn .18s ease-out}.sticker-pack-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:10px 2px}.sticker-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.sticker-grid button{border:0;background:transparent;border-radius:14px;font-size:29px;aspect-ratio:1;cursor:pointer;transition:transform .14s,background .14s}.sticker-grid button:hover{background:rgba(103,80,164,.1);transform:scale(1.12)}
-.poll-creator{animation:popIn .18s ease-out}.poll-check{display:flex;align-items:center;gap:8px;margin:14px 0;color:var(--txt);font-size:14px}.poll-check input{width:17px;height:17px}.poll-title{font-size:12px;font-weight:800;color:#6750a4;margin-bottom:5px}.poll-option{position:relative;width:100%;display:flex;align-items:center;gap:8px;text-align:left;border:1px solid rgba(103,80,164,.15);background:rgba(103,80,164,.04);color:var(--txt);border-radius:13px;padding:10px 11px;min-height:44px;overflow:hidden;cursor:pointer}.poll-option.selected{border-color:#6750a4;background:rgba(103,80,164,.09)}.poll-radio{position:relative;z-index:2;width:18px;color:#6750a4}.poll-option-text{position:relative;z-index:2;flex:1}.poll-option-percent{position:relative;z-index:2;font-weight:800;color:#6750a4}.poll-option-bar{position:absolute;left:0;top:0;bottom:0;background:rgba(103,80,164,.11);border-radius:13px;transition:width .35s ease;z-index:0}.msg-sticker{font-size:104px;line-height:1;padding:0;filter:drop-shadow(0 10px 18px rgba(0,0,0,.16));animation:stickerPop .28s cubic-bezier(.34,1.56,.64,1)}
+.poll-creator{animation:popIn .18s ease-out}.poll-check{display:flex;align-items:center;gap:8px;margin:14px 0;color:var(--txt);font-size:14px}.poll-check input{width:17px;height:17px}.poll-title{font-size:12px;font-weight:800;color:#6750a4;margin-bottom:5px}.msg-sticker{font-size:104px;line-height:1;padding:0;filter:drop-shadow(0 10px 18px rgba(0,0,0,.16));animation:stickerPop .28s cubic-bezier(.34,1.56,.64,1)}
 @keyframes stickerPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
 .bubble.sticker-bubble{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:2px 4px!important}
 .bubble.sticker-bubble .btime{background:rgba(0,0,0,.32);color:#fff!important;position:absolute;right:8px;bottom:6px;padding:2px 7px;border-radius:99px;backdrop-filter:blur(6px)}
@@ -2825,29 +2825,53 @@ body.dark .composer input,body.dark .composer textarea{
   overflow:hidden;
 }
 .poll-question{font-size:16px!important;font-weight:750!important;color:var(--txt)!important;margin-bottom:12px}
+.poll-block{
+  width:min(100%,430px);
+  padding:15px!important;
+  border-radius:20px!important;
+  color:var(--txt)!important;
+  overflow:hidden;
+}
+.poll-question{font-size:16px!important;font-weight:750!important;color:var(--txt)!important;margin-bottom:12px}
 .poll-option{
   position:relative;
+  width:100%;
+  display:block;
+  text-align:left;
   overflow:hidden;
   color:var(--txt)!important;
   background:rgba(127,127,127,.10)!important;
-  border:1px solid var(--poll-line)!important;
-  border-radius:13px!important;
+  border:0!important;
+  border-radius:16px!important;
   margin:7px 0!important;
-  min-height:44px;
+  min-height:46px;
+  padding:0;
+  cursor:pointer;
 }
-.poll-option::before{
-  content:"";position:absolute;inset:0 auto 0 0;width:var(--poll-pct,0%);
-  background:var(--poll-fill);transition:width .35s cubic-bezier(.2,.8,.2,1);pointer-events:none;
+.poll-option-fill{
+  position:absolute;inset:0 auto 0 0;height:100%;
+  background:#1a1a1a;
+  border-radius:16px;
+  transition:width .4s cubic-bezier(.2,.8,.2,1);
+  pointer-events:none;
 }
-.poll-option > *{position:relative;z-index:1}
-.poll-option.selected{
-  border-color:#6750a4!important;
-  box-shadow:0 0 0 2px rgba(103,80,164,.12),inset 0 1px 0 rgba(255,255,255,.25);
+body.dark .poll-option-fill{background:#f2f2f2}
+.poll-option-content{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:8px;
+  padding:12px 14px;
+  min-height:46px;
 }
-body.dark .poll-option.selected{
-  border-color:#bb86fc!important;
-  box-shadow:0 0 0 2px rgba(187,134,252,.13),inset 0 1px 0 rgba(255,255,255,.08);
-}
+.poll-option .poll-option-fill ~ .poll-option-content{color:#fff}
+body.dark .poll-option .poll-option-fill ~ .poll-option-content{color:#1a1a1a}
+.poll-option.selected{box-shadow:0 0 0 2px rgba(103,80,164,.35)}
+.poll-radio{width:18px;color:#6750a4}
+.poll-option-text{flex:1;font-weight:600}
+.poll-option-percent{font-weight:800}
+.poll-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid rgba(127,127,127,.14);font-size:12.5px;color:var(--muted)}
+.poll-remove-vote{color:#6750a4;font-weight:700;font-size:12.5px;border:0;background:none;cursor:pointer;padding:0}
+.poll-remove-vote:hover{text-decoration:underline}
+body.dark .poll-remove-vote{color:#bb86fc}
 .poll-percent,.poll-count,.poll-meta{color:var(--muted)!important}
 .poll-option button,.poll-option label{color:var(--txt)!important}
 
@@ -3345,8 +3369,9 @@ window.uploadImageFile = async function (file) {
 };
 
 window.E2E = (function () {
-    const sharedKeyCache = new Map(); // otherUid -> CryptoKey (AES-GCM)
+    const sharedKeyCache = new Map(); // "otherUid:pubKeyHash" -> CryptoKey (AES-GCM)
     let myPrivateKeyPromise = null;
+    let myUid = null;
 
     function b64encode(buf) {
         const bytes = new Uint8Array(buf);
@@ -3361,15 +3386,7 @@ window.E2E = (function () {
         return bytes.buffer;
     }
 
-    async function getOrCreateKeyPair() {
-        const savedPriv = localStorage.getItem('kuban_e2e_priv');
-        const savedPub = localStorage.getItem('kuban_e2e_pub');
-        if (savedPriv && savedPub) {
-            const privateKey = await crypto.subtle.importKey(
-                'jwk', JSON.parse(savedPriv), { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveKey']
-            );
-            return { privateKey, publicKeyJwk: JSON.parse(savedPub) };
-        }
+    async function generateAndStoreKeyPair(uid) {
         const pair = await crypto.subtle.generateKey(
             { name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveKey']
         );
@@ -3377,23 +3394,70 @@ window.E2E = (function () {
         const pubJwk = await crypto.subtle.exportKey('jwk', pair.publicKey);
         localStorage.setItem('kuban_e2e_priv', JSON.stringify(privJwk));
         localStorage.setItem('kuban_e2e_pub', JSON.stringify(pubJwk));
+        if (window.db && uid) {
+            await window.db.ref('privateKeys/' + uid).set(JSON.stringify(privJwk)).catch(() => {});
+        }
         return { privateKey: pair.privateKey, publicKeyJwk: pubJwk };
     }
 
-    function myKeyPair() {
-        if (!myPrivateKeyPromise) myPrivateKeyPromise = getOrCreateKeyPair();
+    // Ключ синхронизируется через Firebase (путь читаем только владельцем), поэтому один и тот же
+    // ключ действует на всех устройствах/браузерах аккаунта — иначе на новом устройстве
+    // генерировался бы новый ключ и старые сообщения переставали бы расшифровываться.
+    async function getOrCreateKeyPair(uid) {
+        const savedPriv = localStorage.getItem('kuban_e2e_priv');
+        const savedPub = localStorage.getItem('kuban_e2e_pub');
+        if (savedPriv && savedPub) {
+            const privateKey = await crypto.subtle.importKey(
+                'jwk', JSON.parse(savedPriv), { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveKey']
+            );
+            // На всякий случай убеждаемся, что ключ также сохранён в облаке (например, если раньше
+            // он был только локальным из старой версии до синхронизации через Firebase).
+            if (window.db && uid) {
+                window.db.ref('privateKeys/' + uid).get().then(snap => {
+                    if (!snap.exists()) window.db.ref('privateKeys/' + uid).set(savedPriv).catch(() => {});
+                }).catch(() => {});
+            }
+            return { privateKey, publicKeyJwk: JSON.parse(savedPub) };
+        }
+
+        if (window.db && uid) {
+            try {
+                const snap = await window.db.ref('privateKeys/' + uid).get();
+                if (snap.exists()) {
+                    const privJwk = JSON.parse(snap.val());
+                    const privateKey = await crypto.subtle.importKey(
+                        'jwk', privJwk, { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveKey']
+                    );
+                    // Из приватного JWK можно восстановить публичный (те же x/y координаты).
+                    const pubJwk = { kty: privJwk.kty, crv: privJwk.crv, x: privJwk.x, y: privJwk.y, ext: true };
+                    localStorage.setItem('kuban_e2e_priv', JSON.stringify(privJwk));
+                    localStorage.setItem('kuban_e2e_pub', JSON.stringify(pubJwk));
+                    return { privateKey, publicKeyJwk: pubJwk };
+                }
+            } catch (e) {
+                console.warn('E2E: не удалось получить ключ из облака', e);
+            }
+        }
+
+        return generateAndStoreKeyPair(uid);
+    }
+
+    function myKeyPair(uid) {
+        if (uid) myUid = uid;
+        if (!myPrivateKeyPromise) myPrivateKeyPromise = getOrCreateKeyPair(myUid);
         return myPrivateKeyPromise;
     }
 
     async function publishMyPublicKey(uid) {
         if (!window.db || !uid) return;
-        const { publicKeyJwk } = await myKeyPair();
+        const { publicKeyJwk } = await myKeyPair(uid);
         await window.db.ref('users/' + uid + '/publicKey').set(JSON.stringify(publicKeyJwk)).catch(() => {});
     }
 
     async function getSharedKey(otherUid, otherPublicKeyJwkStr) {
         if (!otherUid || !otherPublicKeyJwkStr) return null;
-        if (sharedKeyCache.has(otherUid)) return sharedKeyCache.get(otherUid);
+        const cacheKey = otherUid + ':' + otherPublicKeyJwkStr.length + ':' + otherPublicKeyJwkStr.slice(0, 24);
+        if (sharedKeyCache.has(cacheKey)) return sharedKeyCache.get(cacheKey);
         try {
             const { privateKey } = await myKeyPair();
             const theirPublicKey = await crypto.subtle.importKey(
@@ -3406,7 +3470,7 @@ window.E2E = (function () {
                 false,
                 ['encrypt', 'decrypt']
             );
-            sharedKeyCache.set(otherUid, aesKey);
+            sharedKeyCache.set(cacheKey, aesKey);
             return aesKey;
         } catch (e) {
             console.warn('E2E: не удалось получить общий ключ', e);
@@ -3568,7 +3632,8 @@ function Icon({ name, size=22, stroke=2.25, fill="none", className="" }) {
         verified: <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>,
         subscribers: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
         megaphone: <><path d="M20 4L8 9v6l12 5V4z"/><path d="M4 12h4"/><path d="M4 18h4"/><path d="M4 6h4"/></>,
-        pin: <><path d="M12 17v5"/><path d="M9 3h6l1 6 3 3v2H5v-2l3-3z"/></>
+        pin: <><path d="M12 17v5"/><path d="M9 3h6l1 6 3 3v2H5v-2l3-3z"/></>,
+        copy: <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>
     };
     return (
         <svg className={"icon "+className} width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
@@ -3726,13 +3791,14 @@ async function requestNotifications() {
     } catch(e) { return { ok:false, message:"Не удалось включить уведомления." }; }
 }
 
-function showBrowserNotification(title, text) {
+function showBrowserNotification(title, text, tagSuffix) {
     if(!("Notification" in window) || Notification.permission !== "granted") return;
     try {
         const n = new Notification(title, {
             body: text,
             icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%236750a4'/><text x='50' y='67' text-anchor='middle' font-size='58'>💬</text></svg>",
-            tag:"kuban-message"
+            tag: "kuban-message-" + (tagSuffix || Date.now()),
+            renotify: true
         });
         n.onclick = () => { window.focus(); n.close(); };
     } catch(e) {}
@@ -3844,11 +3910,13 @@ function AuthScreen({ onAuth, show }) {
             const s = await window.db.ref('users/' + result.user.uid).get();
             if (s.exists()) {
                 const userData = s.val();
-                if (result.user.emailVerified !== userData.emailVerified) {
-                    await window.db.ref('users/' + result.user.uid).update({ emailVerified: result.user.emailVerified });
-                    userData.emailVerified = result.user.emailVerified;
+                const privSnap = await window.db.ref('userPrivate/' + result.user.uid).get().catch(() => null);
+                const priv = (privSnap && privSnap.exists()) ? privSnap.val() : { email: result.user.email || '', emailVerified: result.user.emailVerified };
+                if (result.user.emailVerified !== priv.emailVerified) {
+                    await window.db.ref('userPrivate/' + result.user.uid).update({ emailVerified: result.user.emailVerified }).catch(() => {});
+                    priv.emailVerified = result.user.emailVerified;
                 }
-                onAuth({ uid: result.user.uid, ...userData });
+                onAuth({ uid: result.user.uid, ...userData, email: priv.email, emailVerified: priv.emailVerified });
             } else {
                 setErr('Профиль не найден. Создайте профиль.');
             }
@@ -3878,35 +3946,34 @@ function AuthScreen({ onAuth, show }) {
         setErr('');
         
         try {
-            const usernameCheck = await window.db.ref('usernames/' + u).get();
-            if (usernameCheck.exists()) {
-                setErr('Этот юзернейм уже занят');
-                setBusy(false);
-                return;
-            }
-            
             const result = await window.auth.createUserWithEmailAndPassword(email, password);
             const uid = result.user.uid;
-            
+
+            const claim = await window.db.ref('usernames/' + u).transaction(v => v === null ? uid : undefined);
+            if (!claim.committed) {
+                setErr('Этот юзернейм уже занят');
+                setBusy(false);
+                await result.user.delete().catch(() => {});
+                return;
+            }
+
             const profile = {
                 name: name.trim(),
                 username: u,
                 about: '',
                 avatar: 'sun',
                 avatarUrl: '',
-                email: email,
-                emailVerified: false,
                 verified: false,
                 createdAt: window.SV_TS
             };
-            
+
             await window.db.ref('users/' + uid).set(profile);
-            await window.db.ref('usernames/' + u).set(uid);
-            
+            await window.db.ref('userPrivate/' + uid).set({ email: email, emailVerified: false });
+
             await result.user.sendEmailVerification();
             show('Письмо с подтверждением отправлено на ' + email);
-            onAuth({ uid, ...profile });
-            
+            onAuth({ uid, ...profile, email, emailVerified: false });
+
         } catch(e) {
             setErr(friendlyError(e));
             show(friendlyError(e), true);
@@ -3992,13 +4059,12 @@ function Register({ uid, onDone, show }) {
                 about:"", 
                 avatar:"sun", 
                 avatarUrl:"", 
-                email: email.trim(),
-                emailVerified: false,
                 verified: false,
                 createdAt:window.SV_TS 
             };
             await window.db.ref("users/"+uid).set(profile);
-            onDone({ ...profile, uid });
+            await window.db.ref("userPrivate/"+uid).set({ email: email.trim(), emailVerified: false });
+            onDone({ ...profile, uid, email: email.trim(), emailVerified: false });
         } catch(e) {
             setErr(friendlyError(e));
             show(friendlyError(e), true);
@@ -4258,7 +4324,6 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
                             )}
                         </div>
                         <div className="muted">@{person.username}</div>
-                        {person.email && <div className="muted" style={{fontSize:12}}>{person.email}</div>}
                         <div className="muted" style={{fontSize:12, marginTop:4}}>
                             {presence?.online ? "в сети" : fmtLastSeen(presence?.lastSeen)}
                         </div>
@@ -4498,12 +4563,14 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
     }
 
     async function removeMember(uid) {
+        const iAmAdmin = chat.createdBy === me.uid || chat.members?.[me.uid] === 'admin';
+        if (!iAmAdmin) { show('Только администратор может удалять участников', true); return; }
         if (!confirm('Удалить участника из группы?')) return;
         setBusy(true);
         try {
+            await window.db.ref('chatsMeta/' + chat.id + '/members/' + uid).remove();
             const newMembers = { ...chat.members };
             delete newMembers[uid];
-            await window.db.ref('chatsMeta/' + chat.id + '/members').set(newMembers);
             const updatedChat = { ...chat, members: newMembers };
             onUpdate(updatedChat);
             show('Участник удалён');
@@ -4771,7 +4838,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                     const isVerified = window.auth.currentUser.emailVerified;
                     if (isVerified !== emailVerified) {
                         setEmailVerified(isVerified);
-                        await window.db.ref('users/' + user.uid).update({ emailVerified: isVerified });
+                        await window.db.ref('userPrivate/' + user.uid).update({ emailVerified: isVerified });
                         onSave({ ...user, emailVerified: isVerified });
                     }
                 } catch(e) {
@@ -4837,16 +4904,12 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 await window.db.ref("usernames/"+user.username).remove();
             }
             const next = { ...user, name:n, username:u, about:about.trim(), avatar, avatarUrl: avatarUrl.trim(), emailVerified };
-            await window.db.ref("users/"+user.uid).set({ 
+            await window.db.ref("users/"+user.uid).update({ 
                 name:n, 
                 username:u, 
                 about:about.trim(), 
                 avatar, 
-                avatarUrl: avatarUrl.trim(),
-                email: user.email || email,
-                emailVerified: emailVerified,
-                verified: user.verified || false,
-                createdAt:user.createdAt || window.SV_TS 
+                avatarUrl: avatarUrl.trim()
             });
             onSave(next);
             show("Профиль сохранён");
@@ -4913,7 +4976,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
             await window.auth.currentUser.reload();
             const isVerified = window.auth.currentUser.emailVerified;
             setEmailVerified(isVerified);
-            await window.db.ref('users/' + user.uid).update({ emailVerified: isVerified });
+            await window.db.ref('userPrivate/' + user.uid).update({ emailVerified: isVerified });
             onSave({ ...user, emailVerified: isVerified });
             show(isVerified ? '✅ Email подтверждён!' : '❌ Email пока не подтверждён');
         } catch(e) {
@@ -4935,7 +4998,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
             const credential = window.firebase.auth.EmailAuthProvider.credential(email, emailPassword);
             await window.auth.currentUser.linkWithCredential(credential);
             const next = { ...user, email: email, emailVerified: false };
-            await window.db.ref("users/"+user.uid).update({ email: email, emailVerified: false });
+            await window.db.ref("userPrivate/"+user.uid).update({ email: email, emailVerified: false });
             onSave(next);
             show('Email привязан! Подтвердите почту.');
             setShowPasswordField(false);
@@ -4961,8 +5024,20 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
             const chatsSnap = await window.db.ref('chatsMeta').orderByChild('members/' + user.uid).equalTo(true).once('value');
             const updates = {};
             chatsSnap.forEach(child => {
-                updates[safeDbKey(child.key)] = null;
+                // Убираем только СЕБЯ из чата — раньше здесь стирался весь узел chatsMeta,
+                // что уничтожало групповой чат целиком для всех остальных участников.
+                updates[safeDbKey(child.key) + '/members/' + user.uid] = null;
+                updates[safeDbKey(child.key) + '/unreadBy/' + user.uid] = null;
             });
+
+            // Отдельно проверяем каналы, на которые пользователь подписан (у них не members, а subscribers).
+            const subsSnap = await window.db.ref('chatsMeta').orderByChild('subscribers/' + user.uid).equalTo(true).once('value');
+            subsSnap.forEach(child => {
+                const data = child.val() || {};
+                if (data.createdBy === user.uid) return; // свой канал не трогаем при удалении аккаунта
+                updates[safeDbKey(child.key) + '/subscribers/' + user.uid] = null;
+            });
+
             await window.db.ref('chatsMeta').update(updates);
             
             await window.auth.currentUser.delete();
@@ -5728,9 +5803,11 @@ function VoicePlayer({ src, duration=0, mine=false, onEnded, playbackRate=1, onS
     const [current,setCurrent] = useState(0);
     const [total,setTotal] = useState(duration || 0);
     const [durationFixed,setDurationFixed] = useState(false);
+    const fixingDurationRef = useRef(false);
     useEffect(()=>{
         const a=audioRef.current; if(!a) return;
         const time=()=>{
+            if (fixingDurationRef.current) return;
             setCurrent(a.currentTime||0);
             if(isFinite(a.duration) && a.duration>0) setProgress((a.currentTime/a.duration)*100);
             if(!listened && a.currentTime > (a.duration||total||0) * 0.7 && onListened) onListened();
@@ -5740,11 +5817,15 @@ function VoicePlayer({ src, duration=0, mine=false, onEnded, playbackRate=1, onS
             // пока не "прокрутить" файл целиком — из-за этого была ошибка Infinity:NaN
             // и пустой прогресс-бар почти до самого конца голосового.
             if(a.duration===Infinity || isNaN(a.duration)){
+                fixingDurationRef.current = true;
                 const onTU=()=>{
                     a.removeEventListener('timeupdate',onTU);
                     a.currentTime=0;
                     setTotal(isFinite(a.duration)&&a.duration>0?a.duration:(duration||0));
                     setDurationFixed(true);
+                    // Небольшая задержка перед снятием защиты — на случай, если браузер всё же
+                    // успеет асинхронно послать "ended" сразу после перемотки.
+                    setTimeout(()=>{ fixingDurationRef.current = false; }, 50);
                 };
                 a.addEventListener('timeupdate',onTU);
                 a.currentTime=1e9;
@@ -5753,7 +5834,10 @@ function VoicePlayer({ src, duration=0, mine=false, onEnded, playbackRate=1, onS
                 setDurationFixed(true);
             }
         };
-        const end=()=>{setPlaying(false); setProgress(100); setCurrent(0); if(onListened) onListened(); if(onEnded) onEnded();};
+        const end=()=>{
+            if (fixingDurationRef.current) return; // игнорируем ложное "ended" от перемотки при фиксе длительности
+            setPlaying(false); setProgress(100); setCurrent(0); if(onListened) onListened(); if(onEnded) onEnded();
+        };
         a.addEventListener('timeupdate',time); a.addEventListener('loadedmetadata',fixDuration); a.addEventListener('ended',end);
         return ()=>{a.removeEventListener('timeupdate',time);a.removeEventListener('loadedmetadata',fixDuration);a.removeEventListener('ended',end);};
     },[duration,listened]);
@@ -5800,7 +5884,7 @@ function PollBlock({ poll, messageId, chatId, me, show, isChannel }) {
     const counts=poll.counts||{};
     const total=Object.values(counts).reduce((a,b)=>a+(Number(b)||0),0);
     const myVote=votes[me.uid];
-    useEffect(()=>{ if(myVote!==undefined) setVote(Number(myVote)); },[myVote]);
+    useEffect(()=>{ setVote(myVote!==undefined ? Number(myVote) : null); },[myVote]);
     const choose=async(i)=>{
         if(busy) return;
         if(myVote!==undefined){show('Вы уже голосовали',true);return;}
@@ -5813,20 +5897,42 @@ function PollBlock({ poll, messageId, chatId, me, show, isChannel }) {
         }catch(e){show(friendlyError(e),true);}
         finally{setBusy(false);}
     };
+    const removeVote=async()=>{
+        if(busy || myVote===undefined) return;
+        setBusy(true);
+        const base='chats/'+chatId+'/'+(isChannel?'posts':'messages')+'/'+messageId+'/poll';
+        try{
+            await window.db.ref(base+'/votes/'+me.uid).remove();
+            await window.db.ref(base+'/counts/'+myVote).transaction(v=>Math.max(0,(Number(v)||0)-1));
+            setVote(null); show('Голос удалён');
+        }catch(e){show(friendlyError(e),true);}
+        finally{setBusy(false);}
+    };
     return <div className="poll-block">
         <div className="poll-title">📊 Опрос</div>
         <div className="poll-question">{poll.question}</div>
         <div className="poll-options">
             {(poll.options||[]).map((opt,i)=>{
                 const c=Number(counts[i]||0); const pct=total?Math.round(c/total*100):0; const selected=vote===i || myVote===i;
-                return <button key={i} className={'poll-option '+(selected?'selected':'')} onClick={()=>choose(i)} disabled={busy}>
-                    <span className="poll-radio">{selected?'●':'○'}</span>
-                    <span className="poll-option-text">{opt}</span>
-                    {myVote!==undefined && <><span className="poll-option-percent">{pct}%</span><span className="poll-option-bar" style={{width:pct+'%'}}/></>}
+                return <button key={i} className={'poll-option '+(selected?'selected':'')} onClick={()=>choose(i)} disabled={busy || myVote!==undefined}>
+                    {myVote!==undefined && <span className="poll-option-fill" style={{width:pct+'%'}}/>}
+                    <span className="poll-option-content">
+                        {myVote===undefined && <span className="poll-radio">{selected?'●':'○'}</span>}
+                        <span className="poll-option-text">{opt}</span>
+                        {myVote!==undefined && <span className="poll-option-percent">{pct}%</span>}
+                    </span>
                 </button>;
             })}
         </div>
-        <div className="poll-footer"><span>{total} {total===1?'голос':'голосов'}</span><span>{poll.anonymous?'🔒 Анонимный':'👤 Открытый'}</span></div>
+        <div className="poll-footer">
+            <span>{total} {total===1?'ответ':total>1&&total<5?'ответа':'ответов'}</span>
+            <span style={{display:'flex', alignItems:'center', gap:10}}>
+                {poll.anonymous?'🔒 Анонимный':'👤 Открытый'}
+                {myVote!==undefined && (
+                    <button className="poll-remove-vote" onClick={removeVote} disabled={busy}>Удалить голос</button>
+                )}
+            </span>
+        </div>
     </div>;
 }
 
@@ -5864,10 +5970,27 @@ function getReactionCount(message) {
 
 // ===== КОНТЕКСТНОЕ МЕНЮ (вынесено на верхний уровень модуля — стабильная идентичность компонента,
 // не пересоздаётся при каждом ре-рендере ChatView, поэтому не мерцает и не размонтируется зря) =====
-function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction, replyToMessage, setSelectedMessage, startEdit, deleteMessage, onPin, onUnpin, pinnedId }) {
+function ContextMenu({ message, x, y, onClose, me, users, isChannel, chat, show, addReaction, replyToMessage, setSelectedMessage, startEdit, deleteMessage, onPin, onUnpin, pinnedId }) {
     const menuRef = useRef(null);
     const mine = message.senderId === me.uid;
     const canEdit = mine && message.type !== 'sticker' && message.type !== 'voice' && message.type !== 'poll' && (!isChannel || chat.createdBy === me.uid);
+
+    async function copyMessage() {
+        try {
+            let text = message.text || '';
+            if (message.type === 'sticker') text = message.sticker || text;
+            if (message.encrypted && chat.uid) {
+                const otherUid = message.senderId === me.uid ? chat.uid : message.senderId;
+                const otherPubKey = users?.[otherUid]?.publicKey;
+                if (!otherPubKey) { show && show('Нет ключа для расшифровки', true); return; }
+                text = await window.E2E.decryptFrom(otherUid, otherPubKey, { iv: message.iv, ct: message.text });
+            }
+            await navigator.clipboard.writeText(text);
+            show && show('Скопировано');
+        } catch (e) {
+            show && show('Не удалось скопировать', true);
+        }
+    }
     const [pos, setPos] = useState({ left: x, top: y, above: false, ready: false });
 
     useEffect(() => {
@@ -5937,6 +6060,13 @@ function ContextMenu({ message, x, y, onClose, me, isChannel, chat, addReaction,
                     <span>Переслать</span>
                 </button>
 
+                {message.type !== 'voice' && (
+                    <button className="context-menu-item" onClick={() => { copyMessage(); onClose(); }}>
+                        <Icon name="copy" size={18} />
+                        <span>Скопировать</span>
+                    </button>
+                )}
+
                 {onPin && (
                     <button className="context-menu-item" onClick={() => { pinnedId === message.id ? onUnpin() : onPin(message); onClose(); }}>
                         <Icon name="pin" size={18} />
@@ -5990,8 +6120,8 @@ function EncryptedText({ message, me, chat, users, metas, onSelectChat }) {
         return () => { cancelled = true; };
     }, [message.id, message.text, message.iv, me.uid, chat.uid]);
 
-    if (failed) return <span style={{ opacity: 0.6, fontStyle: 'italic' }}>🔒 Не удалось расшифровать</span>;
-    if (plain === null) return <span style={{ opacity: 0.55 }}>🔒 Расшифровка…</span>;
+    if (failed) return <span style={{ opacity: 0.6, fontStyle: 'italic' }}>Не удалось расшифровать</span>;
+    if (plain === null) return <span style={{ opacity: 0.55 }}>Загрузка…</span>;
     return <>{renderRichText(plain, { me, users, metas, onSelectChat })}</>;
 }
 
@@ -6182,7 +6312,6 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                         )}
 
                         <div className="btime">
-                            {message.encrypted && <span style={{ opacity: 0.7, marginRight: 3 }} title="Сквозное шифрование">🔒</span>}
                             {message.edited && <span style={{ opacity: 0.65, marginRight: 4 }}>изменено</span>}
                             {fmtTime(message.ts)}
                             {!isChannel && mine && <StatusTicks status={message.status || "sent"} />}
@@ -6231,7 +6360,7 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
             {showContextMenu && (
                 <ContextMenu
                     message={message} x={contextPos.x} y={contextPos.y} onClose={() => setShowContextMenu(false)}
-                    me={me} isChannel={isChannel} chat={chat}
+                    me={me} users={users} isChannel={isChannel} chat={chat} show={show}
                     addReaction={addReaction} replyToMessage={replyToMessage}
                     setSelectedMessage={setSelectedMessage} startEdit={startEdit} deleteMessage={deleteMessage}
                     onPin={onPin} onUnpin={onUnpin} pinnedId={pinnedId}
@@ -6564,6 +6693,10 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     // ===== ФУНКЦИЯ ПОДПИСКИ/ОТПИСКИ =====
     async function toggleSubscribe() {
         if (!window.db) return;
+        if (!isSubscribed && chat.isPrivate && chat.createdBy !== me.uid) {
+            show('Это закрытый канал — подписаться можно только по приглашению владельца', true);
+            return;
+        }
         setSubscribing(true);
         try {
             const ref = window.db.ref('chatsMeta/' + chatId + '/subscribers/' + me.uid);
@@ -6934,6 +7067,10 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         
         async function forwardMessage() {
             if (!selectedChat) { show('Выберите чат для пересылки', true); return; }
+            if (message.encrypted && selectedChat.type !== 'dm') {
+                show('Нельзя переслать личное сообщение в группу или канал — там нет шифрования', true);
+                return;
+            }
             setBusy(true);
             try {
                 const targetChatId = selectedChat.id;
@@ -7054,8 +7191,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                         </button>
                     )}
                     {!isChannel && !isGroup && (
-                        <button className="primary danger" style={{width:'100%', justifyContent:'center'}} onClick={blockUser}>
-                            <Icon name="ban" size={18}/> Заблокировать
+                        <button className="primary danger" style={{width:'100%', justifyContent:'center'}} onClick={iBlockedThem ? unblockUser : blockUser}>
+                            <Icon name="ban" size={18}/> {iBlockedThem ? 'Разблокировать' : 'Заблокировать'}
                         </button>
                     )}
                 </div>
@@ -7064,20 +7201,23 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     }
 
     async function clearChat(forAll = false) {
-        if (!confirm(forAll ? 'Удалить все сообщения для всех?' : 'Удалить все сообщения только для себя?')) return;
+        if (!confirm(forAll ? 'Удалить ваши сообщения для всех? (чужие сообщения останутся)' : 'Удалить все сообщения только для себя?')) return;
         try {
-            if (forAll) { 
-                await window.db.ref("chats/"+chatId+"/messages").remove(); 
-            } else {
-                const updates = {};
-                (isChannel ? posts : messages).forEach(m => { 
-                    if (m.id) {
-                        updates["chats/"+safeDbKey(chatId)+"/" + (isChannel ? "posts" : "messages") + "/"+safeDbKey(m.id)+"/deletedFor/"+safeDbKey(me.uid)] = true; 
+            const path = isChannel ? "posts" : "messages";
+            const updates = {};
+            (isChannel ? posts : messages).forEach(m => {
+                if (!m.id) return;
+                if (forAll) {
+                    // Стираем только свои собственные сообщения для всех — чужие трогать нельзя.
+                    if (m.senderId === me.uid) {
+                        updates["chats/"+safeDbKey(chatId)+"/"+path+"/"+safeDbKey(m.id)] = null;
                     }
-                });
-                if (Object.keys(updates).length > 0) {
-                    await window.db.ref().update(updates);
+                } else {
+                    updates["chats/"+safeDbKey(chatId)+"/"+path+"/"+safeDbKey(m.id)+"/deletedFor/"+safeDbKey(me.uid)] = true;
                 }
+            });
+            if (Object.keys(updates).length > 0) {
+                await window.db.ref().update(updates);
             }
             show(isChannel ? 'Канал очищен' : 'Чат очищен');
         } catch(e) { 
@@ -7111,17 +7251,23 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     async function blockUser() {
         if (!confirm('Заблокировать пользователя?')) return;
         try {
-            const blockedRef = window.db.ref("users/"+me.uid+"/blocked");
-            const snap = await blockedRef.get();
-            const blocked = snap.val() || [];
-            if (!blocked.includes(chat.uid)) {
-                blocked.push(chat.uid);
-                await blockedRef.set(blocked);
-                show('Пользователь заблокирован');
-            }
+            await window.db.ref("users/"+me.uid+"/blocked/"+chat.uid).set(true);
+            show('Пользователь заблокирован');
         } catch(e) { show(friendlyError(e), true); }
         setShowChatMenu(false);
     }
+
+    async function unblockUser() {
+        try {
+            await window.db.ref("users/"+me.uid+"/blocked/"+chat.uid).remove();
+            show('Пользователь разблокирован');
+        } catch(e) { show(friendlyError(e), true); }
+        setShowChatMenu(false);
+    }
+
+    const iBlockedThem = !isChannel && !isGroup && !!users[me.uid]?.blocked?.[chat.uid];
+    const theyBlockedMe = !isChannel && !isGroup && !!users[chat.uid]?.blocked?.[me.uid];
+    const isBlockedEitherWay = iBlockedThem || theyBlockedMe;
 
 
     return (
@@ -7272,7 +7418,14 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             
             {/* ===== КОМПОЗЕР ===== */}
             <div className="composer">
-                {isChannel && chat.createdBy !== me.uid ? (
+                {isBlockedEitherWay ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, width: '100%', padding: '8px 0' }}>
+                        <span className="muted">{iBlockedThem ? 'Вы заблокировали этого пользователя' : 'Вы не можете написать этому пользователю'}</span>
+                        {iBlockedThem && (
+                            <button className="secondary" onClick={unblockUser} style={{ padding: '6px 16px', fontSize: 13 }}>Разблокировать</button>
+                        )}
+                    </div>
+                ) : isChannel && chat.createdBy !== me.uid ? (
                     // КАНАЛ, НЕ ВЛАДЕЛЕЦ — кнопка подписки вместо поля ввода
                     <div style={{ 
                         display: 'flex', 
@@ -7393,14 +7546,15 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
 function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateChannel, hideLastSeen }) {
     const [search, setSearch] = useState("");
     const [focused, setFocused] = useState(false);
-    const q = normalizeUsername(search);
+    const q = search.trim().toLowerCase();       // для поиска по названию канала — не режет кириллицу
+    const qUsername = normalizeUsername(search);  // строго для поиска по юзернейму (латиница)
 
     // Поиск людей — строго по юзернейму, и только когда есть запрос (без него люди не показываются).
     const people = useMemo(() => {
-        if (!q) return [];
+        if (!qUsername) return [];
         const arr = Object.values(users).filter(u => u.uid !== me.uid);
-        return arr.filter(u => u.username && u.username.startsWith(q)).sort((a,b) => a.username.localeCompare(b.username)).slice(0,30);
-    }, [users, q, me.uid]);
+        return arr.filter(u => u.username && u.username.startsWith(qUsername)).sort((a,b) => a.username.localeCompare(b.username)).slice(0,30);
+    }, [users, qUsername, me.uid]);
 
     // Поиск каналов (все каналы)
     const allChannels = useMemo(() => {
@@ -7413,7 +7567,7 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
         return result.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
     }, [metas]);
 
-    // Фильтрация каналов: по имени и юзернейму. Без запроса — рекомендуемые (по числу подписчиков).
+    // Фильтрация каналов: по имени (любой язык) и юзернейму. Без запроса — рекомендуемые (по числу подписчиков).
     const filteredChannels = useMemo(() => {
         if (!q) {
             return [...allChannels]
@@ -7421,10 +7575,10 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
                 .slice(0, 15);
         }
         return allChannels.filter(c => 
-            (c.name && c.name.toLowerCase().includes(q.toLowerCase())) || 
-            (c.username && c.username.toLowerCase().includes(q.toLowerCase()))
+            (c.name && c.name.toLowerCase().includes(q)) || 
+            (c.username && c.username.toLowerCase().includes(qUsername))
         );
-    }, [allChannels, q]);
+    }, [allChannels, q, qUsername]);
 
     // Чаты пользователя
     const chats = useMemo(() => {
@@ -7750,11 +7904,13 @@ function App() {
                 const s = await window.db.ref("users/"+fb.uid).get();
                 if(s.exists()) { 
                     const userData = s.val();
-                    if (fb.emailVerified !== userData.emailVerified) {
-                        await window.db.ref('users/' + fb.uid).update({ emailVerified: fb.emailVerified });
-                        userData.emailVerified = fb.emailVerified;
+                    const privSnap = await window.db.ref("userPrivate/"+fb.uid).get().catch(() => null);
+                    const priv = (privSnap && privSnap.exists()) ? privSnap.val() : { email: fb.email || '', emailVerified: fb.emailVerified };
+                    if (fb.emailVerified !== priv.emailVerified) {
+                        await window.db.ref('userPrivate/' + fb.uid).update({ emailVerified: fb.emailVerified }).catch(() => {});
+                        priv.emailVerified = fb.emailVerified;
                     }
-                    setMe({ uid:fb.uid, ...userData }); 
+                    setMe({ uid:fb.uid, ...userData, email: priv.email, emailVerified: priv.emailVerified }); 
                     setState("ready"); 
                 } else { 
                     setMe({ uid:fb.uid }); 
@@ -7865,7 +8021,7 @@ function App() {
                 if(next.type === "group") { title = next.name || "Группа"; }
                 else if(next.type === "channel") { title = next.name || "Канал"; }
                 else { const sender = users[next.lastSender]; title = sender?.name || "Новое сообщение"; }
-                showBrowserNotification(title, next.lastMessage || "Новое сообщение");
+                showBrowserNotification(title, next.lastMessage || "Новое сообщение", id + '-' + next.lastTs);
             });
             previous = value;
         };
