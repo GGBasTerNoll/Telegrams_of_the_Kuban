@@ -8,9 +8,11 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%236750a4'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='34'%3E💬%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%236750a4'/%3E%3Ctext x='90' y='115' text-anchor='middle' font-size='90'%3E💬%3C/text%3E%3C/svg%3E">
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%236750a4'/%3E%3Ctext x='96' y='122' text-anchor='middle' font-size='95'%3E💬%3C/text%3E%3C/svg%3E">
-<meta name="theme-color" content="#6750a4">
+<meta name="theme-color" content="rgb(var(--ar),var(--ag),var(--ab))">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ТпК">
+<link rel="manifest" href="manifest.json">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:ROND,wght@100,300..800&display=swap');
@@ -18,16 +20,16 @@
 
 *{box-sizing:border-box}
 
-*{scrollbar-width:thin;scrollbar-color:rgba(103,80,164,.35) transparent;}
+*{scrollbar-width:thin;scrollbar-color:rgba(var(--ar),var(--ag),var(--ab),.35) transparent;}
 *::-webkit-scrollbar{width:7px;height:7px;}
 *::-webkit-scrollbar-track{background:transparent;}
-*::-webkit-scrollbar-thumb{background:rgba(103,80,164,.32);border-radius:99px;}
-*::-webkit-scrollbar-thumb:hover{background:rgba(103,80,164,.5);}
+*::-webkit-scrollbar-thumb{background:rgba(var(--ar),var(--ag),var(--ab),.32);border-radius:99px;}
+*::-webkit-scrollbar-thumb:hover{background:rgba(var(--ar),var(--ag),var(--ab),.5);}
 *::-webkit-scrollbar-corner{background:transparent;}
-body.dark{scrollbar-color:rgba(187,134,252,.32) transparent;}
-body.dark *{scrollbar-color:rgba(187,134,252,.32) transparent;}
-body.dark *::-webkit-scrollbar-thumb{background:rgba(187,134,252,.28);}
-body.dark *::-webkit-scrollbar-thumb:hover{background:rgba(187,134,252,.46);}
+body.dark{scrollbar-color:rgba(var(--adr),var(--adg),var(--adb),.32) transparent;}
+body.dark *{scrollbar-color:rgba(var(--adr),var(--adg),var(--adb),.32) transparent;}
+body.dark *::-webkit-scrollbar-thumb{background:rgba(var(--adr),var(--adg),var(--adb),.28);}
+body.dark *::-webkit-scrollbar-thumb:hover{background:rgba(var(--adr),var(--adg),var(--adb),.46);}
 
 html,body,#root{
     margin:0;
@@ -55,12 +57,12 @@ button{border:0;background:none;color:inherit;cursor:pointer}
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible{
-    outline:3px solid #6750a4;
+    outline:3px solid rgb(var(--ar),var(--ag),var(--ab));
     outline-offset:2px
 }
 
 .m3{
-    --p:#6750a4;
+    --p:rgb(var(--ar),var(--ag),var(--ab));
     --onp:#fff;
     --pc:#eadcff;
     --onpc:#21005d;
@@ -83,7 +85,7 @@ textarea:focus-visible{
 }
 
 body.dark .m3{
-    --p:#bb86fc;
+    --p:rgb(var(--adr),var(--adg),var(--adb));
     --onp:#000;
     --pc:#3700b3;
     --onpc:#fff;
@@ -152,7 +154,7 @@ body.dark .date{
 }
 
 body.dark .avatar-choice.selected{
-    border-color:#bb86fc;
+    border-color:rgb(var(--adr),var(--adg),var(--adb));
     box-shadow:0 0 0 3px #3700b3
 }
 
@@ -396,6 +398,15 @@ body.dark .b3{background:#2a5a5a}
     letter-spacing:.06em
 }
 
+.saved-avatar{
+    width:48px;height:48px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgb(var(--ar),var(--ag),var(--ab)),#9c7fd4);
+    color:#fff;
+}
+.saved-messages-entry{border:0;transition:transform .15s ease}
+.saved-messages-entry:active{transform:scale(.98)}
+
 .person{
     width:100%;
     display:flex;
@@ -416,7 +427,7 @@ body.dark .b3{background:#2a5a5a}
 }
 .person:active{background:var(--c)}
 .person.active{background:var(--pc)}
-body.dark .person.active{background:rgba(187,134,252,.16)}
+body.dark .person.active{background:rgba(var(--adr),var(--adg),var(--adb),.16)}
 
 .person-body{
     min-width:0;
@@ -477,7 +488,7 @@ body.dark .person.active{background:rgba(187,134,252,.16)}
     height:21px;
     padding:0 6px;
     border-radius:11px;
-    background:#6750a4;
+    background:rgb(var(--ar),var(--ag),var(--ab));
     color:#fff;
     font-size:11px;
     display:grid;
@@ -486,7 +497,7 @@ body.dark .person.active{background:rgba(187,134,252,.16)}
 }
 
 body.dark .badge{
-    background:#bb86fc;
+    background:rgb(var(--adr),var(--adg),var(--adb));
     color:#000
 }
 
@@ -644,8 +655,8 @@ body.dark .online{
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: rgba(103,80,164,.16);
-    color: #6750a4;
+    background: rgba(var(--ar),var(--ag),var(--ab),.16);
+    color: rgb(var(--ar),var(--ag),var(--ab));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -653,7 +664,7 @@ body.dark .online{
 }
 .row.theirs .swipe-reply-hint{ left: 6px; }
 .row.mine .swipe-reply-hint{ right: 6px; }
-body.dark .swipe-reply-hint{ background: rgba(187,134,252,.2); color:#bb86fc; }
+body.dark .swipe-reply-hint{ background: rgba(var(--adr),var(--adg),var(--adb),.2); color:rgb(var(--adr),var(--adg),var(--adb)); }
 
 .bubble-wrapper {
     position: relative;
@@ -735,7 +746,7 @@ body.dark .mine .quote-block:hover{ background: rgba(0,0,0,.3); }
 }
 
 .mine .bubble{
-    background:#6750a4;
+    background:rgb(var(--ar),var(--ag),var(--ab));
     color:#fff;
     border-radius:20px 20px 6px 20px
 }
@@ -789,7 +800,7 @@ body.dark .theirs .bubble{
     pointer-events: none;
 }
 .date-divider span{
-    background: rgba(103,80,164,.85);
+    background: rgba(var(--ar),var(--ag),var(--ab),.85);
     color: #fff;
     font-size: 12.5px;
     font-weight: 650;
@@ -799,7 +810,7 @@ body.dark .theirs .bubble{
     box-shadow: 0 4px 14px rgba(50,35,70,.18);
 }
 body.dark .date-divider span{
-    background: rgba(187,134,252,.28);
+    background: rgba(var(--adr),var(--adg),var(--adb),.28);
 }
 
 .pinned-bar{
@@ -807,14 +818,14 @@ body.dark .date-divider span{
     align-items: center;
     gap: 10px;
     padding: 8px 14px;
-    background: rgba(103,80,164,.07);
-    border-bottom: 1px solid rgba(103,80,164,.12);
+    background: rgba(var(--ar),var(--ag),var(--ab),.07);
+    border-bottom: 1px solid rgba(var(--ar),var(--ag),var(--ab),.12);
     cursor: pointer;
-    color: #6750a4;
+    color: rgb(var(--ar),var(--ag),var(--ab));
 }
-.pinned-bar:hover{background: rgba(103,80,164,.12)}
-body.dark .pinned-bar{background: rgba(187,134,252,.08); border-bottom-color: rgba(187,134,252,.14); color:#bb86fc}
-body.dark .pinned-bar:hover{background: rgba(187,134,252,.13)}
+.pinned-bar:hover{background: rgba(var(--ar),var(--ag),var(--ab),.12)}
+body.dark .pinned-bar{background: rgba(var(--adr),var(--adg),var(--adb),.08); border-bottom-color: rgba(var(--adr),var(--adg),var(--adb),.14); color:rgb(var(--adr),var(--adg),var(--adb))}
+body.dark .pinned-bar:hover{background: rgba(var(--adr),var(--adg),var(--adb),.13)}
 .pinned-bar-body{flex:1; min-width:0}
 .pinned-bar-title{font-size:11.5px; font-weight:700; opacity:.85}
 .pinned-bar-text{font-size:13px; color:var(--txt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
@@ -961,12 +972,12 @@ body.dark .send{
 }
 
 .send.ready{
-    background:#6750a4;
+    background:rgb(var(--ar),var(--ag),var(--ab));
     color:#fff
 }
 
 body.dark .send.ready{
-    background:#bb86fc;
+    background:rgb(var(--adr),var(--adg),var(--adb));
     color:#000
 }
 
@@ -1190,7 +1201,7 @@ body.dark .reaction-picker{
 
 .field input:focus,
 .field textarea:focus{
-    border-color:#6750a4;
+    border-color:rgb(var(--ar),var(--ag),var(--ab));
     background:#fff
 }
 
@@ -1203,7 +1214,7 @@ body.dark .field textarea:focus{
     height:50px;
     padding:0 22px;
     border-radius:25px;
-    background:#6750a4;
+    background:rgb(var(--ar),var(--ag),var(--ab));
     color:#fff;
     font-weight:650;
     display:inline-flex;
@@ -1214,7 +1225,7 @@ body.dark .field textarea:focus{
 }
 
 body.dark .primary{
-    background:#bb86fc;
+    background:rgb(var(--adr),var(--adg),var(--adb));
     color:#000
 }
 
@@ -1259,7 +1270,7 @@ body.dark .secondary{
 }
 
 .avatar-choice.selected{
-    border-color:#6750a4;
+    border-color:rgb(var(--ar),var(--ag),var(--ab));
     box-shadow:0 0 0 3px #eadcff
 }
 
@@ -1285,7 +1296,7 @@ body.dark .secondary{
 }
 
 .avatar-url-input input:focus{
-    border-color:#6750a4;
+    border-color:rgb(var(--ar),var(--ag),var(--ab));
     background:#fff;
 }
 
@@ -1386,7 +1397,7 @@ body.dark .avatar-url-preview .remove-btn{
 
 .group-member-item .member-role{
     font-size:11px;
-    color:#6750a4;
+    color:rgb(var(--ar),var(--ag),var(--ab));
     font-weight:600;
     padding:2px 10px;
     border-radius:10px;
@@ -1437,7 +1448,7 @@ body.dark .group-member-item .remove-btn{
 
 .group-edit-field input:focus,
 .group-edit-field textarea:focus{
-    border-color:#6750a4;
+    border-color:rgb(var(--ar),var(--ag),var(--ab));
     background:#fff;
 }
 
@@ -1527,7 +1538,7 @@ body.dark .group-about{
 .user-pick input{
     width:20px;
     height:20px;
-    accent-color:#6750a4
+    accent-color:rgb(var(--ar),var(--ag),var(--ab))
 }
 
 .toast{
@@ -1648,14 +1659,14 @@ body.dark .context-menu-item.danger:hover {
     border-radius: 16px;
     padding: 6px 4px 4px 4px;
     margin: -2px -2px -2px -2px;
-    border-left: 4px solid #6750a4 !important;
+    border-left: 4px solid rgb(var(--ar),var(--ag),var(--ab)) !important;
     box-shadow: 0 0 20px rgba(103, 80, 164, 0.2);
     animation: highlight-pulse 1.2s ease;
 }
 
 body.dark .bubble-wrapper.highlight {
     background: rgba(187, 134, 252, 0.3) !important;
-    border-left-color: #bb86fc !important;
+    border-left-color: rgb(var(--adr),var(--adg),var(--adb)) !important;
     box-shadow: 0 0 20px rgba(187, 134, 252, 0.2);
     animation: highlight-pulse-dark 1.2s ease;
 }
@@ -1698,23 +1709,23 @@ body.dark .bubble-wrapper.highlight {
     align-items: center;
     justify-content: space-between;
     border-top: 1px solid var(--chh);
-    border-left: 4px solid #6750a4;
+    border-left: 4px solid rgb(var(--ar),var(--ag),var(--ab));
     flex-shrink: 0;
 }
 
 body.dark .reply-preview {
-    border-left-color: #bb86fc;
+    border-left-color: rgb(var(--adr),var(--adg),var(--adb));
     background: #2a2a32;
 }
 
 .reply-preview .reply-info {
     font-size: 12px;
-    color: #6750a4;
+    color: rgb(var(--ar),var(--ag),var(--ab));
     font-weight: 600;
 }
 
 body.dark .reply-preview .reply-info {
-    color: #bb86fc;
+    color: rgb(var(--adr),var(--adg),var(--adb));
 }
 
 .reply-preview .reply-text {
@@ -1883,11 +1894,11 @@ body.dark .forward-modal .chat-list .person.active {
 }
 
 .toggle.active{
-    background:#6750a4
+    background:rgb(var(--ar),var(--ag),var(--ab))
 }
 
 body.dark .toggle.active{
-    background:#bb86fc
+    background:rgb(var(--adr),var(--adg),var(--adb))
 }
 
 .toggle-knob{
@@ -1950,11 +1961,11 @@ body.dark .toggle.active{
 }
 
 .mobile-nav-item.active {
-    color: #6750a4;
+    color: rgb(var(--ar),var(--ag),var(--ab));
 }
 
 body.dark .mobile-nav-item.active {
-    color: #bb86fc;
+    color: rgb(var(--adr),var(--adg),var(--adb));
 }
 
 .mobile-nav-item .icon {
@@ -2497,6 +2508,8 @@ body.dark .verified-check {
 :root{
   --glass-blur:26px;
   --glass-sat:145%;
+  --ar:103;--ag:80;--ab:164;
+  --adr:187;--adg:134;--adb:252;
 }
 html{background:#f7f4fb;}
 body{
@@ -2548,7 +2561,7 @@ body{
 }
 .search:focus-within{
   transform:translateY(-1px);
-  box-shadow:inset 0 0 0 2px rgba(103,80,164,.32),0 10px 26px rgba(103,80,164,.11);
+  box-shadow:inset 0 0 0 2px rgba(var(--ar),var(--ag),var(--ab),.32),0 10px 26px rgba(var(--ar),var(--ag),var(--ab),.11);
 }
 body.dark .search{
   background:rgba(255,255,255,.07);
@@ -2556,7 +2569,7 @@ body.dark .search{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 5px 20px rgba(0,0,0,.2);
 }
 body.dark .search:focus-within{
-  box-shadow:inset 0 0 0 2px rgba(187,134,252,.38),0 10px 26px rgba(0,0,0,.3);
+  box-shadow:inset 0 0 0 2px rgba(var(--adr),var(--adg),var(--adb),.38),0 10px 26px rgba(0,0,0,.3);
 }
 
 .person,.chat-item{
@@ -2623,11 +2636,11 @@ body.dark .setting-card:hover{box-shadow:0 14px 36px rgba(0,0,0,.4),inset 0 1px 
     gap:14px;
     padding:12px 14px;
     border-radius:18px;
-    background:rgba(103,80,164,.06);
+    background:rgba(var(--ar),var(--ag),var(--ab),.06);
     margin-bottom:8px;
 }
 .device-item:last-child{margin-bottom:0}
-body.dark .device-item{background:rgba(187,134,252,.08)}
+body.dark .device-item{background:rgba(var(--adr),var(--adg),var(--adb),.08)}
 .device-icon{
     flex-shrink:0;
     width:42px;
@@ -2636,9 +2649,9 @@ body.dark .device-item{background:rgba(187,134,252,.08)}
     display:grid;
     place-items:center;
     font-size:20px;
-    background:rgba(103,80,164,.12);
+    background:rgba(var(--ar),var(--ag),var(--ab),.12);
 }
-body.dark .device-icon{background:rgba(187,134,252,.16)}
+body.dark .device-icon{background:rgba(var(--adr),var(--adg),var(--adb),.16)}
 .device-info{flex:1;min-width:0}
 .device-name{font-weight:650;font-size:14px}
 .device-time{font-size:12.5px;color:var(--muted);margin-top:1px}
@@ -2754,9 +2767,9 @@ html, body, #root { width:100%; min-height:100%; }
 .attach-btn{width:40px!important;height:40px!important;flex:none}
 .attach-menu{position:absolute;bottom:48px;left:0;width:190px;padding:8px;border-radius:20px;background:rgba(255,255,255,.88);backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);border:1px solid rgba(255,255,255,.7);box-shadow:0 18px 50px rgba(40,20,60,.22);z-index:80;animation:popIn .16s ease-out}
 body.dark .attach-menu{background:rgba(34,34,40,.92);border-color:rgba(255,255,255,.1)}
-.attach-menu button{width:100%;display:flex;align-items:center;gap:12px;border:0;background:transparent;padding:11px 12px;border-radius:13px;color:var(--txt);font:inherit;cursor:pointer;text-align:left}.attach-menu button:hover{background:rgba(103,80,164,.1)}.attach-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(103,80,164,.12);font-size:18px}
-.sticker-modal{width:min(420px,100%);max-height:min(78vh,560px);overflow:auto;background:rgba(255,255,255,.88);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:28px;padding:18px;box-shadow:0 24px 70px rgba(30,15,50,.25);animation:popIn .18s ease-out}.sticker-pack-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:10px 2px}.sticker-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.sticker-grid button{border:0;background:transparent;border-radius:14px;font-size:29px;aspect-ratio:1;cursor:pointer;transition:transform .14s,background .14s}.sticker-grid button:hover{background:rgba(103,80,164,.1);transform:scale(1.12)}
-.poll-creator{animation:popIn .18s ease-out}.poll-check{display:flex;align-items:center;gap:8px;margin:14px 0;color:var(--txt);font-size:14px}.poll-check input{width:17px;height:17px}.poll-title{font-size:12px;font-weight:800;color:#6750a4;margin-bottom:5px}.msg-sticker{font-size:104px;line-height:1;padding:0;filter:drop-shadow(0 10px 18px rgba(0,0,0,.16));animation:stickerPop .28s cubic-bezier(.34,1.56,.64,1)}
+.attach-menu button{width:100%;display:flex;align-items:center;gap:12px;border:0;background:transparent;padding:11px 12px;border-radius:13px;color:var(--txt);font:inherit;cursor:pointer;text-align:left}.attach-menu button:hover{background:rgba(var(--ar),var(--ag),var(--ab),.1)}.attach-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(var(--ar),var(--ag),var(--ab),.12);font-size:18px}
+.sticker-modal{width:min(420px,100%);max-height:min(78vh,560px);overflow:auto;background:rgba(255,255,255,.88);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:28px;padding:18px;box-shadow:0 24px 70px rgba(30,15,50,.25);animation:popIn .18s ease-out}.sticker-pack-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:10px 2px}.sticker-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.sticker-grid button{border:0;background:transparent;border-radius:14px;font-size:29px;aspect-ratio:1;cursor:pointer;transition:transform .14s,background .14s}.sticker-grid button:hover{background:rgba(var(--ar),var(--ag),var(--ab),.1);transform:scale(1.12)}
+.poll-creator{animation:popIn .18s ease-out}.poll-check{display:flex;align-items:center;gap:8px;margin:14px 0;color:var(--txt);font-size:14px}.poll-check input{width:17px;height:17px}.poll-title{font-size:12px;font-weight:800;color:rgb(var(--ar),var(--ag),var(--ab));margin-bottom:5px}.msg-sticker{font-size:104px;line-height:1;padding:0;filter:drop-shadow(0 10px 18px rgba(0,0,0,.16));animation:stickerPop .28s cubic-bezier(.34,1.56,.64,1)}
 @keyframes stickerPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
 .bubble.sticker-bubble{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:2px 4px!important}
 .bubble.sticker-bubble .btime{background:rgba(0,0,0,.32);color:#fff!important;position:absolute;right:8px;bottom:6px;padding:2px 7px;border-radius:99px;backdrop-filter:blur(6px)}
@@ -2766,14 +2779,14 @@ body.dark .attach-menu{background:rgba(34,34,40,.92);border-color:rgba(255,255,2
 .msg-link{color:#2e7ed6;text-decoration:underline;word-break:break-all;cursor:pointer}
 .mine .msg-link{color:#eaf1ff}
 body.dark .msg-link{color:#8ab4f8}
-.msg-mention{color:#6750a4;font-weight:650;cursor:pointer;border-radius:4px}
+.msg-mention{color:rgb(var(--ar),var(--ag),var(--ab));font-weight:650;cursor:pointer;border-radius:4px}
 .msg-mention:hover{text-decoration:underline}
 .mine .msg-mention{color:#f2ecff}
-body.dark .msg-mention{color:#bb86fc}
-.voice-msg{min-width:210px;display:flex;align-items:center;gap:10px}.voice-msg audio{display:none}.voice-bar{height:5px;background:rgba(0,0,0,.12);border-radius:99px;overflow:hidden;cursor:pointer}.voice-fill{height:100%;background:#6750a4;border-radius:99px;transition:width .1s linear}.voice-time{font-size:11px;opacity:.7;margin-top:4px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:5px}.voice-play-btn{width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(103,80,164,.13);color:#6750a4;cursor:pointer;flex:none}.mine .voice-play-btn{background:rgba(255,255,255,.2);color:#fff}.mine .voice-fill{background:#fff}
+body.dark .msg-mention{color:rgb(var(--adr),var(--adg),var(--adb))}
+.voice-msg{min-width:210px;display:flex;align-items:center;gap:10px}.voice-msg audio{display:none}.voice-bar{height:5px;background:rgba(0,0,0,.12);border-radius:99px;overflow:hidden;cursor:pointer}.voice-fill{height:100%;background:rgb(var(--ar),var(--ag),var(--ab));border-radius:99px;transition:width .1s linear}.voice-time{font-size:11px;opacity:.7;margin-top:4px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:5px}.voice-play-btn{width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(var(--ar),var(--ag),var(--ab),.13);color:rgb(var(--ar),var(--ag),var(--ab));cursor:pointer;flex:none}.mine .voice-play-btn{background:rgba(255,255,255,.2);color:#fff}.mine .voice-fill{background:#fff}
 .voice-unheard-dot{width:7px;height:7px;border-radius:50%;background:#2ea6ff;flex-shrink:0}
 .mine .voice-unheard-dot{background:#fff}
-.voice-speed-btn{flex:none;height:22px;padding:0 8px;border:0;border-radius:99px;background:rgba(103,80,164,.14);color:#6750a4;font-size:11px;font-weight:700;cursor:pointer}
+.voice-speed-btn{flex:none;height:22px;padding:0 8px;border:0;border-radius:99px;background:rgba(var(--ar),var(--ag),var(--ab),.14);color:rgb(var(--ar),var(--ag),var(--ab));font-size:11px;font-weight:700;cursor:pointer}
 .mine .voice-speed-btn{background:rgba(255,255,255,.22);color:#fff}
 @keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
 @media(max-width:640px){.attach-menu{bottom:52px;left:-4px;width:200px}.sticker-modal{align-self:end;margin-bottom:max(8px,env(safe-area-inset-bottom));max-height:70vh;border-radius:24px}.sticker-grid{grid-template-columns:repeat(6,1fr)}.sticker-grid button{font-size:27px}.voice-msg{min-width:180px}.poll-block{min-width:0;width:min(310px,78vw)}}
@@ -2787,7 +2800,7 @@ body.dark .msg-mention{color:#bb86fc}
         <div style="font-size:48px;margin-bottom:8px;">💬</div>
         <h2 style="margin:0;">Телеграммы по Кубани</h2>
         <p style="color:#49454f;max-width:320px;margin:0;">Загрузка приложения...</p>
-        <div style="width:40px;height:40px;border:4px solid #e8def8;border-top-color:#6750a4;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+        <div style="width:40px;height:40px;border:4px solid #e8def8;border-top-color:rgb(var(--ar),var(--ag),var(--ab));border-radius:50%;animation:spin 0.8s linear infinite;"></div>
         <style>@keyframes spin{to{transform:rotate(360deg)}}
 /* ===== FINAL GLASS UI / CHAT COMPOSER ===== */
 :root{
@@ -2795,20 +2808,20 @@ body.dark .msg-mention{color:#bb86fc}
   --glass-2:rgba(255,255,255,.62);
   --glass-line:rgba(255,255,255,.70);
   --glass-shadow:0 20px 70px rgba(48,32,72,.16), inset 0 1px 0 rgba(255,255,255,.80);
-  --poll-fill:rgba(103,80,164,.16);
-  --poll-line:rgba(103,80,164,.34);
+  --poll-fill:rgba(var(--ar),var(--ag),var(--ab),.16);
+  --poll-line:rgba(var(--ar),var(--ag),var(--ab),.34);
 }
 body.dark{
   --glass-1:rgba(28,28,38,.50);
   --glass-2:rgba(36,36,48,.66);
   --glass-line:rgba(255,255,255,.13);
   --glass-shadow:0 22px 75px rgba(0,0,0,.40), inset 0 1px 0 rgba(255,255,255,.11);
-  --poll-fill:rgba(187,134,252,.17);
-  --poll-line:rgba(187,134,252,.38);
+  --poll-fill:rgba(var(--adr),var(--adg),var(--adb),.17);
+  --poll-line:rgba(var(--adr),var(--adg),var(--adb),.38);
 }
 .shell,.rail,.list,.chat,.panel,.mobile-nav,
 .chatbar,.composer,.compose,.search,.setting-card,.modal,
-.reaction-picker,.attach-menu,.poll-block{
+.reaction-picker,.attach-menu{
   background:var(--glass-1)!important;
   border-color:var(--glass-line)!important;
   box-shadow:var(--glass-shadow);
@@ -2821,7 +2834,7 @@ body.dark{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
   background:
     radial-gradient(700px 220px at 12% -5%,rgba(255,255,255,.42),transparent 58%),
-    radial-gradient(480px 180px at 95% 105%,rgba(187,134,252,.12),transparent 60%);
+    radial-gradient(480px 180px at 95% 105%,rgba(var(--adr),var(--adg),var(--adb),.12),transparent 60%);
 }
 .chat > *,.list > *,.panel > *,.composer > *,.chatbar > *{position:relative;z-index:1}
 .composer,.chatbar{background:var(--glass-2)!important}
@@ -2829,7 +2842,7 @@ body.dark{
 body.dark .bubble{border-color:rgba(255,255,255,.10);box-shadow:0 12px 34px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)}
 .theirs .bubble{background:rgba(255,255,255,.48)!important;backdrop-filter:blur(18px) saturate(170%);-webkit-backdrop-filter:blur(18px) saturate(170%)}
 body.dark .theirs .bubble{background:rgba(52,52,64,.60)!important}
-.mine .bubble{background:linear-gradient(135deg,rgba(103,80,164,.90),rgba(142,111,202,.82))!important;backdrop-filter:blur(18px) saturate(150%)!important;-webkit-backdrop-filter:blur(18px) saturate(150%)!important;color:#fff!important}
+.mine .bubble{background:linear-gradient(135deg,rgba(var(--ar),var(--ag),var(--ab),.90),rgba(142,111,202,.82))!important;backdrop-filter:blur(18px) saturate(150%)!important;-webkit-backdrop-filter:blur(18px) saturate(150%)!important;color:#fff!important}
 body.dark .mine .bubble{background:linear-gradient(135deg,rgba(157,111,211,.88),rgba(108,78,151,.84))!important;color:#fff!important}
 
 /* Composer controls are available in every chat type */
@@ -2888,14 +2901,14 @@ body.dark .poll-option-fill{background:#f2f2f2}
 }
 .poll-option .poll-option-fill ~ .poll-option-content{color:#fff}
 body.dark .poll-option .poll-option-fill ~ .poll-option-content{color:#1a1a1a}
-.poll-option.selected{box-shadow:0 0 0 2px rgba(103,80,164,.35)}
-.poll-radio{width:18px;color:#6750a4}
+.poll-option.selected{box-shadow:0 0 0 2px rgba(var(--ar),var(--ag),var(--ab),.35)}
+.poll-radio{width:18px;color:rgb(var(--ar),var(--ag),var(--ab))}
 .poll-option-text{flex:1;font-weight:600}
 .poll-option-percent{font-weight:800}
 .poll-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid rgba(127,127,127,.14);font-size:12.5px;color:var(--muted)}
-.poll-remove-vote{color:#6750a4;font-weight:700;font-size:12.5px;border:0;background:none;cursor:pointer;padding:0}
+.poll-remove-vote{color:rgb(var(--ar),var(--ag),var(--ab));font-weight:700;font-size:12.5px;border:0;background:none;cursor:pointer;padding:0}
 .poll-remove-vote:hover{text-decoration:underline}
-body.dark .poll-remove-vote{color:#bb86fc}
+body.dark .poll-remove-vote{color:rgb(var(--adr),var(--adg),var(--adb))}
 .poll-percent,.poll-count,.poll-meta{color:var(--muted)!important}
 .poll-option button,.poll-option label{color:var(--txt)!important}
 
@@ -3370,6 +3383,37 @@ window.SV_TS = window.firebase ? firebase.database.ServerValue.TIMESTAMP : Date.
 // =====================================================================
 window.IMGBB_API_KEY = '41299df5c87071bd814e8f53bca1b02f';
 
+// =====================================================================
+// КАСТОМИЗАЦИЯ АКЦЕНТНОГО ЦВЕТА (как смена темы оформления в Telegram)
+// Меняет цвет "своих" сообщений, активных пунктов меню, кнопок, тумблеров
+// и т.д. по всему приложению через CSS-переменные.
+// =====================================================================
+function hexToRgb(hex) {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return m ? { r: parseInt(m[1],16), g: parseInt(m[2],16), b: parseInt(m[3],16) } : null;
+}
+function lighten(rgb, amount) {
+    return {
+        r: Math.round(rgb.r + (255 - rgb.r) * amount),
+        g: Math.round(rgb.g + (255 - rgb.g) * amount),
+        b: Math.round(rgb.b + (255 - rgb.b) * amount)
+    };
+}
+window.applyAccentColor = function(hex, persist) {
+    const rgb = hexToRgb(hex);
+    if (!rgb) return;
+    const dark = lighten(rgb, 0.32);
+    const root = document.documentElement.style;
+    root.setProperty('--ar', rgb.r); root.setProperty('--ag', rgb.g); root.setProperty('--ab', rgb.b);
+    root.setProperty('--adr', dark.r); root.setProperty('--adg', dark.g); root.setProperty('--adb', dark.b);
+    if (persist !== false) localStorage.setItem('kuban-accent-color', hex);
+};
+window.ACCENT_PRESETS = ['#6750a4', '#2e7ed6', '#2e9e5b', '#c2410c', '#c02b6a', '#0e7490', '#6b21a8', '#374151'];
+(function(){
+    const saved = localStorage.getItem('kuban-accent-color');
+    if (saved) window.applyAccentColor(saved, false);
+})();
+
 window.uploadImageFile = async function (file) {
     if (!file) throw new Error('Файл не выбран');
     if (!file.type || !file.type.startsWith('image/')) throw new Error('Можно загружать только изображения');
@@ -3533,7 +3577,7 @@ window.addEventListener("error", e => {
                 <div style="font-size:48px;margin-bottom:8px;">⚠️</div>
                 <h2 style="margin:0;">Ошибка загрузки</h2>
                 <p style="color:#49454f;max-width:320px;margin:0;">${e.message || 'Неизвестная ошибка'}</p>
-                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:#6750a4;color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
+                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
             </div>
         `;
     }
@@ -3554,7 +3598,7 @@ if (!depsOk) {
                 <div style="font-size:48px;margin-bottom:8px;">⚠️</div>
                 <h2 style="margin:0;">Ошибка загрузки библиотек</h2>
                 <p style="color:#49454f;max-width:320px;margin:0;">Проверьте подключение к интернету и перезагрузите страницу.</p>
-                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:#6750a4;color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
+                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
             </div>
         `;
     }
@@ -3576,7 +3620,7 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     if (this.state.hasError) {
-      return <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',flexDirection:'column',gap:'16px',color:'#ba1a1a',fontFamily:'system-ui'}}><div style={{fontSize:'48px'}}>⚠️</div><h2>Произошла ошибка</h2><p>Попробуйте обновить страницу</p><button onClick={()=>location.reload()} style={{padding:'12px 32px',borderRadius:'25px',background:'#6750a4',color:'#fff',border:'none',fontSize:'16px',cursor:'pointer',fontWeight:'600'}}>Обновить</button></div>;
+      return <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',flexDirection:'column',gap:'16px',color:'#ba1a1a',fontFamily:'system-ui'}}><div style={{fontSize:'48px'}}>⚠️</div><h2>Произошла ошибка</h2><p>Попробуйте обновить страницу</p><button onClick={()=>location.reload()} style={{padding:'12px 32px',borderRadius:'25px',background:'rgb(var(--ar),var(--ag),var(--ab))',color:'#fff',border:'none',fontSize:'16px',cursor:'pointer',fontWeight:'600'}}>Обновить</button></div>;
     }
     return this.props.children;
   }
@@ -3611,7 +3655,7 @@ const AVATARS = [
     {id:"planet",emoji:"🪐",bg:"#c9c2ff"}
 ];
 
-const COLORS = ["#6750a4","#006a6a","#9b4057","#386a20","#8a4b00","#4c5f92","#6c5674"];
+const COLORS = ["rgb(var(--ar),var(--ag),var(--ab))","#006a6a","#9b4057","#386a20","#8a4b00","#4c5f92","#6c5674"];
 const REACTIONS = ['❤️', '👍', '😂', '😮', '😢', '😡', '🥰', '🔥', '👏', '💯'];
 
 // ===== ИКОНКИ =====
@@ -3657,7 +3701,8 @@ function Icon({ name, size=22, stroke=2.25, fill="none", className="" }) {
         subscribers: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>,
         megaphone: <><path d="M20 4L8 9v6l12 5V4z"/><path d="M4 12h4"/><path d="M4 18h4"/><path d="M4 6h4"/></>,
         pin: <><path d="M12 17v5"/><path d="M9 3h6l1 6 3 3v2H5v-2l3-3z"/></>,
-        copy: <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>
+        copy: <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>,
+        star: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
     };
     return (
         <svg className={"icon "+className} width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
@@ -3738,6 +3783,18 @@ function safeDbKey(v) {
         .slice(0, 120);
 }
 function chatIdFor(a,b) { return "dm_"+[safeDbKey(a),safeDbKey(b)].sort().join("_"); }
+function savedChatId(uid) { return "saved_"+safeDbKey(uid); }
+async function ensureSavedChat(uid) {
+    if (!window.db || !uid) return;
+    const id = savedChatId(uid);
+    const snap = await window.db.ref('chatsMeta/'+id).get();
+    if (!snap.exists()) {
+        await window.db.ref('chatsMeta/'+id).set({
+            id, type:'saved', name:'Избранное', members:{[uid]:true}, createdBy:uid,
+            lastMessage:'', lastTs:window.SV_TS, lastSender:uid
+        });
+    }
+}
 
 function normalizeUsername(v) { return v.toLowerCase().replace(/^@/,"").replace(/[^a-z0-9_]/g,""); }
 
@@ -3815,15 +3872,31 @@ async function requestNotifications() {
     } catch(e) { return { ok:false, message:"Не удалось включить уведомления." }; }
 }
 
-function showBrowserNotification(title, text, tagSuffix) {
+// Регистрируем Service Worker — на iOS Safari уведомления работают только через него
+// (обычный `new Notification()` там не работает вовсе для обычных вкладок, только
+// showNotification() через Service Worker, и только если сайт добавлен на главный экран).
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+
+const NOTIFICATION_ICON = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%236750a4'/><text x='50' y='67' text-anchor='middle' font-size='58'>💬</text></svg>";
+
+async function showBrowserNotification(title, text, tagSuffix) {
     if(!("Notification" in window) || Notification.permission !== "granted") return;
+    const tag = "kuban-message-" + (tagSuffix || Date.now());
     try {
-        const n = new Notification(title, {
-            body: text,
-            icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%236750a4'/><text x='50' y='67' text-anchor='middle' font-size='58'>💬</text></svg>",
-            tag: "kuban-message-" + (tagSuffix || Date.now()),
-            renotify: true
-        });
+        // Основной путь: через активный Service Worker (единственный способ на iOS).
+        if ("serviceWorker" in navigator) {
+            const reg = await navigator.serviceWorker.ready.catch(() => null);
+            if (reg && reg.active) {
+                reg.active.postMessage({ type: "show-notification", title, body: text, icon: NOTIFICATION_ICON, tag });
+                return;
+            }
+        }
+    } catch(e) {}
+    // Запасной путь: обычный Notification() — работает на десктопе/Android, если SW недоступен.
+    try {
+        const n = new Notification(title, { body: text, icon: NOTIFICATION_ICON, tag, renotify: true });
         n.onclick = () => { window.focus(); n.close(); };
     } catch(e) {}
 }
@@ -4008,7 +4081,7 @@ function AuthScreen({ onAuth, show }) {
     return (
         <div className="register screen">
             <div className="reg-card">
-                <div style={{ fontSize:13, color:"#6750a4", fontWeight:700, marginBottom:8 }}>ТЕЛЕГРАММЫ ПО КУБАНИ</div>
+                <div style={{ fontSize:13, color:"rgb(var(--ar),var(--ag),var(--ab))", fontWeight:700, marginBottom:8 }}>ТЕЛЕГРАММЫ ПО КУБАНИ</div>
                 <h1>{mode === 'login' ? 'Вход' : 'Создать аккаунт'}</h1>
                 <p>{mode === 'login' ? 'Войдите по почте и паролю' : 'Создайте аккаунт с привязкой почты'}</p>
                 
@@ -4099,7 +4172,7 @@ function Register({ uid, onDone, show }) {
     return (
         <div className="register screen">
             <div className="reg-card">
-                <div style={{ fontSize:13, color:"#6750a4", fontWeight:700, marginBottom:8 }}>ТЕЛЕГРАММЫ ПО КУБАНИ</div>
+                <div style={{ fontSize:13, color:"rgb(var(--ar),var(--ag),var(--ab))", fontWeight:700, marginBottom:8 }}>ТЕЛЕГРАММЫ ПО КУБАНИ</div>
                 <h1>Погнали общаться</h1>
                 <p>Создайте профиль. Люди будут находить вас по юзернейму.</p>
                 <div className="field">
@@ -4212,7 +4285,7 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
                 <div className="modal-head">
                     <Avatar name={user.name} uid={user.uid} avatar={user.avatar} avatarUrl={user.avatarUrl} size={56} verified={user.verified} />
                     <div>
-                        <div style={{display:'flex', alignItems:'center', gap:6}}>
+                        <div style={{display:'flex', alignItems:'center', gap:6, flexWrap:'wrap'}}>
                             <b>{user.name}</b>
                             {user.verified && (
                                 <span className="verified-badge" style={{
@@ -4225,7 +4298,9 @@ function ProfileModal({ user, onClose, onLogout, onOpenChannel, metas, show }) {
                                     fontWeight: 700,
                                     padding: '2px 8px',
                                     borderRadius: 12,
-                                    marginLeft: 6
+                                    marginLeft: 6,
+                                    whiteSpace: 'nowrap',
+                                    flexShrink: 0
                                 }}>
                                     ✓ Официальный аккаунт
                                 </span>
@@ -4328,7 +4403,7 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
                 <div className="modal-head">
                     <Avatar name={person.name} uid={person.uid} avatar={person.avatar} avatarUrl={person.avatarUrl} size={70} online={!!presence?.online} verified={person.verified} />
                     <div>
-                        <div style={{display:'flex', alignItems:'center', gap:6}}>
+                        <div style={{display:'flex', alignItems:'center', gap:6, flexWrap:'wrap'}}>
                             <h2 style={{margin:0}}>{person.name}</h2>
                             {person.verified && (
                                 <span className="verified-badge" style={{
@@ -4341,7 +4416,9 @@ function UserProfileModal({ person, presence, onClose, onChat, onOpenChannel, me
                                     fontWeight: 700,
                                     padding: '2px 8px',
                                     borderRadius: 12,
-                                    marginLeft: 6
+                                    marginLeft: 6,
+                                    whiteSpace: 'nowrap',
+                                    flexShrink: 0
                                 }}>
                                     ✓ Официальный аккаунт
                                 </span>
@@ -4498,7 +4575,7 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
                 </div>
 
                 <div className="avatar-preview-large" style={{
-                    backgroundImage: avatarUrl ? `url(${avatarUrl})` : 'linear-gradient(135deg, #6750a4, #9b8ac4)',
+                    backgroundImage: avatarUrl ? `url(${avatarUrl})` : 'linear-gradient(135deg, rgb(var(--ar),var(--ag),var(--ab)), #9b8ac4)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -4817,7 +4894,7 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
 }
 
 // ===== НАСТРОЙКИ =====
-function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLastSeen, setHideLastSeen, allowCalls, setAllowCalls }) {
+function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLastSeen, setHideLastSeen, allowCalls, setAllowCalls, onOpenSaved }) {
     const [name, setName] = useState(user.name || "");
     const [username, setUsername] = useState(user.username || "");
     const [about, setAbout] = useState(user.about || "");
@@ -4839,6 +4916,8 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
     const [isAdmin, setIsAdmin] = useState(false);
     const [adminUsername, setAdminUsername] = useState('');
     const [adminChannelId, setAdminChannelId] = useState('');
+    const [accentTick, setAccentTick] = useState(0);
+    const accentColor = useMemo(() => localStorage.getItem('kuban-accent-color') || '#6750a4', [accentTick]);
 
     useEffect(() => {
         localStorage.setItem('quickReaction', quickReaction);
@@ -5120,6 +5199,37 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
         <div className="panel">
             <div className="settings">
                 <div className="setting-card">
+                    <div className="profile-head">
+                        <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={78} verified={user.verified} />
+                        <div>
+                            <div style={{display:'flex', alignItems:'center', gap:8, flexWrap:'wrap'}}>
+                                <h2 style={{margin:0}}>{name}</h2>
+                                {user.verified && <span className="official-badge">Официальный аккаунт</span>}
+                            </div>
+                            <div className="muted">@{normalizeUsername(username)}</div>
+                            {user.email && <div className="muted" style={{fontSize:12, display:'flex', alignItems:'center', flexWrap:'wrap', gap:6, rowGap:4}}>
+                                <span style={{wordBreak:'break-all'}}>{user.email}</span>
+                                {emailVerified ? 
+                                    <span className="badge-verified" style={{padding:'2px 8px', borderRadius:8, background:'#2e7d5a', color:'#fff', fontSize:10, whiteSpace:'nowrap', flexShrink:0}}>✓ Подтверждён</span> :
+                                    <span className="badge-not-verified" style={{padding:'2px 8px', borderRadius:8, background:'#ba1a1a', color:'#fff', fontSize:10, whiteSpace:'nowrap', flexShrink:0}}>Не подтверждён</span>
+                                }
+                            </div>}
+                        </div>
+                    </div>
+                </div>
+
+                {onOpenSaved && (
+                    <button className="setting-card saved-messages-entry" onClick={onOpenSaved} style={{display:'flex', alignItems:'center', gap:14, width:'100%', textAlign:'left', cursor:'pointer'}}>
+                        <div className="saved-avatar"><Icon name="star" size={22}/></div>
+                        <div style={{flex:1}}>
+                            <div style={{fontWeight:700, fontSize:15}}>Избранное</div>
+                            <div className="muted" style={{fontSize:12.5}}>Заметки, файлы и сообщения для себя</div>
+                        </div>
+                        <Icon name="back" size={18} style={{transform:'scaleX(-1)', opacity:.5}}/>
+                    </button>
+                )}
+
+                <div className="setting-card">
                     <h3 style={{marginTop:0}}>Конфиденциальность</h3>
                     <p className="muted" style={{marginTop:-6, marginBottom:12, fontSize:13}}>Управляйте тем, что видят другие пользователи и кто может вам звонить.</p>
                     <Toggle value={hideLastSeen} onChange={setHideLastSeen} label={
@@ -5136,26 +5246,6 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                     } />
                 </div>
 
-                <div className="setting-card">
-                    <div className="profile-head">
-                        <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={78} verified={user.verified} />
-                        <div>
-                            <div style={{display:'flex', alignItems:'center', gap:8}}>
-                                <h2 style={{margin:0}}>{name}</h2>
-                                {user.verified && <span className="official-badge">Официальный аккаунт</span>}
-                            </div>
-                            <div className="muted">@{normalizeUsername(username)}</div>
-                            {user.email && <div className="muted" style={{fontSize:12, display:'flex', alignItems:'center', flexWrap:'wrap', gap:6, rowGap:4}}>
-                                <span style={{wordBreak:'break-all'}}>{user.email}</span>
-                                {emailVerified ? 
-                                    <span className="badge-verified" style={{padding:'2px 8px', borderRadius:8, background:'#2e7d5a', color:'#fff', fontSize:10, whiteSpace:'nowrap', flexShrink:0}}>✓ Подтверждён</span> :
-                                    <span className="badge-not-verified" style={{padding:'2px 8px', borderRadius:8, background:'#ba1a1a', color:'#fff', fontSize:10, whiteSpace:'nowrap', flexShrink:0}}>Не подтверждён</span>
-                                }
-                            </div>}
-                        </div>
-                    </div>
-                </div>
-                
                 <div className="setting-card">
                     <h3 style={{marginTop:0}}>Данные профиля</h3>
                     <div className="field"><label>Имя</label><input value={name} onChange={e=>setName(e.target.value)} maxLength="40" /></div>
@@ -5320,6 +5410,24 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                             {darkMode ? "Тёмная тема" : "Светлая тема"}
                         </span>
                     } />
+                    <div style={{marginTop:16}}>
+                        <label style={{fontSize:13, color:'var(--muted)', fontWeight:600}}>Цвет оформления</label>
+                        <div style={{display:'flex', gap:10, flexWrap:'wrap', marginTop:10}}>
+                            {window.ACCENT_PRESETS.map(c => (
+                                <button key={c} onClick={() => { window.applyAccentColor(c); setAccentTick(t=>t+1); }} style={{
+                                    width:34, height:34, borderRadius:'50%', background:c, border: accentColor===c ? '3px solid var(--txt)' : '2px solid rgba(127,127,127,.25)',
+                                    cursor:'pointer', padding:0, boxShadow: accentColor===c ? '0 0 0 2px '+c+'55' : 'none'
+                                }} aria-label={c} />
+                            ))}
+                            <label style={{
+                                width:34, height:34, borderRadius:'50%', cursor:'pointer', position:'relative', overflow:'hidden',
+                                border:'2px dashed rgba(127,127,127,.4)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15
+                            }} title="Свой цвет">
+                                🎨
+                                <input type="color" value={accentColor||'#6750a4'} onChange={e => { window.applyAccentColor(e.target.value); setAccentTick(t=>t+1); }} style={{position:'absolute', inset:0, opacity:0, cursor:'pointer'}} />
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 
                 <div className="setting-card">
@@ -5674,8 +5782,8 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                             {chat.verified && <VerifiedBadge size={18} />}
                         </div>
                         <div className="muted" style={{ fontSize: 13 }}>{chat.about || 'Канал'}</div>
-                        {chat.username && <div style={{ fontSize: 13, color: '#6750a4', fontWeight: 600, marginTop: 2 }}>@{chat.username}</div>}
-                        {isOwner && <div style={{ fontSize: 12, color: '#6750a4', marginTop: 2 }}>👑 Владелец канала</div>}
+                        {chat.username && <div style={{ fontSize: 13, color: 'rgb(var(--ar),var(--ag),var(--ab))', fontWeight: 600, marginTop: 2 }}>@{chat.username}</div>}
+                        {isOwner && <div style={{ fontSize: 12, color: 'rgb(var(--ar),var(--ag),var(--ab))', marginTop: 2 }}>👑 Владелец канала</div>}
                     </div>
                     <button className="iconbtn close" onClick={onClose}><Icon name="close"/></button>
                 </div>
@@ -6299,7 +6407,7 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                             </div>
                         )}
                         {isGroup && !mine && (
-                            <div style={{ fontSize:12, fontWeight:700, color:"#6750a4", marginBottom:3 }}>
+                            <div style={{ fontSize:12, fontWeight:700, color:"rgb(var(--ar),var(--ag),var(--ab))", marginBottom:3 }}>
                                 {sender?.name || "Участник"}
                             </div>
                         )}
@@ -6463,8 +6571,9 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
     const typingTimer = useRef(null);
     const isGroup = chat.type === "group";
     const isChannel = chat.type === "channel";
-    const chatId = isGroup || isChannel ? chat.id : chatIdFor(me.uid, chat.uid);
-    const other = !isGroup && !isChannel ? users[chat.uid] : null;
+    const isSaved = chat.type === "saved";
+    const chatId = isGroup || isChannel || isSaved ? chat.id : chatIdFor(me.uid, chat.uid);
+    const other = !isGroup && !isChannel && !isSaved ? users[chat.uid] : null;
     const currentChatIdRef = useRef(chatId);
     const sendingRef = useRef(false);
     const pendingMessagesRef = useRef(new Map());
@@ -6876,7 +6985,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
 
                 const meta = {
                     id:chatId,
-                    type:isGroup ? "group" : "dm",
+                    type: isGroup ? "group" : isSaved ? "saved" : "dm",
                     lastMessage: data.encrypted ? '🔒 Сообщение' : t,
                     lastTs:window.SV_TS,
                     lastSender:me.uid,
@@ -6886,6 +6995,9 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     meta.members = chat.members || {};
                     meta.name = chat.name || "Группа";
                     if (chat.createdBy) meta.createdBy = chat.createdBy;
+                } else if (isSaved) {
+                    meta.members = { [me.uid]:true };
+                    meta.name = "Избранное";
                 } else {
                     if (!chat.uid || chat.uid === me.uid) throw new Error("Не удалось определить получателя сообщения");
                     meta.members = { [me.uid]:true, [chat.uid]:true };
@@ -6893,13 +7005,15 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 }
                 await window.db.ref("chatsMeta/" + chatId).update(meta);
 
-                // Непрочитанные — отдельной операцией, чтобы ошибка Rules здесь не откатывала отправку.
-                const recipient = isGroup ? Object.keys(chat.members || {}).filter(uid => uid !== me.uid) : [chat.uid];
-                await Promise.all(recipient.map(uid =>
-                    window.db.ref("chatsMeta/" + chatId + "/unreadBy/" + uid)
-                        .transaction(v => (Number(v) || 0) + 1)
-                        .catch(() => null)
-                ));
+                if (!isSaved) {
+                    // Непрочитанные — отдельной операцией, чтобы ошибка Rules здесь не откатывала отправку.
+                    const recipient = isGroup ? Object.keys(chat.members || {}).filter(uid => uid !== me.uid) : [chat.uid];
+                    await Promise.all(recipient.map(uid =>
+                        window.db.ref("chatsMeta/" + chatId + "/unreadBy/" + uid)
+                            .transaction(v => (Number(v) || 0) + 1)
+                            .catch(() => null)
+                    ));
+                }
             }
         } catch (e) {
             console.error("Send error:", e);
@@ -7061,6 +7175,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         
         const availableChats = useMemo(() => {
             const result = [];
+            result.push({ id: savedChatId(me.uid), name: 'Избранное', type: 'saved' });
             if (!metas) return result;
             Object.values(metas).forEach(meta => {
                 if (!meta || !meta.type) return;
@@ -7082,7 +7197,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     });
                 }
             });
-            return result.filter(c => c.id !== chatId).sort((a,b) => (b.lastTs||0) - (a.lastTs||0));
+            return result.filter(c => c.id !== chatId).sort((a,b) => a.type==='saved' ? -1 : b.type==='saved' ? 1 : (b.lastTs||0) - (a.lastTs||0));
         }, [metas, users, me.uid, chatId]);
         
         const filteredChats = search 
@@ -7136,6 +7251,9 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                 } else if (selectedChat.type === 'channel') {
                     meta.subscribers = selectedChat.subscribers || {};
                     meta.name = selectedChat.name || 'Канал';
+                } else if (selectedChat.type === 'saved') {
+                    meta.members = { [me.uid]: true };
+                    meta.name = 'Избранное';
                 } else {
                     meta.members = { [me.uid]: true, [selectedChat.uid]: true };
                     meta.name = selectedChat.name;
@@ -7209,19 +7327,41 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                             <Icon name="trash" size={18}/> Очистить для себя
                         </button>
                     )}
-                    {!isChannel && !isGroup && (
+                    {!isChannel && !isGroup && !isSaved && (
                         <button className="primary danger" style={{width:'100%', marginBottom:8, justifyContent:'center'}} onClick={() => clearChat(true)}>
                             <Icon name="trash" size={18}/> Очистить для всех
                         </button>
                     )}
-                    {!isChannel && !isGroup && (
-                        <button className="primary danger" style={{width:'100%', justifyContent:'center'}} onClick={iBlockedThem ? unblockUser : blockUser}>
+                    {!isChannel && !isGroup && !isSaved && (
+                        <button className="primary danger" style={{width:'100%', marginBottom: (isChannel||isGroup) && (chat.createdBy===me.uid) ? 8 : 0, justifyContent:'center'}} onClick={iBlockedThem ? unblockUser : blockUser}>
                             <Icon name="ban" size={18}/> {iBlockedThem ? 'Разблокировать' : 'Заблокировать'}
+                        </button>
+                    )}
+                    {isChannel && chat.createdBy === me.uid && (
+                        <button className="primary danger" style={{width:'100%', justifyContent:'center'}} onClick={deleteChatEntirely}>
+                            <Icon name="trash" size={18}/> Удалить канал
+                        </button>
+                    )}
+                    {isGroup && chat.createdBy === me.uid && (
+                        <button className="primary danger" style={{width:'100%', justifyContent:'center'}} onClick={deleteChatEntirely}>
+                            <Icon name="trash" size={18}/> Удалить группу
                         </button>
                     )}
                 </div>
             </div>
         );
+    }
+
+    async function deleteChatEntirely() {
+        const label = isChannel ? 'канал' : 'группу';
+        if (!confirm(`Удалить ${label} безвозвратно для всех участников? Это действие необратимо.`)) return;
+        try {
+            if (chat.username) await window.db.ref('channelUsernames/' + chat.username).remove().catch(() => {});
+            await window.db.ref('chatsMeta/' + chatId).remove();
+            show((isChannel ? 'Канал' : 'Группа') + ' удалён(а)');
+            setShowChatMenu(false);
+            onBack && onBack();
+        } catch(e) { show(friendlyError(e), true); }
     }
 
     async function clearChat(forAll = false) {
@@ -7289,8 +7429,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         setShowChatMenu(false);
     }
 
-    const iBlockedThem = !isChannel && !isGroup && !!users[me.uid]?.blocked?.[chat.uid];
-    const theyBlockedMe = !isChannel && !isGroup && !!users[chat.uid]?.blocked?.[me.uid];
+    const iBlockedThem = !isChannel && !isGroup && !isSaved && !!users[me.uid]?.blocked?.[chat.uid];
+    const theyBlockedMe = !isChannel && !isGroup && !isSaved && !!users[chat.uid]?.blocked?.[me.uid];
     const isBlockedEitherWay = iBlockedThem || theyBlockedMe;
 
 
@@ -7305,21 +7445,25 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
         >
             <div className="chatbar">
                 <button className="iconbtn mobile-only" onClick={onBack} aria-label="Назад"><Icon name="back"/></button>
-                <button onClick={() => isChannel ? setChannelInfo(true) : isGroup ? setGroupInfo(true) : setProfile(other)}>
-                    <Avatar 
-                        name={isChannel ? chat.name : isGroup ? chat.name : chat.name} 
-                        uid={isChannel ? chat.id : isGroup ? chat.id : chat.uid} 
-                        avatar={isChannel ? null : isGroup ? null : chat.avatar} 
-                        avatarUrl={chat.avatarUrl} 
-                        size={44} 
-                        online={!isChannel && !isGroup && !!presence[chat.uid]?.online} 
-                        group={isChannel ? false : isGroup}
-                        verified={isChannel ? chat.verified : false} 
-                    />
+                <button onClick={() => isChannel ? setChannelInfo(true) : isGroup ? setGroupInfo(true) : isSaved ? null : setProfile(other)}>
+                    {isSaved ? (
+                        <div className="saved-avatar" style={{width:44, height:44}}><Icon name="star" size={20}/></div>
+                    ) : (
+                        <Avatar 
+                            name={isChannel ? chat.name : isGroup ? chat.name : chat.name} 
+                            uid={isChannel ? chat.id : isGroup ? chat.id : chat.uid} 
+                            avatar={isChannel ? null : isGroup ? null : chat.avatar} 
+                            avatarUrl={chat.avatarUrl} 
+                            size={44} 
+                            online={!isChannel && !isGroup && !!presence[chat.uid]?.online} 
+                            group={isChannel ? false : isGroup}
+                            verified={isChannel ? chat.verified : false} 
+                        />
+                    )}
                 </button>
                 <div className="chat-info">
                     <div className="chat-name">
-                        {chat.name}
+                        {isSaved ? 'Избранное' : chat.name}
                         {isChannel && chat.verified && (
                             <span style={{marginLeft: 4, verticalAlign: 'middle', display: 'inline-flex'}}>
                                 <VerifiedBadge size={16} />
@@ -7332,7 +7476,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                         )}
                     </div>
                     <div className="chat-status">
-                        {typing ? (
+                        {isSaved ? 'Ваши заметки и сообщения' :
+                            typing ? (
                             typing === 'voice' ? 'записывает голосовое…' :
                             typing === 'sticker' ? 'выбирает стикер…' :
                             typing === 'poll' ? 'создаёт опрос…' :
@@ -7346,7 +7491,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     </div>
                 </div>
                 <div className="chat-actions">
-                    {!isGroup && !isChannel && (
+                    {!isGroup && !isChannel && !isSaved && (
                         <button className="chat-call-button" title="Аудиозвонок" aria-label="Аудиозвонок"
                             onClick={() => {
                                 if (!chat.uid) { show('Не удалось определить собеседника', true); return; }
@@ -7609,6 +7754,12 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
         const result = [];
         Object.values(metas || {}).forEach(meta => {
             if(!meta || !meta.type) return;
+            if(meta.type === "saved") {
+                if(meta.members && meta.members[me.uid]) {
+                    result.push({ ...meta, sortTs: Infinity, unread: 0, isSaved: true });
+                }
+                return;
+            }
             if(meta.type === "group") {
                 if(meta.members && meta.members[me.uid]) {
                     result.push({ ...meta, sortTs: meta.lastTs || meta.createdAt || 0, unread: 0 });
@@ -7724,29 +7875,35 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
                         ) : chats.map(chat => {
                             const isGroup = chat.type === "group";
                             const isChannel = chat.type === "channel";
+                            const isSaved = chat.type === "saved";
                             return (
                                 <button className={"person " + (active === chat.id || active === chat.uid ? "active" : "")} key={chat.id} onClick={() => onSelect(chat)}>
-                                    <Avatar name={chat.name} uid={isGroup ? chat.id : isChannel ? chat.id : chat.uid} avatar={isGroup ? null : isChannel ? null : chat.avatar} avatarUrl={chat.avatarUrl} size={48} online={!isGroup && !isChannel && !!presence[chat.uid]?.online} group={isGroup} verified={isChannel ? chat.verified : false} />
+                                    {isSaved ? (
+                                        <div className="saved-avatar"><Icon name="star" size={22}/></div>
+                                    ) : (
+                                        <Avatar name={chat.name} uid={isGroup ? chat.id : isChannel ? chat.id : chat.uid} avatar={isGroup ? null : isChannel ? null : chat.avatar} avatarUrl={chat.avatarUrl} size={48} online={!isGroup && !isChannel && !!presence[chat.uid]?.online} group={isGroup} verified={isChannel ? chat.verified : false} />
+                                    )}
                                     <div className="person-body">
                                         <div className="person-row">
                                             <span className="person-name">
-                                                {isChannel ? '📢 ' : ''}{chat.name}
+                                                {isChannel ? '📢 ' : ''}{isSaved ? 'Избранное' : chat.name}
                                                 {isChannel && chat.verified && (
                                                     <span style={{marginLeft: 3, verticalAlign: 'middle', display: 'inline-flex'}}>
                                                         <VerifiedBadge size={13} />
                                                     </span>
                                                 )}
                                             </span>
-                                            <span className="person-time">{fmtTime(chat.lastTs)}</span>
+                                            <span className="person-time">{!isSaved && fmtTime(chat.lastTs)}</span>
                                         </div>
                                         <div className="person-sub">
-                                            {!isGroup && !isChannel && chat.lastSender === me.uid && (
+                                            {!isGroup && !isChannel && !isSaved && chat.lastSender === me.uid && (
                                                 <span className="chat-preview-ticks">
                                                     <Icon name="check" size={15} />
                                                 </span>
                                             )}
                                             <span style={{ minWidth:0, overflow:"hidden", textOverflow:"ellipsis" }}>
-                                                {isChannel ? (chat.subscribersCount || 0) + ' подписчиков' : 
+                                                {isSaved ? 'Ваши заметки и сообщения' :
+                                                 isChannel ? (chat.subscribersCount || 0) + ' подписчиков' : 
                                                  isGroup ? (Object.keys(chat.members||{}).length + ' участников') :
                                                  chat.lastMessage || "@"+chat.username}
                                             </span>
@@ -7925,6 +8082,7 @@ function App() {
             try {
                 if (!window.db) throw new Error("Firebase не инициализирован");
                 window.E2E.publishMyPublicKey(fb.uid).catch(() => {});
+                ensureSavedChat(fb.uid).catch(() => {});
                 const s = await window.db.ref("users/"+fb.uid).get();
                 if(s.exists()) { 
                     const userData = s.val();
@@ -8190,6 +8348,7 @@ function App() {
                             setHideLastSeen={setHideLastSeen} 
                             allowCalls={allowCalls}
                             setAllowCalls={setAllowCalls}
+                            onOpenSaved={() => { select({ id: savedChatId(me.uid), type: 'saved', name: 'Избранное' }); setSection('chats'); }}
                         />
                     ) : (
                         <>
@@ -8279,7 +8438,7 @@ try {
                 <div style="font-size:48px;margin-bottom:8px;">⚠️</div>
                 <h2 style="margin:0;">Ошибка приложения</h2>
                 <p style="color:#49454f;max-width:320px;margin:0;">${e.message || 'Неизвестная ошибка'}</p>
-                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:#6750a4;color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
+                <button onclick="location.reload()" style="padding:12px 32px;border-radius:25px;background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;border:none;font-size:16px;cursor:pointer;font-weight:600;">Повторить</button>
             </div>
         `;
     }
@@ -8406,10 +8565,10 @@ body.dark [class*="sticker-panel"],body.dark [class*="sticker-menu"]{
   transition:transform .14s ease,background .14s ease!important;
 }
 .sticker-grid button:hover,.sticker-item:hover,.sticker-grid [role="button"]:hover{
-  background:rgba(103,80,164,.10)!important;transform:scale(1.08)!important;
+  background:rgba(var(--ar),var(--ag),var(--ab),.10)!important;transform:scale(1.08)!important;
 }
 body.dark .sticker-grid button:hover,body.dark .sticker-item:hover{
-  background:rgba(187,134,252,.14)!important;
+  background:rgba(var(--adr),var(--adg),var(--adb),.14)!important;
 }
 .sticker-grid img,.sticker-item img,.sticker-grid svg,.sticker-item svg{
   width:40px!important;height:40px!important;object-fit:contain!important;transform:none!important;
@@ -8421,8 +8580,8 @@ body.dark .sticker-grid button:hover,body.dark .sticker-item:hover{
   border-radius:12px!important;background:rgba(127,127,127,.11)!important;color:inherit!important;cursor:pointer!important;
 }
 body.dark .sticker-tabs button{background:rgba(255,255,255,.075)!important}
-.sticker-tabs button.active{background:rgba(103,80,164,.20)!important;box-shadow:inset 0 0 0 1px rgba(103,80,164,.28)!important}
-body.dark .sticker-tabs button.active{background:rgba(187,134,252,.20)!important;box-shadow:inset 0 0 0 1px rgba(187,134,252,.32)!important}
+.sticker-tabs button.active{background:rgba(var(--ar),var(--ag),var(--ab),.20)!important;box-shadow:inset 0 0 0 1px rgba(var(--ar),var(--ag),var(--ab),.28)!important}
+body.dark .sticker-tabs button.active{background:rgba(var(--adr),var(--adg),var(--adb),.20)!important;box-shadow:inset 0 0 0 1px rgba(var(--adr),var(--adg),var(--adb),.32)!important}
 @media(max-width:760px){
   .sticker-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;max-height:42vh!important}
   .sticker-grid button,.sticker-item{height:52px!important;font-size:27px!important}
@@ -8432,12 +8591,12 @@ body.dark .sticker-tabs button.active{background:rgba(187,134,252,.20)!important
 .chat-call-button{
   display:inline-flex!important;align-items:center;justify-content:center!important;
   width:40px!important;height:40px!important;border:0!important;border-radius:13px!important;
-  background:rgba(103,80,164,.15)!important;color:inherit!important;
+  background:rgba(var(--ar),var(--ag),var(--ab),.15)!important;color:inherit!important;
   cursor:pointer!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important;
   transition:transform .15s ease,background .15s ease!important;
 }
 body.dark .chat-call-button{background:rgba(255,255,255,.10)!important}
-.chat-call-button:hover{transform:translateY(-1px) scale(1.04)!important;background:rgba(103,80,164,.24)!important}
+.chat-call-button:hover{transform:translateY(-1px) scale(1.04)!important;background:rgba(var(--ar),var(--ag),var(--ab),.24)!important}
 
 .call-denied-popup,.call-toast-v10{
   position:fixed;left:50%;bottom:28px;transform:translateX(-50%);
