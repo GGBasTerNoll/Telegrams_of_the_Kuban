@@ -16,7 +16,22 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:ROND,wght@100,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,600;8..144,700&display=swap');
+
+// Переопределяем функцию friendlyError для более детального логирования
+const originalFriendlyError = window.friendlyError;
+window.friendlyError = function(e) {
+    console.error('🔥 FIREBASE ERROR DETAILS:', {
+        code: e?.code,
+        message: e?.message,
+        name: e?.name,
+        stack: e?.stack,
+        path: e?.path,
+        data: e?.data
+    });
+    return originalFriendlyError ? originalFriendlyError(e) : (e?.message || 'Неизвестная ошибка');
+};
 
 *{box-sizing:border-box}
 
@@ -39,7 +54,7 @@ html,body,#root{
 }
 
 body{
-    font-family:'Google Sans Flex','Roboto Flex',system-ui,sans-serif;
+    font-family:'Google Sans Flex','Golos Text','Roboto Flex',system-ui,sans-serif;
     font-variation-settings:'ROND' 100;
     background:#f7f4fb;
     color:#1a1b20;
@@ -1655,48 +1670,48 @@ body.dark .context-menu-item.danger:hover {
 
 /* ===== ВЫДЕЛЕНИЕ СООБЩЕНИЯ ПРИ ОТВЕТЕ ===== */
 .bubble-wrapper.highlight {
-    background: rgba(103, 80, 164, 0.25) !important;
+    background: rgba(var(--ar),var(--ag),var(--ab), 0.25) !important;
     border-radius: 16px;
     padding: 6px 4px 4px 4px;
     margin: -2px -2px -2px -2px;
     border-left: 4px solid rgb(var(--ar),var(--ag),var(--ab)) !important;
-    box-shadow: 0 0 20px rgba(103, 80, 164, 0.2);
+    box-shadow: 0 0 20px rgba(var(--ar),var(--ag),var(--ab), 0.2);
     animation: highlight-pulse 1.2s ease;
 }
 
 body.dark .bubble-wrapper.highlight {
-    background: rgba(187, 134, 252, 0.3) !important;
+    background: rgba(var(--adr),var(--adg),var(--adb), 0.3) !important;
     border-left-color: rgb(var(--adr),var(--adg),var(--adb)) !important;
-    box-shadow: 0 0 20px rgba(187, 134, 252, 0.2);
+    box-shadow: 0 0 20px rgba(var(--adr),var(--adg),var(--adb), 0.2);
     animation: highlight-pulse-dark 1.2s ease;
 }
 
 @keyframes highlight-pulse {
     0% {
-        background: rgba(103, 80, 164, 0.35);
+        background: rgba(var(--ar),var(--ag),var(--ab), 0.35);
         transform: scale(1.02);
     }
     50% {
-        background: rgba(103, 80, 164, 0.25);
+        background: rgba(var(--ar),var(--ag),var(--ab), 0.25);
         transform: scale(1);
     }
     100% {
-        background: rgba(103, 80, 164, 0.25);
+        background: rgba(var(--ar),var(--ag),var(--ab), 0.25);
         transform: scale(1);
     }
 }
 
 @keyframes highlight-pulse-dark {
     0% {
-        background: rgba(187, 134, 252, 0.4);
+        background: rgba(var(--adr),var(--adg),var(--adb), 0.4);
         transform: scale(1.02);
     }
     50% {
-        background: rgba(187, 134, 252, 0.3);
+        background: rgba(var(--adr),var(--adg),var(--adb), 0.3);
         transform: scale(1);
     }
     100% {
-        background: rgba(187, 134, 252, 0.3);
+        background: rgba(var(--adr),var(--adg),var(--adb), 0.3);
         transform: scale(1);
     }
 }
@@ -2763,33 +2778,336 @@ html, body, #root { width:100%; min-height:100%; }
   .composer { position:relative; z-index:5; }
   .send { touch-action:manipulation; }
 }
+/* ============================================================
+   ВЛОЖЕНИЯ (ATTACH MENU)
+   ============================================================ */
+.attach-btn {
+    width: 40px !important;
+    height: 40px !important;
+    flex: none;
+}
 
-.attach-btn{width:40px!important;height:40px!important;flex:none}
-.attach-menu{position:absolute;bottom:48px;left:0;width:190px;padding:8px;border-radius:20px;background:rgba(255,255,255,.88);backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);border:1px solid rgba(255,255,255,.7);box-shadow:0 18px 50px rgba(40,20,60,.22);z-index:80;animation:popIn .16s ease-out}
-body.dark .attach-menu{background:rgba(34,34,40,.92);border-color:rgba(255,255,255,.1)}
-.attach-menu button{width:100%;display:flex;align-items:center;gap:12px;border:0;background:transparent;padding:11px 12px;border-radius:13px;color:var(--txt);font:inherit;cursor:pointer;text-align:left}.attach-menu button:hover{background:rgba(var(--ar),var(--ag),var(--ab),.1)}.attach-icon{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(var(--ar),var(--ag),var(--ab),.12);font-size:18px}
-.sticker-modal{width:min(420px,100%);max-height:min(78vh,560px);overflow:auto;background:rgba(255,255,255,.88);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:28px;padding:18px;box-shadow:0 24px 70px rgba(30,15,50,.25);animation:popIn .18s ease-out}.sticker-pack-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:10px 2px}.sticker-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.sticker-grid button{border:0;background:transparent;border-radius:14px;font-size:29px;aspect-ratio:1;cursor:pointer;transition:transform .14s,background .14s}.sticker-grid button:hover{background:rgba(var(--ar),var(--ag),var(--ab),.1);transform:scale(1.12)}
-.poll-creator{animation:popIn .18s ease-out}.poll-check{display:flex;align-items:center;gap:8px;margin:14px 0;color:var(--txt);font-size:14px}.poll-check input{width:17px;height:17px}.poll-title{font-size:12px;font-weight:800;color:rgb(var(--ar),var(--ag),var(--ab));margin-bottom:5px}.msg-sticker{font-size:104px;line-height:1;padding:0;filter:drop-shadow(0 10px 18px rgba(0,0,0,.16));animation:stickerPop .28s cubic-bezier(.34,1.56,.64,1)}
-@keyframes stickerPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
-.bubble.sticker-bubble{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:2px 4px!important}
-.bubble.sticker-bubble .btime{background:rgba(0,0,0,.32);color:#fff!important;position:absolute;right:8px;bottom:6px;padding:2px 7px;border-radius:99px;backdrop-filter:blur(6px)}
-.bubble.sticker-bubble{position:relative;padding-bottom:26px!important}
-.bubble.sticker-bubble .bubble-actions{background:rgba(255,255,255,.7);backdrop-filter:blur(12px);border-radius:14px}
-@media(max-width:640px){.msg-sticker{font-size:84px}}
-.msg-link{color:#2e7ed6;text-decoration:underline;word-break:break-all;cursor:pointer}
-.mine .msg-link{color:#eaf1ff}
-body.dark .msg-link{color:#8ab4f8}
-.msg-mention{color:rgb(var(--ar),var(--ag),var(--ab));font-weight:650;cursor:pointer;border-radius:4px}
-.msg-mention:hover{text-decoration:underline}
-.mine .msg-mention{color:#f2ecff}
-body.dark .msg-mention{color:rgb(var(--adr),var(--adg),var(--adb))}
-.voice-msg{min-width:210px;display:flex;align-items:center;gap:10px}.voice-msg audio{display:none}.voice-bar{height:5px;background:rgba(0,0,0,.12);border-radius:99px;overflow:hidden;cursor:pointer}.voice-fill{height:100%;background:rgb(var(--ar),var(--ag),var(--ab));border-radius:99px;transition:width .1s linear}.voice-time{font-size:11px;opacity:.7;margin-top:4px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:5px}.voice-play-btn{width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(var(--ar),var(--ag),var(--ab),.13);color:rgb(var(--ar),var(--ag),var(--ab));cursor:pointer;flex:none}.mine .voice-play-btn{background:rgba(255,255,255,.2);color:#fff}.mine .voice-fill{background:#fff}
-.voice-unheard-dot{width:7px;height:7px;border-radius:50%;background:#2ea6ff;flex-shrink:0}
-.mine .voice-unheard-dot{background:#fff}
-.voice-speed-btn{flex:none;height:22px;padding:0 8px;border:0;border-radius:99px;background:rgba(var(--ar),var(--ag),var(--ab),.14);color:rgb(var(--ar),var(--ag),var(--ab));font-size:11px;font-weight:700;cursor:pointer}
-.mine .voice-speed-btn{background:rgba(255,255,255,.22);color:#fff}
-@keyframes popIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
-@media(max-width:640px){.attach-menu{bottom:52px;left:-4px;width:200px}.sticker-modal{align-self:end;margin-bottom:max(8px,env(safe-area-inset-bottom));max-height:70vh;border-radius:24px}.sticker-grid{grid-template-columns:repeat(6,1fr)}.sticker-grid button{font-size:27px}.voice-msg{min-width:180px}.poll-block{min-width:0;width:min(310px,78vw)}}
+.attach-menu {
+    position: absolute;
+    bottom: 48px;
+    left: 0;
+    width: 190px;
+    padding: 8px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .88);
+    backdrop-filter: blur(26px) saturate(160%);
+    -webkit-backdrop-filter: blur(26px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, .7);
+    box-shadow: 0 18px 50px rgba(40, 20, 60, .22);
+    z-index: 80;
+    animation: popIn .16s ease-out;
+}
+
+body.dark .attach-menu {
+    background: rgba(34, 34, 40, .92);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+.attach-menu button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 0;
+    background: transparent;
+    padding: 11px 12px;
+    border-radius: 13px;
+    color: var(--txt);
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.attach-menu button:hover {
+    background: rgba(var(--ar), var(--ag), var(--ab), .1);
+}
+
+.attach-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: rgba(var(--ar), var(--ag), var(--ab), .12);
+    font-size: 18px;
+}
+
+/* ============================================================
+   СТИКЕРЫ (STICKERS)
+   ============================================================ */
+.sticker-modal {
+    width: min(420px, 100%);
+    max-height: min(78vh, 560px);
+    overflow: auto;
+    background: rgba(255, 255, 255, .88);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, .7);
+    border-radius: 28px;
+    padding: 18px;
+    box-shadow: 0 24px 70px rgba(30, 15, 50, .25);
+    animation: popIn .18s ease-out;
+}
+
+body.dark .sticker-modal {
+    background: rgba(34, 34, 40, .92);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+.sticker-pack-title {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    margin: 10px 2px;
+}
+
+.sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.sticker-grid button {
+    border: 0;
+    background: transparent;
+    border-radius: 14px;
+    font-size: 29px;
+    aspect-ratio: 1;
+    cursor: pointer;
+    transition: transform .14s, background .14s;
+}
+
+.sticker-grid button:hover {
+    background: rgba(var(--ar), var(--ag), var(--ab), .1);
+    transform: scale(1.12);
+}
+
+/* Стикер в сообщении */
+.msg-sticker {
+    font-size: 104px;
+    line-height: 1;
+    padding: 0;
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .16));
+    animation: stickerPop .28s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+@keyframes stickerPop {
+    from {
+        transform: scale(.4);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.bubble.sticker-bubble {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 2px 4px !important;
+    position: relative;
+    padding-bottom: 26px !important;
+}
+
+.bubble.sticker-bubble .btime {
+    background: rgba(0, 0, 0, .32);
+    color: #fff !important;
+    position: absolute;
+    right: 8px;
+    bottom: 6px;
+    padding: 2px 7px;
+    border-radius: 99px;
+    backdrop-filter: blur(6px);
+}
+
+.bubble.sticker-bubble .bubble-actions {
+    background: rgba(255, 255, 255, .7);
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+}
+
+@media(max-width: 640px) {
+    .msg-sticker {
+        font-size: 84px;
+    }
+    .sticker-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    .sticker-grid button {
+        font-size: 27px;
+    }
+}
+
+/* ============================================================
+   ГОЛОСОВЫЕ СООБЩЕНИЯ (VOICE)
+   ============================================================ */
+.voice-msg {
+    min-width: 210px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.voice-msg audio {
+    display: none;
+}
+
+.voice-bar {
+    height: 5px;
+    background: rgba(0, 0, 0, .12);
+    border-radius: 99px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.voice-fill {
+    height: 100%;
+    background: rgb(var(--ar), var(--ag), var(--ab));
+    border-radius: 99px;
+    transition: width .1s linear;
+}
+
+.mine .voice-fill {
+    background: #fff;
+}
+
+.voice-time {
+    font-size: 11px;
+    opacity: .7;
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.voice-play-btn {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(var(--ar), var(--ag), var(--ab), .13);
+    color: rgb(var(--ar), var(--ag), var(--ab));
+    cursor: pointer;
+    flex: none;
+}
+
+.mine .voice-play-btn {
+    background: rgba(255, 255, 255, .2);
+    color: #fff;
+}
+
+.voice-unheard-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #2ea6ff;
+    flex-shrink: 0;
+}
+
+.mine .voice-unheard-dot {
+    background: #fff;
+}
+
+.voice-speed-btn {
+    flex: none;
+    height: 22px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: 99px;
+    background: rgba(var(--ar), var(--ag), var(--ab), .14);
+    color: rgb(var(--ar), var(--ag), var(--ab));
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.mine .voice-speed-btn {
+    background: rgba(255, 255, 255, .22);
+    color: #fff;
+}
+
+@media(max-width: 640px) {
+    .voice-msg {
+        min-width: 180px;
+    }
+    .attach-menu {
+        bottom: 52px;
+        left: -4px;
+        width: 200px;
+    }
+    .sticker-modal {
+        align-self: end;
+        margin-bottom: max(8px, env(safe-area-inset-bottom));
+        max-height: 70vh;
+        border-radius: 24px;
+    }
+}
+
+/* ============================================================
+   ТЕКСТОВЫЕ ЭЛЕМЕНТЫ (ССЫЛКИ, УПОМИНАНИЯ)
+   ============================================================ */
+.msg-link {
+    color: #2e7ed6;
+    text-decoration: underline;
+    word-break: break-all;
+    cursor: pointer;
+}
+
+.mine .msg-link {
+    color: #eaf1ff;
+}
+
+body.dark .msg-link {
+    color: #8ab4f8;
+}
+
+.msg-mention {
+    color: rgb(var(--ar), var(--ag), var(--ab));
+    font-weight: 650;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.msg-mention:hover {
+    text-decoration: underline;
+}
+
+.mine .msg-mention {
+    color: #f2ecff;
+}
+
+body.dark .msg-mention {
+    color: rgb(var(--adr), var(--adg), var(--adb));
+}
+
+/* ============================================================
+   ОБЩАЯ АНИМАЦИЯ
+   ============================================================ */
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(.97);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 
 </style>
 </head>
@@ -2861,58 +3179,367 @@ body.dark .composer input,body.dark .composer textarea{
   background:rgba(10,10,16,.28)!important;border-color:rgba(255,255,255,.12)!important;
 }
 
-/* Polls: readable in both themes, Telegram-like progress */
-.poll-block{
-  width:min(100%,430px);
-  padding:15px!important;
-  border-radius:20px!important;
-  color:var(--txt)!important;
-  overflow:hidden;
+/* ============================================================
+   ОПРОСЫ — аккуратный Telegram-подобный вид + список голосовавших
+   ============================================================ */
+.poll-block {
+    width: min(100%, 430px);
+    padding: 16px !important;
+    border-radius: 18px !important;
+    color: var(--txt) !important;
+    background: #ffffff;
+    border: 1px solid rgba(40,40,50,.08);
+    box-shadow: 0 2px 10px rgba(30,20,50,.06);
+    margin: 4px 0;
 }
-.poll-question{font-size:16px!important;font-weight:750!important;color:var(--txt)!important;margin-bottom:12px}
-.poll-option{
-  position:relative;
-  width:100%;
-  display:block;
-  text-align:left;
-  overflow:hidden;
-  color:var(--txt)!important;
-  background:rgba(127,127,127,.10)!important;
-  border:0!important;
-  border-radius:16px!important;
-  margin:7px 0!important;
-  min-height:46px;
-  padding:0;
-  cursor:pointer;
-}
-.poll-option-fill{
-  position:absolute;inset:0 auto 0 0;height:100%;
-  background:#1a1a1a;
-  border-radius:16px;
-  transition:width .4s cubic-bezier(.2,.8,.2,1);
-  pointer-events:none;
-}
-body.dark .poll-option-fill{background:#f2f2f2}
-.poll-option-content{
-  position:relative;z-index:1;
-  display:flex;align-items:center;gap:8px;
-  padding:12px 14px;
-  min-height:46px;
-}
-.poll-option .poll-option-fill ~ .poll-option-content{color:#fff}
-body.dark .poll-option .poll-option-fill ~ .poll-option-content{color:#1a1a1a}
-.poll-option.selected{box-shadow:0 0 0 2px rgba(var(--ar),var(--ag),var(--ab),.35)}
-.poll-radio{width:18px;color:rgb(var(--ar),var(--ag),var(--ab))}
-.poll-option-text{flex:1;font-weight:600}
-.poll-option-percent{font-weight:800}
-.poll-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid rgba(127,127,127,.14);font-size:12.5px;color:var(--muted)}
-.poll-remove-vote{color:rgb(var(--ar),var(--ag),var(--ab));font-weight:700;font-size:12.5px;border:0;background:none;cursor:pointer;padding:0}
-.poll-remove-vote:hover{text-decoration:underline}
-body.dark .poll-remove-vote{color:rgb(var(--adr),var(--adg),var(--adb))}
-.poll-percent,.poll-count,.poll-meta{color:var(--muted)!important}
-.poll-option button,.poll-option label{color:var(--txt)!important}
 
-/* Attach menu: stickers + poll only. Voice is intentionally NOT here. */
+body.dark .poll-block {
+    background: #202126;
+    border-color: rgba(255,255,255,.07);
+    box-shadow: 0 2px 12px rgba(0,0,0,.28);
+}
+
+.poll-title {
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgb(var(--ar), var(--ag), var(--ab));
+    margin-bottom: 5px;
+}
+
+body.dark .poll-title {
+    color: rgb(var(--adr), var(--adg), var(--adb));
+}
+
+.poll-question {
+    font-size: 17px !important;
+    font-weight: 650 !important;
+    color: var(--txt) !important;
+    margin-bottom: 13px;
+    line-height: 1.35;
+    letter-spacing: -.15px;
+}
+
+.poll-options {
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.poll-option {
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    min-height:44px;
+    padding:10px 12px;
+    border-radius:13px;
+    border:1px solid rgba(80,80,90,.10);
+    background:#f4f4f6;
+    color:var(--txt);
+    font-size:14px;
+    cursor:pointer;
+    transition:background .18s ease,border-color .18s ease,transform .12s ease;
+    text-align:left;
+    overflow:hidden;
+}
+
+body.dark .poll-option {
+    background:#2b2c31;
+    border-color:rgba(255,255,255,.06);
+}
+
+.poll-option:hover:not(:disabled) {
+    border-color:rgba(var(--ar),var(--ag),var(--ab),.42);
+    background:rgba(var(--ar),var(--ag),var(--ab),.07);
+}
+
+body.dark .poll-option:hover:not(:disabled) {
+    border-color:rgba(var(--adr),var(--adg),var(--adb),.48);
+    background:rgba(var(--adr),var(--adg),var(--adb),.10);
+}
+
+.poll-option:active:not(:disabled) {
+    transform:scale(.99);
+}
+
+.poll-option.selected {
+    border-color:rgba(var(--ar),var(--ag),var(--ab),.55);
+    background:rgba(var(--ar),var(--ag),var(--ab),.08);
+}
+
+body.dark .poll-option.selected {
+    border-color:rgba(var(--adr),var(--adg),var(--adb),.62);
+    background:rgba(var(--adr),var(--adg),var(--adb),.12);
+}
+
+.poll-option:disabled {
+    cursor:default;
+}
+
+.poll-radio {
+    width:20px;
+    height:20px;
+    flex:0 0 20px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    border:2px solid #a6a6ad;
+    color:transparent;
+    position:relative;
+    z-index:2;
+    font-size:0;
+    transition:.18s;
+}
+
+body.dark .poll-radio {
+    border-color:#777983;
+}
+
+.poll-option.selected .poll-radio {
+    border-color:rgb(var(--ar),var(--ag),var(--ab));
+    box-shadow:inset 0 0 0 4px var(--bg);
+    background:rgb(var(--ar),var(--ag),var(--ab));
+}
+
+body.dark .poll-option.selected .poll-radio {
+    border-color:rgb(var(--adr),var(--adg),var(--adb));
+    box-shadow:inset 0 0 0 4px #202126;
+    background:rgb(var(--adr),var(--adg),var(--adb));
+}
+
+.poll-option-text {
+    min-width:0;
+    flex:1;
+    position:relative;
+    z-index:2;
+    overflow-wrap:anywhere;
+}
+
+.poll-option-percent {
+    min-width:40px;
+    position:relative;
+    z-index:2;
+    text-align:right;
+    font-size:13px;
+    font-weight:700;
+    color:rgb(var(--ar),var(--ag),var(--ab));
+}
+
+body.dark .poll-option-percent {
+    color:rgb(var(--adr),var(--adg),var(--adb));
+}
+
+.poll-option-bar {
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    bottom:0 !important;
+    background:rgba(var(--ar),var(--ag),var(--ab),.10) !important;
+    border-radius:13px !important;
+    transition:width .35s cubic-bezier(.2,.8,.2,1) !important;
+    z-index:0 !important;
+    pointer-events:none !important;
+}
+
+body.dark .poll-option-bar {
+    background:rgba(var(--adr),var(--adg),var(--adb),.15) !important;
+}
+
+.poll-option.selected .poll-option-bar {
+    background:rgba(var(--ar),var(--ag),var(--ab),.15) !important;
+}
+
+body.dark .poll-option.selected .poll-option-bar {
+    background:rgba(var(--adr),var(--adg),var(--adb),.19) !important;
+}
+
+.poll-footer {
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:7px 10px;
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px solid rgba(127,127,127,.10);
+    font-size:12px;
+    color:var(--muted);
+}
+
+.poll-footer .poll-votes-button {
+    color:var(--muted);
+    font-weight:600;
+    cursor:pointer;
+    padding:3px 6px;
+    border-radius:8px;
+    transition:.18s;
+}
+
+.poll-footer .poll-votes-button:hover:not(:disabled) {
+    background:rgba(var(--ar),var(--ag),var(--ab),.08);
+    color:rgb(var(--ar),var(--ag),var(--ab));
+}
+
+.poll-footer .poll-votes-button:disabled {
+    cursor:default;
+    opacity:.72;
+}
+
+.poll-open-label {
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+}
+
+.poll-remove-vote {
+    margin-left:auto;
+    background:none !important;
+    border:none !important;
+    color:rgb(var(--ar),var(--ag),var(--ab)) !important;
+    cursor:pointer !important;
+    font-weight:650 !important;
+    font-size:12px !important;
+    padding:4px 7px !important;
+    border-radius:8px !important;
+    transition:background .18s ease;
+}
+
+body.dark .poll-remove-vote {
+    color:rgb(var(--adr),var(--adg),var(--adb)) !important;
+}
+
+.poll-remove-vote:hover {
+    background:rgba(var(--ar),var(--ag),var(--ab),.08) !important;
+}
+
+.poll-voters-modal {
+    width:min(520px,100%);
+    max-height:min(78vh,700px);
+}
+
+.poll-voters-subtitle {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.4;
+    margin-top:-3px;
+}
+
+.poll-voters-groups {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:14px;
+}
+
+.poll-voter-option {
+    padding:12px 13px;
+    border-radius:16px;
+    background:var(--ch);
+}
+
+body.dark .poll-voter-option {
+    background:#2a2b30;
+}
+
+.poll-voter-option-head {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:7px;
+}
+
+.poll-voter-option-name {
+    min-width:0;
+    font-size:14px;
+    font-weight:700;
+    overflow-wrap:anywhere;
+}
+
+.poll-voter-option-count {
+    flex:0 0 auto;
+    font-size:12px;
+    color:var(--muted);
+}
+
+.poll-voter-list {
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.poll-voter {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:42px;
+    padding:4px 2px;
+    border-radius:11px;
+}
+
+.poll-voter:hover {
+    background:rgba(127,127,127,.07);
+}
+
+.poll-voter-info {
+    min-width:0;
+    flex:1;
+}
+
+.poll-voter-name {
+    font-size:13px;
+    font-weight:650;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.poll-voter-username {
+    margin-top:2px;
+    font-size:11px;
+    color:var(--muted);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.poll-voter-empty {
+    font-size:12px;
+    color:var(--muted);
+    padding:4px 2px 2px;
+}
+
+@media (max-width:600px) {
+    .poll-block {
+        padding:13px !important;
+        border-radius:16px !important;
+        width:min(100%,330px);
+    }
+
+    .poll-question {
+        font-size:16px !important;
+    }
+
+    .poll-option {
+        min-height:42px;
+        padding:9px 11px;
+        font-size:13px;
+    }
+
+    .poll-footer {
+        font-size:11.5px;
+    }
+
+    .poll-voters-modal {
+        max-height:82vh;
+    }
+}
+
+/* Attach menu: stickers + poll only. */
+ Voice is intentionally NOT here. */
 .attach-menu{
   border-radius:20px!important;
   padding:8px!important;
@@ -3793,6 +4420,16 @@ async function ensureSavedChat(uid) {
             id, type:'saved', name:'Избранное', members:{[uid]:true}, createdBy:uid,
             lastMessage:'', lastTs:window.SV_TS, lastSender:uid
         });
+    } else {
+        // Самовосстановление: старая версия могла по ошибке перезаписать тип/участников
+        // при отправке голосовых/опросов в Избранное — чиним, если так.
+        const val = snap.val() || {};
+        const brokenMembers = val.members && Object.keys(val.members).some(k => k !== uid);
+        if (val.type !== 'saved' || brokenMembers || !val.members || !val.members[uid]) {
+            await window.db.ref('chatsMeta/'+id).update({
+                type:'saved', name:'Избранное', members:{[uid]:true}, createdBy:uid
+            });
+        }
     }
 }
 
@@ -6009,80 +6646,326 @@ function VoicePlayer({ src, duration=0, mine=false, onEnded, playbackRate=1, onS
     </div>;
 }
 
-function PollBlock({ poll, messageId, chatId, me, show, isChannel }) {
-    const [vote,setVote]=useState(null);
-    const [busy,setBusy]=useState(false);
-    const votes=poll.votes||{};
-    const counts=poll.counts||{};
-    const total=Object.values(counts).reduce((a,b)=>a+(Number(b)||0),0);
-    const myVote=votes[me.uid];
-    useEffect(()=>{ setVote(myVote!==undefined ? Number(myVote) : null); },[myVote]);
-    const choose=async(i)=>{
-        if(busy) return;
-        if(myVote!==undefined){show('Вы уже голосовали',true);return;}
+function PollVotersModal({ poll, users, onClose }) {
+    const votes = poll.votes || {};
+    const options = poll.options || [];
+
+    const votersByOption = options.map((option, optionIndex) => {
+        const ids = Object.keys(votes).filter(uid => Number(votes[uid]) === optionIndex);
+        return { option, optionIndex, ids };
+    });
+
+    const total = Object.keys(votes).length;
+
+    return (
+        <div className="overlay" onClick={onClose}>
+            <div className="modal poll-voters-modal" onClick={e => e.stopPropagation()}>
+                <div className="modal-head">
+                    <div style={{ minWidth:0 }}>
+                        <h2 style={{ margin:0, fontSize:20 }}>Кто проголосовал</h2>
+                        <div className="poll-voters-subtitle">
+                            {total} {total === 1 ? 'голос' : total > 1 && total < 5 ? 'голоса' : 'голосов'} · открытый опрос
+                        </div>
+                    </div>
+                    <button className="iconbtn close" onClick={onClose} aria-label="Закрыть">
+                        <Icon name="close" />
+                    </button>
+                </div>
+
+                <div className="poll-voters-groups">
+                    {votersByOption.map(({ option, optionIndex, ids }) => (
+                        <div className="poll-voter-option" key={optionIndex}>
+                            <div className="poll-voter-option-head">
+                                <div className="poll-voter-option-name">{option}</div>
+                                <div className="poll-voter-option-count">
+                                    {ids.length} {ids.length === 1 ? 'голос' : ids.length > 1 && ids.length < 5 ? 'голоса' : 'голосов'}
+                                </div>
+                            </div>
+
+                            {ids.length ? (
+                                <div className="poll-voter-list">
+                                    {ids.map(uid => {
+                                        const user = users?.[uid] || {};
+                                        const name = user.name || user.username || 'Участник';
+                                        return (
+                                            <div className="poll-voter" key={uid}>
+                                                <Avatar
+                                                    name={name}
+                                                    uid={uid}
+                                                    avatar={user.avatar}
+                                                    avatarUrl={user.avatarUrl}
+                                                    size={34}
+                                                />
+                                                <div className="poll-voter-info">
+                                                    <div className="poll-voter-name">{name}</div>
+                                                    {user.username && (
+                                                        <div className="poll-voter-username">@{user.username}</div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="poll-voter-empty">Пока никто не выбрал этот вариант</div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                <div className="modal-actions">
+                    <button className="secondary" onClick={onClose}>Закрыть</button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function PollBlock({ poll, messageId, chatId, me, show, isChannel, isGroup, users }) {
+    const [vote, setVote] = useState(null);
+    const [busy, setBusy] = useState(false);
+    const [showVoters, setShowVoters] = useState(false);
+
+    const votes = poll.votes || {};
+    const counts = poll.counts || {};
+    const totalFromCounts = Object.values(counts).reduce((a, b) => a + (Number(b) || 0), 0);
+    const totalFromVotes = Object.keys(votes).length;
+    const total = Math.max(totalFromCounts, totalFromVotes);
+    const myVote = votes[me.uid];
+
+    useEffect(() => {
+        setVote(myVote !== undefined ? Number(myVote) : null);
+    }, [myVote]);
+
+    const choose = async (i) => {
+        if (busy || myVote !== undefined) {
+            if (myVote !== undefined) show('Вы уже голосовали', true);
+            return;
+        }
+
         setBusy(true);
-        const base='chats/'+chatId+'/'+(isChannel?'posts':'messages')+'/'+messageId+'/poll';
-        try{
-            await window.db.ref(base+'/votes/'+me.uid).set(i);
-            await window.db.ref(base+'/counts/'+i).transaction(v=>(Number(v)||0)+1);
-            setVote(i); show('Голос учтён');
-        }catch(e){show(friendlyError(e),true);}
-        finally{setBusy(false);}
+        const base = 'chats/' + chatId + '/' + (isChannel ? 'posts' : 'messages') + '/' + messageId + '/poll';
+
+        try {
+            // Сначала фиксируем выбор пользователя, затем атомарно увеличиваем счётчик варианта.
+            await window.db.ref(base + '/votes/' + me.uid).set(i);
+            await window.db.ref(base + '/counts/' + i).transaction(v => (Number(v) || 0) + 1);
+            setVote(i);
+            show('Голос учтён ✅');
+        } catch (e) {
+            show(friendlyError(e), true);
+        } finally {
+            setBusy(false);
+        }
     };
-    const removeVote=async()=>{
-        if(busy || myVote===undefined) return;
+
+    const removeVote = async () => {
+        if (busy || myVote === undefined) return;
+
         setBusy(true);
-        const base='chats/'+chatId+'/'+(isChannel?'posts':'messages')+'/'+messageId+'/poll';
-        try{
-            await window.db.ref(base+'/votes/'+me.uid).remove();
-            await window.db.ref(base+'/counts/'+myVote).transaction(v=>Math.max(0,(Number(v)||0)-1));
-            setVote(null); show('Голос удалён');
-        }catch(e){show(friendlyError(e),true);}
-        finally{setBusy(false);}
+        const base = 'chats/' + chatId + '/' + (isChannel ? 'posts' : 'messages') + '/' + messageId + '/poll';
+        const oldVote = Number(myVote);
+
+        try {
+            await window.db.ref(base + '/votes/' + me.uid).remove();
+            await window.db.ref(base + '/counts/' + oldVote).transaction(v => Math.max(0, (Number(v) || 0) - 1));
+            setVote(null);
+            show('Голос удалён');
+        } catch (e) {
+            show(friendlyError(e), true);
+        } finally {
+            setBusy(false);
+        }
     };
-    return <div className="poll-block">
-        <div className="poll-title">📊 Опрос</div>
-        <div className="poll-question">{poll.question}</div>
-        <div className="poll-options">
-            {(poll.options||[]).map((opt,i)=>{
-                const c=Number(counts[i]||0); const pct=total?Math.round(c/total*100):0; const selected=vote===i || myVote===i;
-                return <button key={i} className={'poll-option '+(selected?'selected':'')} onClick={()=>choose(i)} disabled={busy || myVote!==undefined}>
-                    {myVote!==undefined && <span className="poll-option-fill" style={{width:pct+'%'}}/>}
-                    <span className="poll-option-content">
-                        {myVote===undefined && <span className="poll-radio">{selected?'●':'○'}</span>}
-                        <span className="poll-option-text">{opt}</span>
-                        {myVote!==undefined && <span className="poll-option-percent">{pct}%</span>}
+
+    const getPercent = (i) => {
+        const c = Number(counts[i] || 0);
+        return total ? Math.round(c / total * 100) : 0;
+    };
+
+    const options = poll.options || [];
+    const hasVoted = myVote !== undefined;
+    const canShowVoters = !!isGroup && !poll.anonymous && total > 0;
+
+    return (
+        <>
+            <div className="poll-block">
+                <div className="poll-title">
+                    <span aria-hidden="true">📊</span>
+                    <span>Опрос</span>
+                </div>
+
+                <div className="poll-question">{poll.question}</div>
+
+                <div className="poll-options">
+                    {options.map((opt, i) => {
+                        const pct = getPercent(i);
+                        const selected = vote === i || Number(myVote) === i;
+
+                        return (
+                            <button
+                                key={i}
+                                className={`poll-option ${selected ? 'selected' : ''}`}
+                                onClick={() => choose(i)}
+                                disabled={busy || hasVoted}
+                            >
+                                <span className="poll-radio">{selected ? '●' : ''}</span>
+                                <span className="poll-option-text">{opt}</span>
+
+                                {hasVoted && (
+                                    <span className="poll-option-percent">{pct}%</span>
+                                )}
+
+                                <span
+                                    className="poll-option-bar"
+                                    style={{ width: hasVoted ? pct + '%' : '0%' }}
+                                />
+                            </button>
+                        );
+                    })}
+                </div>
+
+                <div className="poll-footer">
+                    <button
+                        type="button"
+                        className="poll-votes-button"
+                        disabled={!canShowVoters}
+                        onClick={() => canShowVoters && setShowVoters(true)}
+                        title={canShowVoters ? 'Посмотреть, кто выбрал каждый вариант' : undefined}
+                    >
+                        {total} {total === 1 ? 'голос' : total > 1 && total < 5 ? 'голоса' : 'голосов'}
+                    </button>
+
+                    <span className="poll-open-label">
+                        {poll.anonymous ? '🔒 Анонимный' : '👤 Открытый'}
                     </span>
-                </button>;
-            })}
-        </div>
-        <div className="poll-footer">
-            <span>{total} {total===1?'ответ':total>1&&total<5?'ответа':'ответов'}</span>
-            <span style={{display:'flex', alignItems:'center', gap:10}}>
-                {poll.anonymous?'🔒 Анонимный':'👤 Открытый'}
-                {myVote!==undefined && (
-                    <button className="poll-remove-vote" onClick={removeVote} disabled={busy}>Удалить голос</button>
-                )}
-            </span>
-        </div>
-    </div>;
+
+                    {canShowVoters && (
+                        <button
+                            type="button"
+                            className="poll-votes-button"
+                            onClick={() => setShowVoters(true)}
+                        >
+                            Кто проголосовал
+                        </button>
+                    )}
+
+                    {myVote !== undefined && (
+                        <button
+                            className="poll-remove-vote"
+                            onClick={removeVote}
+                            disabled={busy}
+                        >
+                            Отменить голос
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {showVoters && (
+                <PollVotersModal
+                    poll={poll}
+                    users={users}
+                    onClose={() => setShowVoters(false)}
+                />
+            )}
+        </>
+    );
 }
 
 function PollCreator({ onClose, onCreate }) {
-    const [question,setQuestion]=useState('');
-    const [options,setOptions]=useState(['','']);
-    const [anonymous,setAnonymous]=useState(false);
-    const [busy,setBusy]=useState(false);
-    const update=(i,v)=>setOptions(a=>a.map((x,n)=>n===i?v:x));
-    const create=async()=>{const q=question.trim(), opts=options.map(x=>x.trim()).filter(Boolean);if(!q||opts.length<2){return;}setBusy(true);try{await onCreate({question:q,options:opts,anonymous});onClose();}finally{setBusy(false);}};
-    return <div className="overlay" onClick={onClose}><div className="modal poll-creator" onClick={e=>e.stopPropagation()}>
-        <div className="modal-head"><h2 style={{margin:0}}>📊 Создать опрос</h2><button className="iconbtn close" onClick={onClose}><Icon name="close"/></button></div>
-        <div className="field"><label>Вопрос</label><input autoFocus value={question} onChange={e=>setQuestion(e.target.value)} placeholder="Например: Куда пойдём сегодня?"/></div>
-        <div className="field"><label>Варианты ответа</label>{options.map((x,i)=><div key={i} style={{display:'flex',gap:8,marginBottom:8}}><input style={{flex:1}} value={x} onChange={e=>update(i,e.target.value)} placeholder={'Вариант '+(i+1)}/>{options.length>2&&<button className="iconbtn" onClick={()=>setOptions(a=>a.filter((_,n)=>n!==i))}><Icon name="close" size={17}/></button>}</div>)}</div>
-        {options.length<10&&<button className="secondary" onClick={()=>setOptions(a=>[...a,''])}><Icon name="plus" size={17}/> Добавить вариант</button>}
-        <label className="poll-check"><input type="checkbox" checked={anonymous} onChange={e=>setAnonymous(e.target.checked)}/> Анонимный опрос</label>
-        <div className="modal-actions"><button className="secondary" onClick={onClose}>Отмена</button><button className="primary" disabled={busy||!question.trim()||options.filter(x=>x.trim()).length<2} onClick={create}>{busy?'Создание…':'Создать опрос'}</button></div>
-    </div></div>;
+    const [question, setQuestion] = useState('');
+    const [options, setOptions] = useState(['', '']);
+    const [anonymous, setAnonymous] = useState(false);
+    const [busy, setBusy] = useState(false);
+    
+    const updateOption = (i, v) => setOptions(a => a.map((x, n) => n === i ? v : x));
+    const addOption = () => { if (options.length < 10) setOptions([...options, '']); };
+    const removeOption = (i) => { if (options.length > 2) setOptions(a => a.filter((_, n) => n !== i)); };
+    
+    const create = async () => {
+        const q = question.trim();
+        const opts = options.map(x => x.trim()).filter(Boolean);
+        if (!q) { show('Введите вопрос', true); return; }
+        if (opts.length < 2) { show('Добавьте минимум 2 варианта ответа', true); return; }
+        setBusy(true);
+        try {
+            await onCreate({ question: q, options: opts, anonymous });
+            onClose();
+        } finally {
+            setBusy(false);
+        }
+    };
+    
+    return (
+        <div className="overlay" onClick={onClose}>
+            <div className="modal poll-creator-modern" onClick={e => e.stopPropagation()}>
+                <div className="modal-head">
+                    <h2 style={{ margin: 0, fontSize: 20 }}>📊 Создать опрос</h2>
+                    <button className="iconbtn close" onClick={onClose}>
+                        <Icon name="close" />
+                    </button>
+                </div>
+                
+                <div className="field">
+                    <label>Вопрос</label>
+                    <input 
+                        autoFocus 
+                        value={question} 
+                        onChange={e => setQuestion(e.target.value)} 
+                        placeholder="Например: Куда пойдём сегодня?" 
+                    />
+                </div>
+                
+                <div className="field">
+                    <label>Варианты ответа</label>
+                    {options.map((x, i) => (
+                        <div className="option-row" key={i}>
+                            <input 
+                                value={x} 
+                                onChange={e => updateOption(i, e.target.value)} 
+                                placeholder={`Вариант ${i + 1}`} 
+                            />
+                            {options.length > 2 && (
+                                <button 
+                                    className="remove-option" 
+                                    onClick={() => removeOption(i)}
+                                    type="button"
+                                >
+                                    ✕
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                    {options.length < 10 && (
+                        <button className="add-option-btn" onClick={addOption} type="button">
+                            + Добавить вариант
+                        </button>
+                    )}
+                </div>
+                
+                <div className="toggle-row">
+                    <span className="toggle-label">
+                        <span style={{ fontSize: 16 }}>🔒</span> Анонимный опрос
+                    </span>
+                    <div className={`toggle ${anonymous ? 'active' : ''}`} onClick={() => setAnonymous(!anonymous)}>
+                        <div className="toggle-knob" />
+                    </div>
+                </div>
+                
+                <div className="modal-actions" style={{ marginTop: 16 }}>
+                    <button className="secondary" onClick={onClose}>Отмена</button>
+                    <button 
+                        className="primary" 
+                        onClick={create} 
+                        disabled={busy || !question.trim() || options.filter(x => x.trim()).length < 2}
+                    >
+                        {busy ? 'Создание…' : 'Создать опрос'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 // ===== СТАТУС ГАЛОЧЕК =====
@@ -6396,7 +7279,7 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                     </div>
                 )}
                 <div className={"bubble-wrapper" + (isReplied ? ' highlight' : '')} id={"msg-" + message.id} style={dragX ? { transform: `translateX(${dragX}px)`, transition: 'none' } : undefined}>
-                    <div className={"bubble" + (message.type === 'sticker' ? ' sticker-bubble' : '')}>
+                    <div className={"bubble" + (message.type === 'sticker' ? ' sticker-bubble' : '') + (message.type === 'poll' ? ' poll-message-bubble' : '')}>
                         {!isChannel && message.replyTo && (
                             <div className="quote-block" onClick={(e) => { e.stopPropagation(); scrollToMessage(message.replyTo.id); }}>
                                 <div className="quote-bar" />
@@ -6412,36 +7295,45 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
                             </div>
                         )}
                         {message.type === 'voice' && message.voiceData ? (
-                            <VoicePlayer
-                                src={message.voiceData}
-                                duration={message.voiceDuration}
-                                mine={mine}
-                                playerId={message.id}
-                                playbackRate={voiceSpeed}
-                                onSpeedChange={setVoiceSpeed}
-                                isPlaying={playingVoiceId === message.id}
-                                listened={mine || !!message.listenedBy?.[me.uid]}
-                                onListened={() => markVoiceListened(message.id)}
-                                onTogglePlay={(id) => setPlayingVoiceId(id)}
-                                onEnded={() => {
-                                    const nextId = nextVoiceMap[message.id];
-                                    setPlayingVoiceId(nextId || null);
-                                }}
-                            />
-                        ) : message.type === 'sticker' ? (
-                            <div className="msg-sticker">{message.sticker || message.text}</div>
-                        ) : message.type === 'poll' && message.poll ? (
-                            <PollBlock poll={message.poll} messageId={message.id} chatId={chatId} me={me} show={show} isChannel={isChannel} />
-                        ) : (
-                            <div style={{ whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
-                                {message.forwardedFrom && <div style={{ fontSize: 11, opacity: 0.6, marginBottom: 2 }}>📎 Переслано от {message.forwardedFrom}</div>}
-                                {message.encrypted ? (
-                                    <EncryptedText message={message} me={me} chat={chat} users={users} metas={metas} onSelectChat={onSelectChat} />
-                                ) : (
-                                    renderRichText(message.text, { me, users, metas, onSelectChat })
-                                )}
-                            </div>
-                        )}
+    <VoicePlayer
+        src={message.voiceData}
+        duration={message.voiceDuration}
+        mine={mine}
+        playerId={message.id}
+        playbackRate={voiceSpeed}
+        onSpeedChange={setVoiceSpeed}
+        isPlaying={playingVoiceId === message.id}
+        listened={mine || !!message.listenedBy?.[me.uid]}
+        onListened={() => markVoiceListened(message.id)}
+        onTogglePlay={(id) => setPlayingVoiceId(id)}
+        onEnded={() => {
+            const nextId = nextVoiceMap[message.id];
+            setPlayingVoiceId(nextId || null);
+        }}
+    />
+) : message.type === 'sticker' ? (
+    <div className="msg-sticker">{message.sticker || message.text}</div>
+) : message.type === 'poll' && message.poll ? (
+    <PollBlock
+    poll={message.poll}
+    messageId={message.id}
+    chatId={chatId}
+    me={me}
+    show={show}
+    isChannel={isChannel}
+    isGroup={isGroup}
+    users={users}
+/>
+) : (
+    <div style={{ whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
+        {message.forwardedFrom && <div style={{ fontSize: 11, opacity: 0.6, marginBottom: 2 }}>📎 Переслано от {message.forwardedFrom}</div>}
+        {message.encrypted ? (
+            <EncryptedText message={message} me={me} chat={chat} users={users} metas={metas} onSelectChat={onSelectChat} />
+        ) : (
+            renderRichText(message.text, { me, users, metas, onSelectChat })
+        )}
+    </div>
+)}
 
                         <div className="btime">
                             {message.edited && <span style={{ opacity: 0.65, marginRight: 4 }}>изменено</span>}
@@ -6501,7 +7393,7 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
         </>
     );
 }, (prev, next) => {
-    // Пропускаем ре-рендер бабла, если содержимое сообщения фактически не изменилось —
+    // Пропускаем ре-рендер бабла, если содержимое сообщения фактически не изменилось (включая poll) —
     // это устраняет мерцание при перерисовке всего списка на каждый снапшот Firebase.
     const a = prev.message, b = next.message;
     if (a !== b) {
@@ -6509,7 +7401,8 @@ const MessageBubble = React.memo(function MessageBubble({ message, me, users, is
             a.edited !== b.edited || a.sticker !== b.sticker ||
             JSON.stringify(a.reactions || {}) !== JSON.stringify(b.reactions || {}) ||
             JSON.stringify(a.deletedFor || {}) !== JSON.stringify(b.deletedFor || {}) ||
-            JSON.stringify(a.listenedBy || {}) !== JSON.stringify(b.listenedBy || {})) {
+            JSON.stringify(a.listenedBy || {}) !== JSON.stringify(b.listenedBy || {}) ||
+            JSON.stringify(a.poll || {}) !== JSON.stringify(b.poll || {})) {
             return false;
         }
     }
@@ -6877,6 +7770,8 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             const lastMessage = payload.type==='voice'?'🎤 Голосовое':payload.type==='sticker'?data.sticker:safeText;
             if (isChannel) {
                 await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:'channel',lastMessage,lastTs:window.SV_TS,lastSender:me.uid});
+            } else if (isSaved) {
+                await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:'saved',members:{[me.uid]:true},name:'Избранное',lastMessage,lastTs:window.SV_TS,lastSender:me.uid});
             } else {
                 await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:isGroup?'group':'dm',members:isGroup?(chat.members||{}):{[me.uid]:true,[chat.uid]:true},name:isGroup?(chat.name||'Группа'):(other?.name||chat.name||'Чат'),lastMessage,lastTs:window.SV_TS,lastSender:me.uid,lastStatus:'sent'});
                 const recipients=isGroup?Object.keys(chat.members||{}).filter(x=>x!==me.uid):[chat.uid];
@@ -6893,8 +7788,12 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
             const ref=window.db.ref('chats/'+chatId+'/'+path).push();
             const poll={question:data.question,options:data.options,anonymous:!!data.anonymous,createdBy:me.uid,votes:{},counts:{}};
             await ref.set({senderId:me.uid,text:'📊 Опрос: '+data.question,ts:window.SV_TS,status:'sent',type:'poll',poll});
-            await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:isChannel?'channel':(isGroup?'group':'dm'),lastMessage:'📊 Опрос: '+data.question,lastTs:window.SV_TS,lastSender:me.uid});
-            if(!isChannel){const recipients=isGroup?Object.keys(chat.members||{}).filter(x=>x!==me.uid):[chat.uid];await Promise.all(recipients.map(uid=>window.db.ref('chatsMeta/'+chatId+'/unreadBy/'+uid).transaction(v=>(Number(v)||0)+1).catch(()=>null)));}
+            if (isSaved) {
+                await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:'saved',members:{[me.uid]:true},name:'Избранное',lastMessage:'📊 Опрос: '+data.question,lastTs:window.SV_TS,lastSender:me.uid});
+            } else {
+                await window.db.ref('chatsMeta/'+chatId).update({id:chatId,type:isChannel?'channel':(isGroup?'group':'dm'),lastMessage:'📊 Опрос: '+data.question,lastTs:window.SV_TS,lastSender:me.uid});
+            }
+            if(!isChannel && !isSaved){const recipients=isGroup?Object.keys(chat.members||{}).filter(x=>x!==me.uid):[chat.uid];await Promise.all(recipients.map(uid=>window.db.ref('chatsMeta/'+chatId+'/unreadBy/'+uid).transaction(v=>(Number(v)||0)+1).catch(()=>null)));}
             show('Опрос создан');
         }catch(e){show(friendlyError(e),true);throw e;}
     }
@@ -8465,7 +9364,7 @@ try {
 
 /* ===== FINAL TYPOGRAPHY ===== */
 html,body,#root,.m3,.m3 *{
-  font-family:'Google Sans Flex','Roboto Flex',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif!important;
+  font-family:'Google Sans Flex','Golos Text','Roboto Flex',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif!important;
   font-variation-settings:'ROND' 100!important;
   font-variant-numeric:tabular-nums;
 }
@@ -8700,4 +9599,132 @@ body:not(.dark) .context-menu-inner{
   .context-menu{width:244px!important}
   .context-menu-item{height:43px}
 }
+/* ============================================================
+   POLL OVERRIDES — MUST BE LAST
+   Polls are rendered inside the generic .bubble, so the generic
+   message-bubble skin must be disabled for poll messages.
+   ============================================================ */
+.bubble.poll-message-bubble,
+.mine .bubble.poll-message-bubble,
+.theirs .bubble.poll-message-bubble,
+body.dark .mine .bubble.poll-message-bubble,
+body.dark .theirs .bubble.poll-message-bubble {
+    width: min(430px, calc(100vw - 32px)) !important;
+    max-width: min(430px, calc(100vw - 32px)) !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: var(--txt) !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+}
+
+.bubble.poll-message-bubble .poll-block {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+    background: #fff !important;
+    color: #1a1b20 !important;
+    border: 1px solid rgba(40,40,50,.10) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 3px 14px rgba(30,20,50,.09) !important;
+}
+
+body.dark .bubble.poll-message-bubble .poll-block {
+    background: #202126 !important;
+    color: #e9e9ed !important;
+    border-color: rgba(255,255,255,.09) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,.30) !important;
+}
+
+.bubble.poll-message-bubble .poll-title {
+    color: rgb(var(--ar),var(--ag),var(--ab)) !important;
+}
+body.dark .bubble.poll-message-bubble .poll-title {
+    color: rgb(var(--adr),var(--adg),var(--adb)) !important;
+}
+
+.bubble.poll-message-bubble .poll-question {
+    color: #1a1b20 !important;
+}
+body.dark .bubble.poll-message-bubble .poll-question {
+    color: #e9e9ed !important;
+}
+
+.bubble.poll-message-bubble .poll-option {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    color: #1a1b20 !important;
+    background: #f4f4f6 !important;
+}
+body.dark .bubble.poll-message-bubble .poll-option {
+    color: #e9e9ed !important;
+    background: #2b2c31 !important;
+}
+
+.bubble.poll-message-bubble .poll-option-text,
+.bubble.poll-message-bubble .poll-option-percent {
+    color: inherit !important;
+}
+
+.bubble.poll-message-bubble .poll-footer {
+    color: #696772 !important;
+}
+body.dark .bubble.poll-message-bubble .poll-footer {
+    color: #a8a8b8 !important;
+}
+
+/* The generic message timestamp is still useful, but it belongs to
+   the poll card rather than to the old purple message bubble. */
+.bubble.poll-message-bubble > .btime {
+    position: absolute !important;
+    right: 11px !important;
+    bottom: 8px !important;
+    z-index: 20 !important;
+    margin: 0 !important;
+    padding: 2px 3px !important;
+    font-size: 10px !important;
+    color: #7d7a84 !important;
+    pointer-events: none !important;
+}
+body.dark .bubble.poll-message-bubble > .btime {
+    color: #9c9ba5 !important;
+}
+
+/* Make room for the timestamp inside the card. */
+.bubble.poll-message-bubble .poll-block {
+    padding-bottom: 34px !important;
+}
+
+/* Generic hover action buttons should not sit over the poll card. */
+.bubble.poll-message-bubble > .bubble-actions {
+    top: -42px !important;
+    right: 0 !important;
+    bottom: auto !important;
+    z-index: 50 !important;
+}
+
+@media (max-width: 600px) {
+    .bubble.poll-message-bubble,
+    .mine .bubble.poll-message-bubble,
+    .theirs .bubble.poll-message-bubble,
+    body.dark .mine .bubble.poll-message-bubble,
+    body.dark .theirs .bubble.poll-message-bubble {
+        width: min(330px, calc(100vw - 28px)) !important;
+        max-width: min(330px, calc(100vw - 28px)) !important;
+    }
+    .bubble.poll-message-bubble .poll-block {
+        padding: 13px 13px 32px !important;
+        border-radius: 16px !important;
+    }
+}
+
+
 </style>
