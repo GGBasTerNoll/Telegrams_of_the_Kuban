@@ -2627,6 +2627,7 @@ body.dark .search:focus-within{
 /* Настройки: один предсказуемый скролл */
 .panel{min-height:0;overflow:hidden;}
 .settings{min-height:0;overflow:auto;overscroll-behavior:contain;padding-bottom:max(28px,env(safe-area-inset-bottom));scrollbar-gutter:stable;}
+.tg-settings{min-height:0;overflow:auto;overscroll-behavior:contain;padding-bottom:max(28px,env(safe-area-inset-bottom));scrollbar-gutter:stable;}
 .setting-card{
   background:linear-gradient(145deg,rgba(255,255,255,.68),rgba(248,243,251,.52));
   border:1px solid rgba(255,255,255,.72);
@@ -2644,6 +2645,262 @@ body.dark .setting-card{
   -webkit-backdrop-filter:blur(26px) saturate(160%);
 }
 body.dark .setting-card:hover{box-shadow:0 14px 36px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);}
+
+/* ============================================================
+   TELEGRAM-STYLE SETTINGS — list-based settings screen
+   ============================================================ */
+.tg-settings{width:min(720px,100%);padding-bottom:20px;}
+
+.tg-topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:2px 2px 18px;
+}
+.tg-topbar-btn{
+    width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    color:var(--txt);transition:background .15s ease,transform .15s ease;flex-shrink:0;
+}
+.tg-topbar-btn:hover{background:rgba(127,127,127,.14);}
+.tg-topbar-btn:active{transform:scale(.92);}
+.tg-topbar-title{font-size:17px;font-weight:750;flex:1;text-align:center;}
+.tg-topbar-spacer{width:40px;height:40px;flex-shrink:0;}
+
+.tg-profile-card{
+    display:flex;align-items:center;gap:16px;
+    padding:18px 4px 22px;
+}
+.tg-profile-card .name{font-size:20px;font-weight:750;line-height:1.25;}
+.tg-profile-card .sub{font-size:14px;color:var(--muted);margin-top:2px;}
+
+.tg-group{
+    background:var(--c);
+    border-radius:18px;
+    overflow:hidden;
+    margin-bottom:18px;
+    box-shadow:0 6px 20px rgba(50,35,70,.05);
+    transition:background .3s;
+}
+body.dark .tg-group{box-shadow:0 8px 24px rgba(0,0,0,.28);}
+
+.tg-group-title{
+    font-size:12.5px;font-weight:700;letter-spacing:.02em;
+    color:var(--muted);text-transform:uppercase;
+    padding:0 6px 8px;
+}
+.tg-group-hint{
+    font-size:12.5px;color:var(--muted);
+    padding:8px 16px 2px;line-height:1.4;
+}
+
+.tg-row{
+    display:flex;align-items:center;gap:14px;
+    width:100%;padding:12px 14px;
+    text-align:left;cursor:pointer;
+    position:relative;
+    transition:background .15s ease;
+}
+.tg-row:hover{background:rgba(127,127,127,.08);}
+.tg-row:active{background:rgba(127,127,127,.14);}
+.tg-row + .tg-row{
+    box-shadow:inset 0 1px 0 rgba(127,127,127,.14);
+}
+.tg-row-icon{
+    width:32px;height:32px;border-radius:9px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;color:#fff;
+}
+.tg-row-body{flex:1;min-width:0;}
+.tg-row-label{font-size:15px;font-weight:600;color:var(--txt);}
+.tg-row-value{font-size:13px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tg-row-chev{opacity:.35;flex-shrink:0;transform:scaleX(-1);}
+.tg-row-right{margin-left:auto;font-size:13.5px;color:var(--muted);flex-shrink:0;}
+
+.tg-ic-blue{background:linear-gradient(160deg,#4fa6f2,#2e8fe6);}
+.tg-ic-green{background:linear-gradient(160deg,#5bc37e,#39ab5f);}
+.tg-ic-red{background:linear-gradient(160deg,#f2665c,#e0453b);}
+.tg-ic-orange{background:linear-gradient(160deg,#f2a13f,#e5851f);}
+.tg-ic-purple{background:linear-gradient(160deg,#a97ff0,#8a56e0);}
+.tg-ic-teal{background:linear-gradient(160deg,#3fc0c8,#1fa0aa);}
+.tg-ic-pink{background:linear-gradient(160deg,#f26ea0,#e2477f);}
+.tg-ic-gray{background:linear-gradient(160deg,#9a9aa5,#7c7c88);}
+.tg-ic-indigo{background:linear-gradient(160deg,#7c8ff2,#5c6fe0);}
+.tg-ic-yellow{background:linear-gradient(160deg,#f2c53f,#e3ab1a);}
+
+.tg-invite{
+    display:flex;align-items:center;gap:14px;width:100%;
+    padding:14px 14px;border-radius:18px;background:var(--c);
+    margin-bottom:18px;cursor:pointer;transition:background .15s ease;
+    color:rgb(var(--ar),var(--ag),var(--ab));font-weight:700;font-size:15px;
+}
+.tg-invite:hover{background:rgba(127,127,127,.1);}
+.tg-invite .tg-row-icon{background:rgb(var(--ar),var(--ag),var(--ab));}
+
+/* --- Edit profile screen --- */
+.tg-edit-avatar-wrap{
+    display:flex;flex-direction:column;align-items:center;
+    padding:26px 0 8px;
+}
+.tg-edit-avatar{position:relative;}
+.tg-edit-avatar-cam{
+    position:absolute;right:-2px;bottom:-2px;
+    width:34px;height:34px;border-radius:50%;
+    background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    border:3px solid var(--bg);cursor:pointer;
+    transition:transform .15s ease;
+}
+.tg-edit-avatar-cam:hover{transform:scale(1.08);}
+
+.tg-input-group{
+    background:var(--c);border-radius:16px;overflow:hidden;margin:18px 0;
+}
+.tg-input-row{padding:10px 16px;}
+.tg-input-row + .tg-input-row{box-shadow:inset 0 1px 0 rgba(127,127,127,.14);}
+.tg-input-row label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.02em;color:rgb(var(--ar),var(--ag),var(--ab));text-transform:uppercase;margin-bottom:2px;}
+.tg-input-row input,.tg-input-row textarea{
+    width:100%;border:0;background:transparent;padding:0;
+    font-size:16px;color:var(--txt);outline:0;resize:vertical;font-family:inherit;
+}
+.tg-input-hint{font-size:12.5px;color:var(--muted);padding:0 16px 14px;line-height:1.4;margin-top:-8px;}
+
+.tg-more-menu{
+    position:absolute;top:52px;right:0;z-index:60;min-width:220px;
+    background:var(--c);border-radius:16px;padding:6px;
+    box-shadow:0 20px 60px rgba(30,20,50,.22);
+    border:1px solid rgba(127,127,127,.14);
+}
+.tg-more-item{
+    width:100%;padding:11px 14px;border-radius:11px;text-align:left;
+    display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;color:var(--txt);
+}
+.tg-more-item:hover{background:rgba(127,127,127,.12);}
+.tg-more-item.danger{color:var(--err);}
+
+.tg-folder-item{
+    display:flex;align-items:center;gap:12px;padding:13px 14px;
+}
+.tg-folder-icon{
+    width:38px;height:38px;border-radius:11px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+    background:rgba(var(--ar),var(--ag),var(--ab),.14);color:rgb(var(--ar),var(--ag),var(--ab));
+}
+.tg-folder-name{font-weight:650;font-size:15px;flex:1;}
+.tg-folder-del{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--err);opacity:.75;}
+.tg-folder-del:hover{background:rgba(186,26,26,.12);opacity:1;}
+.tg-new-folder-row{
+    display:flex;gap:8px;padding:12px 14px;align-items:center;
+}
+.tg-new-folder-row input{
+    flex:1;border:0;border-radius:12px;background:rgba(127,127,127,.12);
+    padding:11px 14px;font-size:14.5px;color:var(--txt);outline:0;
+}
+
+/* ============================================================
+   CONNECTION / UPDATE STATUS BAR (top, Telegram-style)
+   ============================================================ */
+.conn-bar{
+    position:fixed;top:0;left:0;right:0;z-index:9999;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top));
+    background:rgb(var(--ar),var(--ag),var(--ab));
+    color:#fff;font-size:13.5px;font-weight:650;
+    animation:connBarIn .25s ease;
+    box-shadow:0 4px 16px rgba(0,0,0,.15);
+}
+@keyframes connBarIn{from{transform:translateY(-100%);}to{transform:translateY(0);}}
+.conn-spinner{
+    width:14px;height:14px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.4);border-top-color:#fff;
+    animation:connSpin .8s linear infinite;flex-shrink:0;
+}
+@keyframes connSpin{to{transform:rotate(360deg);}}
+
+/* ============================================================
+   NEW BOTTOM NAVIGATION (mobile) — Telegram/MAX style pill bar
+   ============================================================ */
+.tg-bottomnav-wrap{
+    position:fixed;left:0;right:0;bottom:0;z-index:40;
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px calc(10px + env(safe-area-inset-bottom));
+    pointer-events:none;
+}
+.tg-bottomnav-wrap > *{pointer-events:auto;}
+.tg-bottomnav{
+    flex:1;display:flex;align-items:center;justify-content:space-around;
+    background:var(--navbg, rgba(255,255,255,.86));
+    backdrop-filter:blur(24px) saturate(160%);
+    -webkit-backdrop-filter:blur(24px) saturate(160%);
+    border-radius:30px;padding:7px 6px;
+    box-shadow:0 10px 34px rgba(40,25,60,.14);
+    border:1px solid rgba(255,255,255,.5);
+}
+body.dark .tg-bottomnav{
+    background:rgba(36,34,42,.86);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 10px 34px rgba(0,0,0,.4);
+}
+.tg-bottomnav-item{
+    position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2px;padding:7px 14px;border-radius:20px;color:var(--muted);
+    transition:background .18s ease,color .18s ease,transform .15s ease;
+    min-width:56px;
+}
+.tg-bottomnav-item:active{transform:scale(.92);}
+.tg-bottomnav-item.active{
+    background:rgba(var(--ar),var(--ag),var(--ab),.14);
+    color:rgb(var(--ar),var(--ag),var(--ab));
+}
+.tg-bottomnav-item .tg-nav-label{font-size:10.5px;font-weight:650;}
+.tg-bottomnav-badge{
+    position:absolute;top:2px;right:8px;
+    background:#e0453b;color:#fff;font-size:10px;font-weight:750;
+    min-width:16px;height:16px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;padding:0 4px;
+}
+.tg-search-fab{
+    width:52px;height:52px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--navbg, rgba(255,255,255,.86));
+    backdrop-filter:blur(24px) saturate(160%);
+    -webkit-backdrop-filter:blur(24px) saturate(160%);
+    box-shadow:0 10px 34px rgba(40,25,60,.14);
+    border:1px solid rgba(255,255,255,.5);
+    color:var(--txt);transition:transform .15s ease;
+}
+.tg-search-fab:active{transform:scale(.9);}
+body.dark .tg-search-fab{
+    background:rgba(36,34,42,.86);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 10px 34px rgba(0,0,0,.4);
+}
+
+/* Reserve space so content isn't hidden behind the floating nav */
+.panels:not(.mobile-chat-open) .list{padding-bottom:86px;}
+.tg-settings{padding-bottom:86px;}
+.tg-contactscalls{padding-bottom:86px;}
+
+@media (min-width:881px){
+    .tg-bottomnav-wrap{display:none;}
+}
+
+/* ============================================================
+   CONTACTS / CALLS screens
+   ============================================================ */
+.tg-contactscalls{width:100%;height:100%;overflow:auto;}
+.tg-cc-head{padding:20px 20px 6px;}
+.tg-cc-head h1{margin:0 0 14px;font-size:26px;}
+.tg-cc-hint{padding:10px 20px 4px;font-size:13px;color:var(--muted);}
+.tg-cc-row{
+    display:flex;align-items:center;gap:14px;width:100%;padding:11px 20px;text-align:left;
+    transition:background .15s ease;
+}
+.tg-cc-row:hover{background:rgba(127,127,127,.08);}
+.tg-cc-call-btn{
+    width:38px;height:38px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(var(--ar),var(--ag),var(--ab),.12);color:rgb(var(--ar),var(--ag),var(--ab));
+    transition:background .15s ease,transform .15s ease;
+}
+.tg-cc-call-btn:hover{background:rgba(var(--ar),var(--ag),var(--ab),.22);}
+.tg-cc-call-btn:active{transform:scale(.9);}
 
 .device-item{
     display:flex;
@@ -3538,8 +3795,85 @@ body.dark .poll-voter-option {
     }
 }
 
-/* Attach menu: stickers + poll only. */
- Voice is intentionally NOT here. */
+/* ============================================================
+   POLL CREATOR MODAL — was missing styles entirely, causing
+   the "create poll" form to render with no formatting at all.
+   ============================================================ */
+.poll-creator-modern{
+    width:min(480px,100%);
+}
+.poll-creator-modern .option-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+}
+.poll-creator-modern .option-row input{
+    flex:1;
+    border:2px solid transparent;
+    border-radius:14px;
+    background:var(--ch);
+    padding:12px 14px;
+    outline:0;
+    color:var(--txt);
+    font-size:14.5px;
+    transition:background .3s, border-color .2s;
+}
+.poll-creator-modern .option-row input:focus{
+    border-color:rgb(var(--ar),var(--ag),var(--ab));
+    background:#fff;
+}
+body.dark .poll-creator-modern .option-row input:focus{
+    background:#2a2a30;
+}
+.poll-creator-modern .remove-option{
+    flex-shrink:0;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--err);
+    background:rgba(186,26,26,.09);
+    font-size:15px;
+    font-weight:700;
+    transition:background .18s ease, transform .15s ease;
+}
+.poll-creator-modern .remove-option:hover{
+    background:rgba(186,26,26,.18);
+}
+.poll-creator-modern .remove-option:active{
+    transform:scale(.9);
+}
+.poll-creator-modern .add-option-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    width:100%;
+    margin-top:10px;
+    padding:11px 14px;
+    border-radius:14px;
+    border:1.5px dashed rgba(var(--ar),var(--ag),var(--ab),.4);
+    background:rgba(var(--ar),var(--ag),var(--ab),.06);
+    color:rgb(var(--ar),var(--ag),var(--ab));
+    font-weight:650;
+    font-size:14px;
+    transition:background .18s ease, border-color .18s ease;
+}
+.poll-creator-modern .add-option-btn:hover{
+    background:rgba(var(--ar),var(--ag),var(--ab),.12);
+    border-color:rgba(var(--ar),var(--ag),var(--ab),.6);
+}
+.poll-creator-modern .toggle-row{
+    margin-top:18px;
+    padding:12px 14px;
+    background:var(--ch);
+    border-radius:14px;
+}
+
+/* Attach menu: stickers + poll only. Voice is intentionally NOT here. */
 .attach-menu{
   border-radius:20px!important;
   padding:8px!important;
@@ -4329,7 +4663,17 @@ function Icon({ name, size=22, stroke=2.25, fill="none", className="" }) {
         megaphone: <><path d="M20 4L8 9v6l12 5V4z"/><path d="M4 12h4"/><path d="M4 18h4"/><path d="M4 6h4"/></>,
         pin: <><path d="M12 17v5"/><path d="M9 3h6l1 6 3 3v2H5v-2l3-3z"/></>,
         copy: <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></>,
-        star: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        star: <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>,
+        qrcode: <><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 14h2v2h-2zM14 19h2v2h-2zM19 19h2v2h-2z"/></>,
+        lock: <><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></>,
+        folder: <><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></>,
+        battery: <><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 10v4"/><path d="M6 10v4"/></>,
+        storage: <><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6a8 3 0 0 0 16 0V5"/><path d="M4 11v6a8 3 0 0 0 16 0v-6"/></>,
+        palette: <><circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.3" fill="currentColor"/><circle cx="12" cy="8" r="1.3" fill="currentColor"/><circle cx="16" cy="10" r="1.3" fill="currentColor"/><circle cx="9" cy="15" r="1.3" fill="currentColor"/><path d="M12 21a9 9 0 0 1 0-18 4 4 0 0 1 0 8h-1a2 2 0 0 0 0 4h1a1 1 0 0 1 0 2"/></>,
+        briefcase: <><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></>,
+        wifi: <><path d="M2 8.5a17 17 0 0 1 20 0"/><path d="M5.5 12.5a12 12 0 0 1 13 0"/><path d="M9 16.5a6.5 6.5 0 0 1 6 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></>,
+        link2: <><path d="M9 17H7a5 5 0 0 1 0-10h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><path d="M8 12h8"/></>,
+        phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.81.35 1.6.68 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.25a2 2 0 0 1 2.11-.45c.74.33 1.53.56 2.34.68A2 2 0 0 1 22 16.92z"/>
     };
     return (
         <svg className={"icon "+className} width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
@@ -4544,6 +4888,44 @@ function Toast({ toast }) {
         <div className={"toast " + (toast.error ? "error" : "")}>
             <Icon name={toast.error ? "info" : "check"} size={19} />
             {toast.text}
+        </div>
+    );
+}
+
+// ===== СТАТУС-БАР СОЕДИНЕНИЯ (сверху, как в Telegram) =====
+function ConnectionBar() {
+    const [status, setStatus] = useState('online'); // 'online' | 'connecting' | 'updating'
+
+    useEffect(() => {
+        if (!window.db) return;
+        const ref = window.db.ref('.info/connected');
+        let wasOffline = false;
+        let updateTimer = null;
+        const handler = snap => {
+            const connected = snap.val();
+            if (!connected) {
+                wasOffline = true;
+                setStatus('connecting');
+            } else if (wasOffline) {
+                wasOffline = false;
+                setStatus('updating');
+                updateTimer = setTimeout(() => setStatus('online'), 900);
+            } else {
+                setStatus('online');
+            }
+        };
+        ref.on('value', handler);
+        return () => {
+            ref.off('value', handler);
+            if (updateTimer) clearTimeout(updateTimer);
+        };
+    }, []);
+
+    if (status === 'online') return null;
+    return (
+        <div className="conn-bar">
+            <span className="conn-spinner"/>
+            {status === 'connecting' ? 'Соединение…' : 'Обновление…'}
         </div>
     );
 }
@@ -5556,6 +5938,61 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
     const [accentTick, setAccentTick] = useState(0);
     const accentColor = useMemo(() => localStorage.getItem('kuban-accent-color') || '#6750a4', [accentTick]);
 
+    // ===== Telegram-style navigation =====
+    const [view, setView] = useState('main'); // main | edit | notifications | privacy | devices | email | folders | reaction | appearance | admin | account | about
+    const [moreOpen, setMoreOpen] = useState(false);
+    const [autoDelete, setAutoDelete] = useState(user.autoDeleteMonths || 6);
+    const [autoDeleteOpen, setAutoDeleteOpen] = useState(false);
+    const [qrOpen, setQrOpen] = useState(false);
+    const [folders, setFolders] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('tgFolders') || '[]'); } catch(e) { return []; }
+    });
+    const [newFolderName, setNewFolderName] = useState('');
+
+    useEffect(() => {
+        localStorage.setItem('tgFolders', JSON.stringify(folders));
+    }, [folders]);
+
+    function addFolder() {
+        const n = newFolderName.trim();
+        if (!n) return;
+        setFolders(f => [...f, { id: 'f' + Date.now(), name: n }]);
+        setNewFolderName('');
+    }
+    function removeFolder(id) {
+        setFolders(f => f.filter(x => x.id !== id));
+    }
+
+    async function setAutoDeleteMonths(m) {
+        setAutoDelete(m);
+        setAutoDeleteOpen(false);
+        try {
+            if (window.db) await window.db.ref('users/' + user.uid).update({ autoDeleteMonths: m });
+            onSave({ ...user, autoDeleteMonths: m });
+            show('Срок автоудаления обновлён');
+        } catch(e) { show(friendlyError(e), true); }
+    }
+
+    function inviteFriends() {
+        const link = location.origin + location.pathname + (username ? ('?u=' + normalizeUsername(username)) : '');
+        if (navigator.share) {
+            navigator.share({ title: 'Телеграммы по Кубани', url: link }).catch(()=>{});
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(link).then(() => show('Ссылка скопирована')).catch(() => show('Не удалось скопировать', true));
+        } else {
+            show(link);
+        }
+    }
+
+    function copyProfileLink() {
+        const link = location.origin + location.pathname + '?u=' + normalizeUsername(username);
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(link).then(() => show('Ссылка на профиль скопирована')).catch(() => show('Не удалось скопировать', true));
+        } else {
+            show(link);
+        }
+    }
+
     useEffect(() => {
         localStorage.setItem('quickReaction', quickReaction);
     }, [quickReaction]);
@@ -5834,220 +6271,287 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
 
     return (
         <div className="panel">
-            <div className="settings">
-                <div className="setting-card">
-                    <div className="profile-head">
-                        <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={78} verified={user.verified} />
-                        <div>
-                            <div style={{display:'flex', alignItems:'center', gap:8, flexWrap:'wrap'}}>
-                                <h2 style={{margin:0}}>{name}</h2>
-                                {user.verified && <span className="official-badge">Официальный аккаунт</span>}
-                            </div>
-                            <div className="muted">@{normalizeUsername(username)}</div>
-                            {user.email && <div className="muted" style={{fontSize:12, display:'flex', alignItems:'center', flexWrap:'wrap', gap:6, rowGap:4}}>
-                                <span style={{wordBreak:'break-all'}}>{user.email}</span>
-                                {emailVerified ? 
-                                    <span className="badge-verified" style={{padding:'2px 8px', borderRadius:8, background:'#2e7d5a', color:'#fff', fontSize:10, whiteSpace:'nowrap', flexShrink:0}}>✓ Подтверждён</span> :
-                                    <span className="badge-not-verified" style={{padding:'2px 8px', borderRadius:8, background:'#ba1a1a', color:'#fff', fontSize:10, whiteSpace:'nowrap', flexShrink:0}}>Не подтверждён</span>
-                                }
-                            </div>}
+            <div className="tg-settings">
+
+            {view === 'main' && (<>
+                <div className="tg-topbar">
+                    <div className="tg-topbar-btn" onClick={() => setQrOpen(true)}><Icon name="qrcode" size={20}/></div>
+                    <div className="tg-topbar-title">Настройки</div>
+                    <div className="tg-topbar-btn" onClick={() => setView('edit')}><Icon name="edit" size={19}/></div>
+                </div>
+
+                <div className="tg-profile-card">
+                    <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={68} verified={user.verified} />
+                    <div style={{flex:1, minWidth:0}}>
+                        <div className="name" style={{display:'flex', alignItems:'center', gap:6, flexWrap:'wrap'}}>
+                            {name}
+                            {user.verified && <span className="official-badge">✓</span>}
                         </div>
+                        <div className="sub">@{normalizeUsername(username)}</div>
                     </div>
                 </div>
+
+                <button className="tg-invite" onClick={inviteFriends}>
+                    <div className="tg-row-icon"><Icon name="share" size={17}/></div>
+                    Пригласить друзей
+                </button>
 
                 {onOpenSaved && (
-                    <button className="setting-card saved-messages-entry" onClick={onOpenSaved} style={{display:'flex', alignItems:'center', gap:14, width:'100%', textAlign:'left', cursor:'pointer'}}>
-                        <div className="saved-avatar"><Icon name="star" size={22}/></div>
-                        <div style={{flex:1}}>
-                            <div style={{fontWeight:700, fontSize:15}}>Избранное</div>
-                            <div className="muted" style={{fontSize:12.5}}>Заметки, файлы и сообщения для себя</div>
-                        </div>
-                        <Icon name="back" size={18} style={{transform:'scaleX(-1)', opacity:.5}}/>
-                    </button>
+                    <TgGroup>
+                        <TgRow icon="star" iconClass="tg-ic-yellow" label="Избранное" value="Заметки, файлы, сообщения для себя" onClick={onOpenSaved} />
+                    </TgGroup>
                 )}
 
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>Конфиденциальность</h3>
-                    <p className="muted" style={{marginTop:-6, marginBottom:12, fontSize:13}}>Управляйте тем, что видят другие пользователи и кто может вам звонить.</p>
-                    <Toggle value={hideLastSeen} onChange={setHideLastSeen} label={
-                        <span style={{display:"flex",alignItems:"center",gap:8}}>
-                            <Icon name={hideLastSeen ? "eyeOff" : "eye"} size={18} />
-                            {hideLastSeen ? "Скрывать время последнего визита" : "Показывать время последнего визита"}
-                        </span>
-                    } />
-                    <Toggle value={allowCalls} onChange={setAllowCalls} label={
-                        <span style={{display:"flex",alignItems:"center",gap:8}}>
-                            <span style={{fontSize:16, lineHeight:1}}>📞</span>
-                            {allowCalls ? "Разрешать звонки" : "Звонки запрещены"}
-                        </span>
-                    } />
-                </div>
+                <TgGroup>
+                    <TgRow icon="bell" iconClass="tg-ic-red" label="Уведомления и звук" onClick={() => setView('notifications')} />
+                    <TgRow icon="lock" iconClass="tg-ic-green" label="Конфиденциальность" onClick={() => setView('privacy')} />
+                    <TgRow icon="device" iconClass="tg-ic-blue" label="Устройства" value={devices.length + ' активных'} onClick={() => setView('devices')} />
+                    <TgRow icon="mail" iconClass="tg-ic-teal" label="Почта" value={user.email || 'Не привязана'} onClick={() => setView('email')} />
+                </TgGroup>
 
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>Данные профиля</h3>
-                    <div className="field"><label>Имя</label><input value={name} onChange={e=>setName(e.target.value)} maxLength="40" /></div>
-                    <div className="field">
-                        <label>Юзернейм — по нему вас ищут</label>
-                        <input value={"@"+username.replace(/^@/,"")} onChange={e=>setUsername(e.target.value.replace(/^@/,""))} maxLength="24" />
+                <TgGroup>
+                    <TgRow icon="folder" iconClass="tg-ic-purple" label="Папки" value={folders.length ? folders.length + ' папок' : 'Не настроены'} onClick={() => setView('folders')} />
+                    <TgRow icon="smile" iconClass="tg-ic-pink" label="Быстрая реакция" value={quickReaction} onClick={() => setView('reaction')} />
+                    <TgRow icon="palette" iconClass="tg-ic-indigo" label="Оформление" value={darkMode ? 'Тёмная тема' : 'Светлая тема'} onClick={() => setView('appearance')} />
+                </TgGroup>
+
+                {isAdmin && (
+                    <TgGroup>
+                        <TgRow icon="key" iconClass="tg-ic-orange" label="Администрирование" onClick={() => setView('admin')} />
+                    </TgGroup>
+                )}
+
+                <TgGroup>
+                    <TgRow icon="logout" iconClass="tg-ic-gray" label="Аккаунт" onClick={() => setView('account')} />
+                    <TgRow icon="info" iconClass="tg-ic-gray" label="О мессенджере" onClick={() => setView('about')} />
+                </TgGroup>
+            </>)}
+
+            {view === 'edit' && (
+                <EditProfileView
+                    name={name} setName={setName}
+                    username={username} setUsername={setUsername}
+                    about={about} setAbout={setAbout}
+                    avatar={avatar} setAvatar={setAvatar}
+                    avatarUrl={avatarUrl} setAvatarUrl={setAvatarUrl}
+                    tempAvatarUrl={tempAvatarUrl} setTempAvatarUrl={setTempAvatarUrl}
+                    uploading={uploading} fileInputRef={fileInputRef}
+                    handleFilePick={handleFilePick} applyAvatarUrl={applyAvatarUrl}
+                    removeAvatarUrl={removeAvatarUrl} openHosting={openHosting}
+                    user={user} busy={busy} save={save}
+                    autoDelete={autoDelete} setAutoDeleteOpen={setAutoDeleteOpen}
+                    moreOpen={moreOpen} setMoreOpen={setMoreOpen}
+                    copyProfileLink={copyProfileLink} onLogout={onLogout}
+                    onBack={() => setView('main')}
+                />
+            )}
+
+            {view === 'notifications' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Уведомления и звук</div>
+                        <div className="tg-topbar-spacer"/>
                     </div>
-                    <div className="field">
-                        <label>О себе</label>
-                        <textarea rows="4" placeholder="Расскажите немного о себе" value={about} onChange={e=>setAbout(e.target.value)} maxLength="180" />
+                    <TgGroup>
+                        <div style={{padding:'14px 14px 4px'}} className="muted">Разрешите браузеру показывать уведомления о новых сообщениях.</div>
+                        <div style={{padding:'6px 14px 14px'}}>
+                            <button className="secondary" onClick={enableNotifications}><Icon name="bell" size={18}/> Включить уведомления</button>
+                        </div>
+                    </TgGroup>
+                </div>
+            )}
+
+            {view === 'privacy' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Конфиденциальность</div>
+                        <div className="tg-topbar-spacer"/>
                     </div>
-                    <label style={{ fontSize:13, fontWeight:650, color:"#49454f" }}>Стандартная аватарка</label>
-                    <div className="avatar-grid">
-                        {AVATARS.map(a => (
-                            <button key={a.id} className={"avatar-choice " + (avatar===a.id ? "selected" : "")} style={{background:a.bg}} onClick={() => { setAvatar(a.id); setAvatarUrl(""); setTempAvatarUrl(""); }}>
-                                {a.emoji}
-                            </button>
-                        ))}
+                    <TgGroup>
+                        <Toggle value={hideLastSeen} onChange={setHideLastSeen} label={
+                            <span style={{display:"flex",alignItems:"center",gap:8}}>
+                                <Icon name={hideLastSeen ? "eyeOff" : "eye"} size={18} />
+                                {hideLastSeen ? "Скрывать время последнего визита" : "Показывать время последнего визита"}
+                            </span>
+                        } />
+                        <Toggle value={allowCalls} onChange={setAllowCalls} label={
+                            <span style={{display:"flex",alignItems:"center",gap:8}}>
+                                <span style={{fontSize:16, lineHeight:1}}>📞</span>
+                                {allowCalls ? "Разрешать звонки" : "Звонки запрещены"}
+                            </span>
+                        } />
+                    </TgGroup>
+                </div>
+            )}
+
+            {view === 'devices' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Устройства</div>
+                        <div className="tg-topbar-spacer"/>
                     </div>
-                    
-                    <div style={{ marginTop: 16 }}>
-                        <label style={{ fontSize:13, fontWeight:650, color:"#49454f", display:'block', marginBottom:8 }}>Или укажите ссылку на картинку</label>
-                        <div className="avatar-url-input">
-                            <input 
-                                type="text" 
-                                placeholder="https://example.com/avatar.jpg" 
-                                value={tempAvatarUrl} 
-                                onChange={e => setTempAvatarUrl(e.target.value)}
-                            />
-                            <button className="primary" onClick={applyAvatarUrl}>Применить</button>
-                        </div>
-                        <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
-                        <div className="avatar-url-input" style={{ marginTop: 8 }}>
-                            <button className="primary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{ width:'100%', justifyContent:'center' }}>
-                                {uploading ? 'Загрузка…' : '📷 Выбрать фото с устройства'}
-                            </button>
-                        </div>
-                        <div className="avatar-url-input" style={{ marginTop: 8 }}>
-                            <button className="secondary" onClick={openHosting} style={{ width:'100%', justifyContent:'center' }}>
-                                📤 Или через hostimg.pw (ссылкой)
-                            </button>
-                        </div>
-                        <div className="upload-hint">
-                            💡 Выберите фото с устройства или вставьте прямую ссылку на изображение
-                        </div>
-                        {avatarUrl && (
-                            <div className="avatar-url-preview">
-                                <div className="avatar-preview" style={{ backgroundImage: `url(${avatarUrl})` }} />
-                                <span className="muted">{avatarUrl.substring(0, 50)}...</span>
-                                <button className="remove-btn" onClick={removeAvatarUrl}>Удалить</button>
-                            </div>
+                    <TgGroup>
+                        {devices.length === 0 ? (
+                            <p className="muted" style={{padding:'14px'}}>Нет активных устройств</p>
+                        ) : (
+                            devices.map(device => (
+                                <div className="device-item" key={device.id}>
+                                    <span className="device-icon">{deviceEmoji(device.name)}</span>
+                                    <div className="device-info">
+                                        <div className="device-name">{device.name}</div>
+                                        <div className="device-time">
+                                            {device.current ? (
+                                                <span className="device-current">● В сети сейчас</span>
+                                            ) : (
+                                                'Последний визит: ' + fmtLastSeen(device.lastSeen)
+                                            )}
+                                        </div>
+                                    </div>
+                                    {device.current && <span className="device-badge">Это устройство</span>}
+                                </div>
+                            ))
                         )}
-                    </div>
-                    
-                    <button className="primary" style={{marginTop:18}} onClick={save} disabled={busy}>
-                        {busy ? "Сохраняем…" : "Сохранить изменения"}
-                    </button>
+                    </TgGroup>
                 </div>
-                
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>Быстрая реакция (двойной клик)</h3>
-                    <div style={{display:'flex', gap:8, flexWrap:'wrap', marginTop:8}}>
-                        {REACTIONS.map(r => (
-                            <button 
-                                key={r}
-                                className={"avatar-choice " + (quickReaction === r ? 'selected' : '')}
-                                onClick={() => setQuickReaction(r)}
-                                style={{fontSize:28, width:50, height:50}}
-                            >
-                                {r}
-                            </button>
-                        ))}
+            )}
+
+            {view === 'email' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Привязка почты</div>
+                        <div className="tg-topbar-spacer"/>
                     </div>
-                </div>
-                
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>Привязка почты</h3>
-                    {user.email ? (
-                        <div>
-                            <div className="email-status">
-                                <Icon name="mail" size={18} />
-                                <span style={{flex:1}}>{user.email}</span>
-                                {emailVerified ? 
-                                    <span className="badge-verified">✓ Подтверждён</span> :
-                                    <span className="badge-not-verified">Не подтверждён</span>
-                                }
+                    <div className="setting-card">
+                        {user.email ? (
+                            <div>
+                                <div className="email-status">
+                                    <Icon name="mail" size={18} />
+                                    <span style={{flex:1}}>{user.email}</span>
+                                    {emailVerified ? 
+                                        <span className="badge-verified">✓ Подтверждён</span> :
+                                        <span className="badge-not-verified">Не подтверждён</span>
+                                    }
+                                </div>
+                                <div className="email-actions">
+                                    {!emailVerified && (
+                                        <>
+                                            <button className="secondary" onClick={sendVerificationEmail}>
+                                                <Icon name="mail" size={18} /> Отправить письмо
+                                            </button>
+                                            <button className="secondary" onClick={checkVerificationStatus}>
+                                                <Icon name="refresh" size={18} /> Проверить статус
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             </div>
-                            <div className="email-actions">
-                                {!emailVerified && (
-                                    <>
-                                        <button className="secondary" onClick={sendVerificationEmail}>
-                                            <Icon name="mail" size={18} /> Отправить письмо
-                                        </button>
-                                        <button className="secondary" onClick={checkVerificationStatus}>
-                                            <Icon name="refresh" size={18} /> Проверить статус
-                                        </button>
-                                    </>
+                        ) : (
+                            <div className="field">
+                                <label>Email для привязки</label>
+                                <input type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} />
+                                {showPasswordField && (
+                                    <input type="password" placeholder="Пароль (минимум 6 символов)" value={emailPassword} onChange={e=>setEmailPassword(e.target.value)} />
                                 )}
                             </div>
-                        </div>
-                    ) : (
-                        <div className="field">
-                            <label>Email для привязки</label>
-                            <input type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} />
-                            {showPasswordField && (
-                                <input type="password" placeholder="Пароль (минимум 6 символов)" value={emailPassword} onChange={e=>setEmailPassword(e.target.value)} />
+                        )}
+                        <div className="email-actions">
+                            {!user.email ? (
+                                <>
+                                    {!showPasswordField ? (
+                                        <button className="secondary" onClick={() => setShowPasswordField(true)}>
+                                            <Icon name="mail" size={18} /> Привязать почту
+                                        </button>
+                                    ) : (
+                                        <button className="primary" onClick={linkEmail} disabled={emailBusy}>
+                                            {emailBusy ? 'Привязываем…' : 'Сохранить почту и пароль'}
+                                        </button>
+                                    )}
+                                </>
+                            ) : (
+                                emailVerified && (
+                                    <div style={{ fontSize:12, color:'var(--muted)', marginTop:8 }}>
+                                        ✅ Почта подтверждена. Вы можете использовать её для входа.
+                                    </div>
+                                )
                             )}
                         </div>
-                    )}
-                    <div className="email-actions">
-                        {!user.email ? (
-                            <>
-                                {!showPasswordField ? (
-                                    <button className="secondary" onClick={() => setShowPasswordField(true)}>
-                                        <Icon name="mail" size={18} /> Привязать почту
-                                    </button>
-                                ) : (
-                                    <button className="primary" onClick={linkEmail} disabled={emailBusy}>
-                                        {emailBusy ? 'Привязываем…' : 'Сохранить почту и пароль'}
-                                    </button>
-                                )}
-                            </>
-                        ) : (
-                            emailVerified && (
-                                <div style={{ fontSize:12, color:'var(--muted)', marginTop:8 }}>
-                                    ✅ Почта подтверждена. Вы можете использовать её для входа.
-                                </div>
-                            )
-                        )}
                     </div>
                 </div>
-                
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>Активные устройства</h3>
-                    {devices.length === 0 ? (
-                        <p className="muted">Нет активных устройств</p>
-                    ) : (
-                        devices.map(device => (
-                            <div className="device-item" key={device.id}>
-                                <span className="device-icon">{deviceEmoji(device.name)}</span>
-                                <div className="device-info">
-                                    <div className="device-name">{device.name}</div>
-                                    <div className="device-time">
-                                        {device.current ? (
-                                            <span className="device-current">● В сети сейчас</span>
-                                        ) : (
-                                            'Последний визит: ' + fmtLastSeen(device.lastSeen)
-                                        )}
-                                    </div>
+            )}
+
+            {view === 'folders' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Папки</div>
+                        <div className="tg-topbar-spacer"/>
+                    </div>
+                    <div className="tg-group-hint">Папки помогают группировать чаты. Создайте папку и дайте ей название — чуть позже вы сможете добавлять в неё чаты.</div>
+                    <TgGroup>
+                        <div className="tg-new-folder-row">
+                            <input placeholder="Название новой папки" value={newFolderName} onChange={e=>setNewFolderName(e.target.value)} maxLength="24" onKeyDown={e => e.key==='Enter' && addFolder()} />
+                            <button className="primary" style={{height:40, padding:'0 16px'}} onClick={addFolder}>Создать</button>
+                        </div>
+                    </TgGroup>
+                    {folders.length > 0 && (
+                        <TgGroup title="Ваши папки">
+                            {folders.map(f => (
+                                <div className="tg-folder-item" key={f.id}>
+                                    <div className="tg-folder-icon"><Icon name="folder" size={18}/></div>
+                                    <div className="tg-folder-name">{f.name}</div>
+                                    <div className="tg-folder-del" onClick={() => removeFolder(f.id)}><Icon name="trash" size={16}/></div>
                                 </div>
-                                {device.current && <span className="device-badge">Это устройство</span>}
-                            </div>
-                        ))
+                            ))}
+                        </TgGroup>
                     )}
                 </div>
-                
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>Внешний вид</h3>
-                    <Toggle value={darkMode} onChange={setDarkMode} label={
-                        <span style={{display:"flex",alignItems:"center",gap:8}}>
-                            <Icon name={darkMode ? "moon" : "sun"} size={18} />
-                            {darkMode ? "Тёмная тема" : "Светлая тема"}
-                        </span>
-                    } />
-                    <div style={{marginTop:16}}>
+            )}
+
+            {view === 'reaction' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Быстрая реакция</div>
+                        <div className="tg-topbar-spacer"/>
+                    </div>
+                    <div className="setting-card">
+                        <div className="muted" style={{marginBottom:8}}>Эта реакция ставится по двойному клику на сообщение.</div>
+                        <div style={{display:'flex', gap:8, flexWrap:'wrap', marginTop:8}}>
+                            {REACTIONS.map(r => (
+                                <button 
+                                    key={r}
+                                    className={"avatar-choice " + (quickReaction === r ? 'selected' : '')}
+                                    onClick={() => setQuickReaction(r)}
+                                    style={{fontSize:28, width:50, height:50}}
+                                >
+                                    {r}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {view === 'appearance' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Оформление</div>
+                        <div className="tg-topbar-spacer"/>
+                    </div>
+                    <TgGroup>
+                        <Toggle value={darkMode} onChange={setDarkMode} label={
+                            <span style={{display:"flex",alignItems:"center",gap:8}}>
+                                <Icon name={darkMode ? "moon" : "sun"} size={18} />
+                                {darkMode ? "Тёмная тема" : "Светлая тема"}
+                            </span>
+                        } />
+                    </TgGroup>
+                    <div className="setting-card">
                         <label style={{fontSize:13, color:'var(--muted)', fontWeight:600}}>Цвет оформления</label>
                         <div style={{display:'flex', gap:10, flexWrap:'wrap', marginTop:10}}>
                             {window.ACCENT_PRESETS.map(c => (
@@ -6066,17 +6570,16 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                         </div>
                     </div>
                 </div>
-                
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>Уведомления</h3>
-                    <p className="muted">Разрешите браузеру показывать уведомления о новых сообщениях.</p>
-                    <button className="secondary" onClick={enableNotifications}><Icon name="bell" size={18}/> Включить уведомления</button>
-                </div>
-                
-                {/* Админ-панель */}
-                {isAdmin && (
+            )}
+
+            {view === 'admin' && isAdmin && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Администрирование</div>
+                        <div className="tg-topbar-spacer"/>
+                    </div>
                     <div className="setting-card">
-                        <h3 style={{marginTop:0}}>🔑 Администрирование</h3>
                         <div className="field">
                             <label>Выдать галочку пользователю</label>
                             <div style={{display:'flex', gap:8}}>
@@ -6100,30 +6603,215 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                             </div>
                         </div>
                     </div>
-                )}
-                
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>Аккаунт</h3>
-                    <button className="primary danger" style={{marginBottom:8}} onClick={onLogout}>
-                        <Icon name="logout" size={18}/> Выйти
-                    </button>
-                    <button className="primary danger" onClick={deleteAccount} disabled={busy}>
-                        <Icon name="trash" size={18}/> {busy ? 'Удаляем…' : 'Удалить аккаунт навсегда'}
-                    </button>
-                    <div style={{fontSize:11, color:'var(--err)', marginTop:8}}>
-                        ⚠️ Все данные будут удалены без возможности восстановления
+                </div>
+            )}
+
+            {view === 'account' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">Аккаунт</div>
+                        <div className="tg-topbar-spacer"/>
+                    </div>
+                    <div className="setting-card">
+                        <button className="primary danger" style={{marginBottom:8, width:'100%', justifyContent:'center'}} onClick={onLogout}>
+                            <Icon name="logout" size={18}/> Выйти
+                        </button>
+                        <button className="primary danger" style={{width:'100%', justifyContent:'center'}} onClick={deleteAccount} disabled={busy}>
+                            <Icon name="trash" size={18}/> {busy ? 'Удаляем…' : 'Удалить аккаунт навсегда'}
+                        </button>
+                        <div style={{fontSize:11, color:'var(--err)', marginTop:8}}>
+                            ⚠️ Все данные будут удалены без возможности восстановления
+                        </div>
                     </div>
                 </div>
-                
-                <div className="setting-card">
-                    <h3 style={{marginTop:0}}>О мессенджере</h3>
-                    <div className="about-section">
-                        <strong>Телеграммы по Кубани</strong> — свободный мессенджер с открытым исходным кодом.<br/>
-                        Создано в России.<br/>
-                        Разработчик: ggbaster (Brawkli Entertainment) 2026.
+            )}
+
+            {view === 'about' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">О мессенджере</div>
+                        <div className="tg-topbar-spacer"/>
                     </div>
+                    <div className="setting-card">
+                        <div className="about-section">
+                            <strong>Телеграммы по Кубани</strong> — свободный мессенджер с открытым исходным кодом.<br/>
+                            Создано в России.<br/>
+                            Разработчик: ggbaster (Brawkli Entertainment) 2026.
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            </div>
+
+            {qrOpen && (
+                <div className="overlay" onClick={() => setQrOpen(false)}>
+                    <div className="modal" onClick={e=>e.stopPropagation()} style={{maxWidth:340, textAlign:'center'}}>
+                        <div className="modal-head">
+                            <h2 style={{margin:0, fontSize:17}}>Мой профиль</h2>
+                            <button className="iconbtn close" onClick={() => setQrOpen(false)}><Icon name="close"/></button>
+                        </div>
+                        <div style={{display:'flex', justifyContent:'center', margin:'10px 0 16px'}}>
+                            <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={90} verified={user.verified} />
+                        </div>
+                        <div style={{fontWeight:700, fontSize:17}}>{name}</div>
+                        <div className="muted" style={{marginBottom:16}}>@{normalizeUsername(username)}</div>
+                        <button className="primary" style={{width:'100%', justifyContent:'center'}} onClick={copyProfileLink}>
+                            <Icon name="link2" size={18}/> Скопировать ссылку на профиль
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {autoDeleteOpen && (
+                <div className="overlay" onClick={() => setAutoDeleteOpen(false)}>
+                    <div className="modal" onClick={e=>e.stopPropagation()} style={{maxWidth:340}}>
+                        <div className="modal-head">
+                            <h2 style={{margin:0, fontSize:17}}>Автоудаление профиля</h2>
+                            <button className="iconbtn close" onClick={() => setAutoDeleteOpen(false)}><Icon name="close"/></button>
+                        </div>
+                        <div className="muted" style={{marginBottom:10, fontSize:13}}>Если вы долго не заходите в аккаунт, он будет удалён через выбранный срок.</div>
+                        {[3,6,12].map(m => (
+                            <button key={m} className={"tg-row"} style={{borderRadius:12, marginBottom:6}} onClick={() => setAutoDeleteMonths(m)}>
+                                <div className="tg-row-body"><div className="tg-row-label">{m} месяцев</div></div>
+                                {autoDelete === m && <Icon name="check" size={18}/>}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+        </div>
+    );
+}
+
+function TgGroup({ title, children }) {
+    return (
+        <>
+            {title && <div className="tg-group-title">{title}</div>}
+            <div className="tg-group">{children}</div>
+        </>
+    );
+}
+
+function TgRow({ icon, iconClass, label, value, onClick, right }) {
+    return (
+        <button className="tg-row" onClick={onClick}>
+            {icon && <div className={"tg-row-icon " + (iconClass || "tg-ic-gray")}><Icon name={icon} size={18} /></div>}
+            <div className="tg-row-body">
+                <div className="tg-row-label">{label}</div>
+                {value && <div className="tg-row-value">{value}</div>}
+            </div>
+            {right !== undefined ? <div className="tg-row-right">{right}</div> : <Icon name="back" size={16} className="tg-row-chev"/>}
+        </button>
+    );
+}
+
+function EditProfileView({
+    name, setName, username, setUsername, about, setAbout,
+    avatar, setAvatar, avatarUrl, setAvatarUrl, tempAvatarUrl, setTempAvatarUrl,
+    uploading, fileInputRef, handleFilePick, applyAvatarUrl, removeAvatarUrl, openHosting,
+    user, busy, save, autoDelete, setAutoDeleteOpen, moreOpen, setMoreOpen, copyProfileLink, onLogout, onBack
+}) {
+    return (
+        <div>
+            <div className="tg-topbar" style={{position:'relative'}}>
+                <div className="tg-topbar-btn" onClick={onBack}><Icon name="back" size={20}/></div>
+                <div className="tg-topbar-title">Изменить профиль</div>
+                <div className="tg-topbar-btn" onClick={() => setMoreOpen(o=>!o)}><Icon name="more" size={19}/></div>
+                {moreOpen && (
+                    <div className="tg-more-menu">
+                        <button className="tg-more-item" onClick={() => { setMoreOpen(false); copyProfileLink(); }}>
+                            <Icon name="link2" size={17}/> Скопировать ссылку профиля
+                        </button>
+                        <button className="tg-more-item danger" onClick={() => { setMoreOpen(false); onLogout(); }}>
+                            <Icon name="logout" size={17}/> Выйти из профиля
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            <div className="tg-edit-avatar-wrap">
+                <div className="tg-edit-avatar">
+                    <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={110} verified={user.verified} />
+                    <div className="tg-edit-avatar-cam" onClick={() => fileInputRef.current?.click()}>
+                        <Icon name="edit" size={16}/>
+                    </div>
+                </div>
+                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
+                {uploading && <div className="muted" style={{marginTop:8}}>Загрузка…</div>}
+            </div>
+
+            <div className="tg-input-group">
+                <div className="tg-input-row">
+                    <label>Имя</label>
+                    <input value={name} onChange={e=>setName(e.target.value)} maxLength="40" placeholder="Имя" />
+                </div>
+                <div className="tg-input-row">
+                    <label>Юзернейм</label>
+                    <input value={"@"+username.replace(/^@/,"")} onChange={e=>setUsername(e.target.value.replace(/^@/,""))} maxLength="24" />
                 </div>
             </div>
+            <div className="tg-input-hint">По юзернейму вас смогут найти в поиске.</div>
+
+            <div className="tg-input-group">
+                <div className="tg-input-row">
+                    <label>О себе</label>
+                    <textarea rows="3" placeholder="Расскажите немного о себе" value={about} onChange={e=>setAbout(e.target.value)} maxLength="180" />
+                </div>
+            </div>
+
+            <TgGroup title="Стандартная аватарка">
+                <div style={{padding:14}}>
+                    <div className="avatar-grid">
+                        {AVATARS.map(a => (
+                            <button key={a.id} className={"avatar-choice " + (avatar===a.id ? "selected" : "")} style={{background:a.bg}} onClick={() => { setAvatar(a.id); setAvatarUrl(""); setTempAvatarUrl(""); }}>
+                                {a.emoji}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </TgGroup>
+
+            <TgGroup title="Фото по ссылке">
+                <div style={{padding:14}}>
+                    <div className="avatar-url-input">
+                        <input 
+                            type="text" 
+                            placeholder="https://example.com/avatar.jpg" 
+                            value={tempAvatarUrl} 
+                            onChange={e => setTempAvatarUrl(e.target.value)}
+                        />
+                        <button className="primary" onClick={applyAvatarUrl}>Применить</button>
+                    </div>
+                    <div className="avatar-url-input" style={{ marginTop: 8 }}>
+                        <button className="secondary" onClick={openHosting} style={{ width:'100%', justifyContent:'center' }}>
+                            📤 Или через hostimg.pw (ссылкой)
+                        </button>
+                    </div>
+                    {avatarUrl && (
+                        <div className="avatar-url-preview">
+                            <div className="avatar-preview" style={{ backgroundImage: `url(${avatarUrl})` }} />
+                            <span className="muted">{avatarUrl.substring(0, 50)}...</span>
+                            <button className="remove-btn" onClick={removeAvatarUrl}>Удалить</button>
+                        </div>
+                    )}
+                </div>
+            </TgGroup>
+
+            <TgGroup>
+                <TgRow icon="trash" iconClass="tg-ic-red" label="Удалить профиль" value={autoDelete + ' месяцев'} onClick={() => setAutoDeleteOpen(true)} />
+            </TgGroup>
+
+            <button className="primary danger" style={{width:'100%', justifyContent:'center', marginTop:4, marginBottom:18}} onClick={onLogout}>
+                <Icon name="logout" size={18}/> Выйти из профиля
+            </button>
+
+            <button className="primary" style={{width:'100%', justifyContent:'center'}} onClick={save} disabled={busy}>
+                {busy ? "Сохраняем…" : "Сохранить изменения"}
+            </button>
         </div>
     );
 }
@@ -8611,9 +9299,19 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
 }
 // ===== СПИСОК =====
 // ===== СПИСОК (С ПОИСКОМ КАНАЛОВ) =====
-function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateChannel, hideLastSeen }) {
+function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateChannel, hideLastSeen, searchTick }) {
     const [search, setSearch] = useState("");
     const [focused, setFocused] = useState(false);
+    const searchInputRef = useRef(null);
+    const prevSearchTick = useRef(searchTick);
+
+    useEffect(() => {
+        if (searchTick !== undefined && searchTick !== prevSearchTick.current) {
+            prevSearchTick.current = searchTick;
+            setFocused(true);
+            if (searchInputRef.current) searchInputRef.current.focus();
+        }
+    }, [searchTick]);
     const q = search.trim().toLowerCase();       // для поиска по названию канала — не режет кириллицу
     const qUsername = normalizeUsername(search);  // строго для поиска по юзернейму (латиница)
 
@@ -8704,7 +9402,7 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
             </div>
             <div className="search">
                 <Icon name="search" size={19} />
-                <input value={search} onFocus={()=>setFocused(true)} onChange={e=>setSearch(e.target.value)} placeholder="Поиск по @юзернейму или каналу" />
+                <input value={search} onFocus={()=>setFocused(true)} onChange={e=>setSearch(e.target.value)} placeholder="Поиск по @юзернейму или каналу" ref={searchInputRef} />
                 {search && <button onClick={()=>setSearch("")}><Icon name="close" size={18} /></button>}
             </div>
             <div className="list-scroll">
@@ -8821,12 +9519,20 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
 }
 
 // ===== БОКОВАЯ ПАНЕЛЬ =====
-function Rail({ section, setSection, user, onProfile }) {
+function Rail({ section, setSection, user, onProfile, unreadCount }) {
     return (
         <nav className="rail">
             <div className="rail-items">
-                <button className={"rail-item " + (section === "chats" ? "active" : "")} onClick={()=>setSection("chats")}>
-                    <span className="rail-pill"><Icon name="chat"/></span>
+                <button className={"rail-item " + (section === "contacts" ? "active" : "")} onClick={()=>setSection("contacts")}>
+                    <span className="rail-pill"><Icon name="users"/></span>
+                    <span>Контакты</span>
+                </button>
+                <button className={"rail-item " + (section === "calls" ? "active" : "")} onClick={()=>setSection("calls")}>
+                    <span className="rail-pill"><Icon name="phone"/></span>
+                    <span>Звонки</span>
+                </button>
+                <button className={"rail-item " + (section === "chats" ? "active" : "")} onClick={()=>setSection("chats")} style={{position:'relative'}}>
+                    <span className="rail-pill"><Icon name="chat"/>{unreadCount > 0 && <span className="tg-bottomnav-badge" style={{position:'absolute', top:-2, right:-2}}>{unreadCount > 99 ? "99+" : unreadCount}</span>}</span>
                     <span>Чаты</span>
                 </button>
                 <button className={"rail-item " + (section === "settings" ? "active" : "")} onClick={()=>setSection("settings")}>
@@ -8841,36 +9547,177 @@ function Rail({ section, setSection, user, onProfile }) {
     );
 }
 
-// ===== МОБИЛЬНАЯ НАВИГАЦИЯ =====
-function MobileNav({ section, setSection, onProfile, user, mobileChat }) {
+// ===== МОБИЛЬНАЯ НАВИГАЦИЯ (как в MAX / Telegram) =====
+function MobileNav({ section, setSection, onProfile, user, mobileChat, unreadCount, onSearch }) {
     if (mobileChat) return null;
-    
+
     return (
-        <nav className="mobile-nav">
-            <div className="mobile-nav-items">
-                <button 
-                    className={"mobile-nav-item " + (section === "chats" ? "active" : "")}
+        <div className="tg-bottomnav-wrap">
+            <nav className="tg-bottomnav">
+                <button
+                    className={"tg-bottomnav-item " + (section === "contacts" ? "active" : "")}
+                    onClick={() => setSection("contacts")}
+                >
+                    <Icon name="users" size={23} />
+                    <span className="tg-nav-label">Контакты</span>
+                </button>
+                <button
+                    className={"tg-bottomnav-item " + (section === "calls" ? "active" : "")}
+                    onClick={() => setSection("calls")}
+                >
+                    <Icon name="phone" size={23} />
+                    <span className="tg-nav-label">Звонки</span>
+                </button>
+                <button
+                    className={"tg-bottomnav-item " + (section === "chats" ? "active" : "")}
                     onClick={() => setSection("chats")}
                 >
-                    <Icon name="chat" size={24} />
-                    <span>Чаты</span>
+                    {unreadCount > 0 && <span className="tg-bottomnav-badge">{unreadCount > 99 ? "99+" : unreadCount}</span>}
+                    <Icon name="chat" size={23} />
+                    <span className="tg-nav-label">Чаты</span>
                 </button>
-                <button 
-                    className={"mobile-nav-item " + (section === "settings" ? "active" : "")}
+                <button
+                    className={"tg-bottomnav-item " + (section === "settings" ? "active" : "")}
                     onClick={() => setSection("settings")}
                 >
-                    <Icon name="settings" size={24} />
-                    <span>Настройки</span>
+                    <Icon name="settings" size={23} />
+                    <span className="tg-nav-label">Настройки</span>
                 </button>
-                <button 
-                    className={"mobile-nav-item"}
-                    onClick={onProfile}
-                >
-                    <Avatar name={user.name} uid={user.uid} avatar={user.avatar} avatarUrl={user.avatarUrl} size={28} verified={user.verified} />
-                    <span>Профиль</span>
-                </button>
+            </nav>
+            <button className="tg-search-fab" onClick={onSearch} title="Поиск" aria-label="Поиск">
+                <Icon name="search" size={21}/>
+            </button>
+        </div>
+    );
+}
+
+// ===== КОНТАКТЫ =====
+function ContactsView({ me, users, metas, presence, onSelect, setSection }) {
+    const [search, setSearch] = useState("");
+    const qUsername = normalizeUsername(search);
+    const q = search.trim().toLowerCase();
+
+    const knownContacts = useMemo(() => {
+        const result = [];
+        Object.values(metas || {}).forEach(meta => {
+            if (!meta || meta.type !== 'dm') return;
+            const members = meta.members || {};
+            if (!members[me.uid]) return;
+            const otherUid = Object.keys(members).find(uid => uid !== me.uid);
+            if (!otherUid) return;
+            const person = users[otherUid];
+            if (!person) return;
+            result.push(person);
+        });
+        return result.sort((a,b) => (a.name||"").localeCompare(b.name||""));
+    }, [metas, users, me.uid]);
+
+    const searchResults = useMemo(() => {
+        if (!qUsername && !q) return [];
+        const arr = Object.values(users).filter(u => u.uid !== me.uid);
+        return arr.filter(u =>
+            (u.username && u.username.startsWith(qUsername)) ||
+            (u.name && u.name.toLowerCase().includes(q))
+        ).sort((a,b) => (a.username||"").localeCompare(b.username||"")).slice(0,30);
+    }, [users, qUsername, q, me.uid]);
+
+    const showSearch = search.trim().length > 0;
+    const listToShow = showSearch ? searchResults : knownContacts;
+
+    function openContact(u) {
+        onSelect({ type:"dm", id:chatIdFor(me.uid, u.uid), uid:u.uid, name:u.name, username:u.username, avatar:u.avatar, avatarUrl:u.avatarUrl, verified:u.verified });
+        setSection('chats');
+    }
+
+    return (
+        <div className="tg-contactscalls">
+            <div className="tg-cc-head">
+                <h1>Контакты</h1>
             </div>
-        </nav>
+            <div className="search" style={{margin:'0 20px 14px'}}>
+                <Icon name="search" size={19} />
+                <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Поиск по имени или @юзернейму" />
+                {search && <button onClick={()=>setSearch("")}><Icon name="close" size={18} /></button>}
+            </div>
+            {listToShow.length === 0 ? (
+                <div className="empty" style={{padding:40}}>
+                    <div className="empty-symbol"><Icon name="users" size={32} /></div>
+                    <p>{showSearch ? 'Никого не нашли.' : 'Здесь появятся люди, с которыми вы переписываетесь.\nНачните с поиска по юзернейму.'}</p>
+                </div>
+            ) : (
+                <>
+                    {!showSearch && <div className="tg-cc-hint">Ваши контакты</div>}
+                    {listToShow.map(u => (
+                        <button className="tg-cc-row" key={u.uid} onClick={() => openContact(u)}>
+                            <Avatar name={u.name} uid={u.uid} avatar={u.avatar} avatarUrl={u.avatarUrl} size={48} online={!!presence[u.uid]?.online} verified={u.verified} />
+                            <div className="person-body">
+                                <div className="person-row"><span className="person-name">{u.name}</span></div>
+                                <div className="person-sub">@{u.username}</div>
+                            </div>
+                        </button>
+                    ))}
+                </>
+            )}
+        </div>
+    );
+}
+
+// ===== ЗВОНКИ =====
+function CallsView({ me, users, metas, presence, onSelect, setSection, show }) {
+    const contacts = useMemo(() => {
+        const result = [];
+        Object.values(metas || {}).forEach(meta => {
+            if (!meta || meta.type !== 'dm') return;
+            const members = meta.members || {};
+            if (!members[me.uid]) return;
+            const otherUid = Object.keys(members).find(uid => uid !== me.uid);
+            if (!otherUid) return;
+            const person = users[otherUid];
+            if (!person) return;
+            result.push({ ...person, chatId: meta.id || chatIdFor(me.uid, otherUid), lastTs: meta.lastTs || 0 });
+        });
+        return result.sort((a,b) => (b.lastTs||0) - (a.lastTs||0));
+    }, [metas, users, me.uid]);
+
+    function callUser(u, e) {
+        e.stopPropagation();
+        if (!window.MessengerCallUI) { show && show('Звонки недоступны', true); return; }
+        window.MessengerCallUI.call(u.uid, u.chatId, u);
+    }
+
+    function openChat(u) {
+        onSelect({ type:"dm", id:u.chatId, uid:u.uid, name:u.name, username:u.username, avatar:u.avatar, avatarUrl:u.avatarUrl, verified:u.verified });
+        setSection('chats');
+    }
+
+    return (
+        <div className="tg-contactscalls">
+            <div className="tg-cc-head">
+                <h1>Звонки</h1>
+            </div>
+            {contacts.length === 0 ? (
+                <div className="empty" style={{padding:40}}>
+                    <div className="empty-symbol"><Icon name="phone" size={32} /></div>
+                    <p>Здесь появятся ваши контакты для звонков.<br/>Напишите кому-нибудь в чатах, чтобы позвонить.</p>
+                </div>
+            ) : (
+                <>
+                    <div className="tg-cc-hint">Нажмите на человека, чтобы открыть чат, или на иконку — чтобы позвонить</div>
+                    {contacts.map(u => (
+                        <div className="tg-cc-row" key={u.uid} onClick={() => openChat(u)} style={{cursor:'pointer'}}>
+                            <Avatar name={u.name} uid={u.uid} avatar={u.avatar} avatarUrl={u.avatarUrl} size={48} online={!!presence[u.uid]?.online} verified={u.verified} />
+                            <div className="person-body">
+                                <div className="person-row"><span className="person-name">{u.name}</span></div>
+                                <div className="person-sub">@{u.username}</div>
+                            </div>
+                            <button className="tg-cc-call-btn" onClick={(e) => callUser(u, e)} title="Позвонить" aria-label="Позвонить">
+                                <Icon name="phone" size={17}/>
+                            </button>
+                        </div>
+                    ))}
+                </>
+            )}
+        </div>
     );
 }
 
@@ -8909,6 +9756,19 @@ function App() {
     const [createMenu, setCreateMenu] = useState(false);
     const [toast, setToast] = useState(null);
     const [loadErr, setLoadErr] = useState("");
+    const [searchTick, setSearchTick] = useState(0);
+
+    const totalUnread = useMemo(() => {
+        let sum = 0;
+        Object.values(metas || {}).forEach(meta => {
+            if (!meta || (meta.type !== 'dm' && meta.type !== 'group')) return;
+            const members = meta.members || {};
+            if (!me || !members[me.uid]) return;
+            const n = meta.unreadBy && meta.unreadBy[me.uid] ? Number(meta.unreadBy[me.uid]) : 0;
+            sum += n;
+        });
+        return sum;
+    }, [metas, me]);
 
     // CallManager (звонки) опирается на window.me, чтобы знать, кому звонят и от чьего имени.
     useEffect(() => {
@@ -9226,11 +10086,12 @@ function App() {
 
     return (
         <div className="m3">
+            <ConnectionBar/>
             <div className="bg"><div className="blob b1"/><div className="blob b2"/><div className="blob b3"/></div>
             <div className="shell screen">
-                <Rail section={section} setSection={setSection} user={me} onProfile={()=>setProfile(true)} />
+                <Rail section={section} setSection={setSection} user={me} onProfile={()=>setProfile(true)} unreadCount={totalUnread} />
                 <div 
-                    className={"panels " + (mobileChat ? "mobile-chat-open" : "") + (section === "settings" ? " mobile-settings-open" : "")}
+                    className={"panels " + (mobileChat ? "mobile-chat-open" : "") + ((section === "settings" || section === "contacts" || section === "calls") ? " mobile-settings-open" : "")}
                     onTouchStart={handlePanelsTouchStart}
                     onTouchMove={handlePanelsTouchMove}
                     onTouchEnd={handlePanelsTouchEnd}
@@ -9249,6 +10110,10 @@ function App() {
                             setAllowCalls={setAllowCalls}
                             onOpenSaved={() => { select({ id: savedChatId(me.uid), type: 'saved', name: 'Избранное' }); setSection('chats'); }}
                         />
+                    ) : section === "contacts" ? (
+                        <ContactsView me={me} users={users} metas={metas} presence={presence} onSelect={select} setSection={setSection} />
+                    ) : section === "calls" ? (
+                        <CallsView me={me} users={users} metas={metas} presence={presence} onSelect={select} setSection={setSection} show={show} />
                     ) : (
                         <>
                             <List 
@@ -9261,6 +10126,7 @@ function App() {
                                 onGroup={() => setCreateMenu(true)}
                                 onCreateChannel={() => setCreateChannel(true)}
                                 hideLastSeen={hideLastSeen} 
+                                searchTick={searchTick}
                             />
                             {activeChat ? (
                                 <ChatView 
@@ -9318,7 +10184,7 @@ function App() {
             )}
             <Toast toast={toast} />
             
-            {isMobile && <MobileNav section={section} setSection={setSection} onProfile={()=>setProfile(true)} user={me} mobileChat={mobileChat} />}
+            {isMobile && <MobileNav section={section} setSection={setSection} onProfile={()=>setProfile(true)} user={me} mobileChat={mobileChat} unreadCount={totalUnread} onSearch={() => { setSection('chats'); setSearchTick(t => t + 1); }} />}
         </div>
     );
 }
