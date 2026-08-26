@@ -3873,6 +3873,138 @@ body.dark .poll-creator-modern .option-row input:focus{
     border-radius:14px;
 }
 
+/* ============================================================
+   STORIES (СТАТУСЫ) — Telegram-style status bar + viewer
+   ============================================================ */
+.stories-bar{
+    display:flex;gap:14px;overflow-x:auto;
+    padding:14px 16px 10px;
+    scrollbar-width:none;
+}
+.stories-bar::-webkit-scrollbar{display:none;}
+.story-circle{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    flex-shrink:0;width:66px;position:relative;
+}
+.story-ring{
+    width:64px;height:64px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    padding:3px;position:relative;
+}
+.story-ring-new{background:conic-gradient(from 180deg, #6750a4, #a97ff0, #f26ea0, #f2a13f, #6750a4);}
+.story-ring-seen{background:rgba(127,127,127,.35);}
+.story-ring-mine{background:conic-gradient(from 180deg, #6750a4, #a97ff0, #f26ea0, #f2a13f, #6750a4);}
+.story-ring-empty{background:rgba(127,127,127,.28);}
+.story-ring > .avatar-wrap, .story-ring > div{border:2.5px solid var(--bg);border-radius:50%;}
+.story-add-badge{
+    position:absolute;right:2px;bottom:20px;
+    width:20px;height:20px;border-radius:50%;
+    background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    border:2.5px solid var(--bg);
+}
+.story-name{font-size:11.5px;color:var(--txt);max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* --- Viewer --- */
+.story-viewer{
+    position:fixed;inset:0;z-index:2000;background:#000;
+    display:flex;align-items:center;justify-content:center;
+    animation:fade .15s ease;
+}
+.story-viewer-inner{
+    position:relative;width:min(430px,100vw);height:100vh;max-height:100dvh;
+    background:#000;overflow:hidden;
+}
+.story-progress-row{
+    position:absolute;top:0;left:0;right:0;z-index:5;
+    display:flex;gap:4px;padding:10px 10px 0;
+    padding-top:calc(10px + env(safe-area-inset-top));
+}
+.story-progress-track{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden;}
+.story-progress-fill{height:100%;background:#fff;border-radius:2px;transition:width .05s linear;}
+.story-viewer-head{
+    position:absolute;top:0;left:0;right:0;z-index:5;
+    display:flex;align-items:center;gap:10px;
+    padding:26px 14px 10px;
+    padding-top:calc(26px + env(safe-area-inset-top));
+}
+.story-viewer-name{color:#fff;font-weight:700;font-size:14.5px;flex:1;}
+.story-viewer-time{color:rgba(255,255,255,.65);font-size:12.5px;}
+.story-viewer-head .iconbtn{color:#fff;}
+.story-content{
+    width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    background:#15131a;
+}
+.story-text{
+    color:#fff;font-size:26px;font-weight:700;text-align:center;
+    padding:40px;line-height:1.4;word-break:break-word;
+    text-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.story-image{width:100%;height:100%;object-fit:contain;}
+.story-voice{display:flex;flex-direction:column;align-items:center;gap:14px;color:#fff;}
+.story-voice-icon{
+    width:110px;height:110px;border-radius:50%;
+    background:rgba(255,255,255,.12);
+    display:flex;align-items:center;justify-content:center;font-size:44px;
+    animation:storyPulse 1.6s ease-in-out infinite;
+}
+@keyframes storyPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+.story-tap-zone{position:absolute;top:0;bottom:0;width:32%;z-index:4;cursor:pointer;}
+.story-tap-left{left:0;}
+.story-tap-right{right:0;}
+.story-views-count{
+    position:absolute;bottom:20px;left:0;right:0;z-index:5;
+    text-align:center;color:rgba(255,255,255,.8);font-size:13px;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    padding-bottom:env(safe-area-inset-bottom);
+}
+
+/* --- Create story modal --- */
+.story-create-modal{width:min(420px,100%);}
+.story-mode-tabs{display:flex;gap:8px;margin:14px 0;}
+.story-mode-tab{
+    flex:1;padding:10px;border-radius:12px;text-align:center;
+    background:var(--ch);color:var(--muted);font-weight:650;font-size:13.5px;
+    transition:background .18s ease,color .18s ease;
+}
+.story-mode-tab.active{
+    background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;
+}
+.story-text-preview{
+    border-radius:18px;min-height:180px;
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;transition:background .25s ease;
+}
+.story-text-preview textarea{
+    width:100%;background:transparent;border:0;outline:0;resize:none;
+    color:#fff;font-size:19px;font-weight:650;text-align:center;
+    text-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+.story-color-row{display:flex;gap:9px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+.story-color-dot{
+    width:28px;height:28px;border-radius:50%;border:3px solid transparent;
+    transition:border-color .18s ease,transform .15s ease;
+}
+.story-color-dot.selected{border-color:var(--txt);transform:scale(1.1);}
+.story-image-preview{
+    width:100%;height:220px;border-radius:18px;background-size:cover;background-position:center;
+    position:relative;margin-bottom:10px;
+}
+.story-image-remove{
+    position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;
+    background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;
+}
+.story-voice-recorder{display:flex;flex-direction:column;align-items:center;padding:26px 10px;}
+.story-record-btn{
+    width:74px;height:74px;border-radius:50%;
+    background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .15s ease, background .2s ease;
+}
+.story-record-btn.recording{background:var(--err);animation:storyPulse 1s ease-in-out infinite;}
+.story-record-btn:active{transform:scale(.92);}
+.story-voice-ready{font-size:15px;font-weight:650;margin-bottom:12px;}
+
 /* Attach menu: stickers + poll only. Voice is intentionally NOT here. */
 .attach-menu{
   border-radius:20px!important;
@@ -4568,6 +4700,210 @@ if (!depsOk) {
 
 const { useState, useEffect, useMemo, useRef, useCallback } = React;
 
+// ===== ЛОКАЛИЗАЦИЯ (RU / EN / UK / ES / PT / FI) =====
+window.SUPPORTED_LANGS = [
+    { code: 'ru', label: 'Русский' },
+    { code: 'en', label: 'English' },
+    { code: 'uk', label: 'Українська' },
+    { code: 'es', label: 'Español' },
+    { code: 'pt', label: 'Português' },
+    { code: 'fi', label: 'Suomi' }
+];
+
+window.I18N = {
+    // Навигация
+    'nav.contacts': { ru:'Контакты', en:'Contacts', uk:'Контакти', es:'Contactos', pt:'Contatos', fi:'Yhteystiedot' },
+    'nav.calls': { ru:'Звонки', en:'Calls', uk:'Дзвінки', es:'Llamadas', pt:'Chamadas', fi:'Puhelut' },
+    'nav.chats': { ru:'Чаты', en:'Chats', uk:'Чати', es:'Chats', pt:'Conversas', fi:'Keskustelut' },
+    'nav.settings': { ru:'Настройки', en:'Settings', uk:'Налаштування', es:'Ajustes', pt:'Configurações', fi:'Asetukset' },
+    'nav.search': { ru:'Поиск', en:'Search', uk:'Пошук', es:'Buscar', pt:'Pesquisar', fi:'Haku' },
+
+    // Список чатов
+    'list.title': { ru:'Чаты', en:'Chats', uk:'Чати', es:'Chats', pt:'Conversas', fi:'Keskustelut' },
+    'list.searchPlaceholder': { ru:'Поиск по @юзернейму или каналу', en:'Search by @username or channel', uk:'Пошук за @юзернеймом або каналом', es:'Buscar por @usuario o canal', pt:'Buscar por @usuário ou canal', fi:'Hae käyttäjätunnuksella tai kanavalla' },
+    'list.createGroup': { ru:'Создать группу', en:'Create group', uk:'Створити групу', es:'Crear grupo', pt:'Criar grupo', fi:'Luo ryhmä' },
+    'list.createChannel': { ru:'Создать канал', en:'Create channel', uk:'Створити канал', es:'Crear canal', pt:'Criar canal', fi:'Luo kanava' },
+    'list.emptyTitle': { ru:'Выберите чат', en:'Select a chat', uk:'Виберіть чат', es:'Selecciona un chat', pt:'Selecione uma conversa', fi:'Valitse keskustelu' },
+    'list.emptyText': { ru:'Или нажмите поиск и найдите человека по юзернейму.\nИли создайте канал или группу.', en:'Or tap search and find someone by username.\nOr create a channel or group.', uk:'Або натисніть пошук і знайдіть людину за юзернеймом.\nАбо створіть канал чи групу.', es:'O toca buscar y encuentra a alguien por su usuario.\nO crea un canal o grupo.', pt:'Ou toque em pesquisar e encontre alguém pelo nome de usuário.\nOu crie um canal ou grupo.', fi:'Tai etsi henkilö käyttäjätunnuksella.\nTai luo kanava tai ryhmä.' },
+
+    // Статус-бар соединения
+    'conn.connecting': { ru:'Соединение…', en:'Connecting…', uk:'З’єднання…', es:'Conectando…', pt:'Conectando…', fi:'Yhdistetään…' },
+    'conn.updating': { ru:'Обновление…', en:'Updating…', uk:'Оновлення…', es:'Actualizando…', pt:'Atualizando…', fi:'Päivitetään…' },
+
+    // Контакты
+    'contacts.title': { ru:'Контакты', en:'Contacts', uk:'Контакти', es:'Contactos', pt:'Contatos', fi:'Yhteystiedot' },
+    'contacts.searchPlaceholder': { ru:'Поиск по имени или @юзернейму', en:'Search by name or @username', uk:'Пошук за іменем або @юзернеймом', es:'Buscar por nombre o @usuario', pt:'Buscar por nome ou @usuário', fi:'Hae nimellä tai käyttäjätunnuksella' },
+    'contacts.emptyContacts': { ru:'Здесь появятся люди, с которыми вы переписываетесь.\nНачните с поиска по юзернейму.', en:'People you chat with will appear here.\nStart by searching a username.', uk:'Тут з’являться люди, з якими ви спілкуєтесь.\nПочніть із пошуку за юзернеймом.', es:'Aquí aparecerán las personas con las que chateas.\nEmpieza buscando un usuario.', pt:'Aqui aparecerão as pessoas com quem você conversa.\nComece pesquisando um nome de usuário.', fi:'Tähän ilmestyvät henkilöt, joiden kanssa keskustelet.\nAloita hakemalla käyttäjätunnusta.' },
+    'contacts.emptySearch': { ru:'Никого не нашли.', en:'No one found.', uk:'Нікого не знайдено.', es:'No se encontró a nadie.', pt:'Ninguém encontrado.', fi:'Ketään ei löytynyt.' },
+    'contacts.hint': { ru:'Ваши контакты', en:'Your contacts', uk:'Ваші контакти', es:'Tus contactos', pt:'Seus contatos', fi:'Yhteystietosi' },
+
+    // Звонки
+    'calls.title': { ru:'Звонки', en:'Calls', uk:'Дзвінки', es:'Llamadas', pt:'Chamadas', fi:'Puhelut' },
+    'calls.empty': { ru:'Здесь появятся ваши контакты для звонков.\nНапишите кому-нибудь в чатах, чтобы позвонить.', en:'Your call contacts will appear here.\nMessage someone in chats to be able to call them.', uk:'Тут з’являться ваші контакти для дзвінків.\nНапишіть комусь у чатах, щоб зателефонувати.', es:'Aquí aparecerán tus contactos para llamadas.\nEscribe a alguien en los chats para poder llamarlo.', pt:'Aqui aparecerão seus contatos para chamadas.\nEnvie uma mensagem a alguém nas conversas para poder ligar.', fi:'Tähän ilmestyvät puhelukontaktisi.\nLähetä jollekulle viesti keskusteluissa voidaksesi soittaa.' },
+    'calls.hint': { ru:'Нажмите на человека, чтобы открыть чат, или на иконку — чтобы позвонить', en:'Tap a person to open the chat, or the icon to call', uk:'Натисніть на людину, щоб відкрити чат, або на іконку — щоб зателефонувати', es:'Toca a una persona para abrir el chat, o el ícono para llamar', pt:'Toque em uma pessoa para abrir a conversa, ou no ícone para ligar', fi:'Napauta henkilöä avataksesi keskustelun, tai kuvaketta soittaaksesi' },
+    'calls.callBtn': { ru:'Позвонить', en:'Call', uk:'Зателефонувати', es:'Llamar', pt:'Ligar', fi:'Soita' },
+    'calls.noCalls': { ru:'Звонки недоступны', en:'Calls are unavailable', uk:'Дзвінки недоступні', es:'Las llamadas no están disponibles', pt:'Chamadas indisponíveis', fi:'Puhelut eivät ole käytettävissä' },
+
+    // Настройки — главный экран
+    'settings.title': { ru:'Настройки', en:'Settings', uk:'Налаштування', es:'Ajustes', pt:'Configurações', fi:'Asetukset' },
+    'settings.invite': { ru:'Пригласить друзей', en:'Invite friends', uk:'Запросити друзів', es:'Invitar amigos', pt:'Convidar amigos', fi:'Kutsu ystäviä' },
+    'settings.saved': { ru:'Избранное', en:'Saved Messages', uk:'Збережене', es:'Mensajes guardados', pt:'Mensagens salvas', fi:'Tallennetut viestit' },
+    'settings.savedHint': { ru:'Заметки, файлы, сообщения для себя', en:'Notes, files, messages to yourself', uk:'Нотатки, файли, повідомлення для себе', es:'Notas, archivos, mensajes para ti mismo', pt:'Notas, arquivos, mensagens para você mesmo', fi:'Muistiinpanot, tiedostot, viestit itsellesi' },
+    'settings.notifications': { ru:'Уведомления и звук', en:'Notifications and sound', uk:'Сповіщення та звук', es:'Notificaciones y sonido', pt:'Notificações e som', fi:'Ilmoitukset ja ääni' },
+    'settings.privacy': { ru:'Конфиденциальность', en:'Privacy', uk:'Конфіденційність', es:'Privacidad', pt:'Privacidade', fi:'Yksityisyys' },
+    'settings.devices': { ru:'Устройства', en:'Devices', uk:'Пристрої', es:'Dispositivos', pt:'Dispositivos', fi:'Laitteet' },
+    'settings.devicesActive': { ru:'активных', en:'active', uk:'активних', es:'activos', pt:'ativos', fi:'aktiivista' },
+    'settings.email': { ru:'Почта', en:'Email', uk:'Пошта', es:'Correo', pt:'E-mail', fi:'Sähköposti' },
+    'settings.emailNotLinked': { ru:'Не привязана', en:'Not linked', uk:'Не прив’язана', es:'No vinculado', pt:'Não vinculado', fi:'Ei yhdistetty' },
+    'settings.folders': { ru:'Папки', en:'Folders', uk:'Папки', es:'Carpetas', pt:'Pastas', fi:'Kansiot' },
+    'settings.foldersNotSet': { ru:'Не настроены', en:'Not set up', uk:'Не налаштовано', es:'No configuradas', pt:'Não configuradas', fi:'Ei määritetty' },
+    'settings.foldersCount': { ru:'папок', en:'folders', uk:'папок', es:'carpetas', pt:'pastas', fi:'kansiota' },
+    'settings.reaction': { ru:'Быстрая реакция', en:'Quick reaction', uk:'Швидка реакція', es:'Reacción rápida', pt:'Reação rápida', fi:'Pikareaktio' },
+    'settings.appearance': { ru:'Оформление', en:'Appearance', uk:'Оформлення', es:'Apariencia', pt:'Aparência', fi:'Ulkoasu' },
+    'settings.darkTheme': { ru:'Тёмная тема', en:'Dark theme', uk:'Темна тема', es:'Tema oscuro', pt:'Tema escuro', fi:'Tumma teema' },
+    'settings.lightTheme': { ru:'Светлая тема', en:'Light theme', uk:'Світла тема', es:'Tema claro', pt:'Tema claro', fi:'Vaalea teema' },
+    'settings.admin': { ru:'Администрирование', en:'Administration', uk:'Адміністрування', es:'Administración', pt:'Administração', fi:'Hallinta' },
+    'settings.account': { ru:'Аккаунт', en:'Account', uk:'Обліковий запис', es:'Cuenta', pt:'Conta', fi:'Tili' },
+    'settings.about': { ru:'О мессенджере', en:'About the messenger', uk:'Про месенджер', es:'Acerca de la app', pt:'Sobre o mensageiro', fi:'Tietoja sovelluksesta' },
+    'settings.language': { ru:'Язык', en:'Language', uk:'Мова', es:'Idioma', pt:'Idioma', fi:'Kieli' },
+
+    // Редактирование профиля
+    'edit.title': { ru:'Изменить профиль', en:'Edit profile', uk:'Редагувати профіль', es:'Editar perfil', pt:'Editar perfil', fi:'Muokkaa profiilia' },
+    'edit.copyLink': { ru:'Скопировать ссылку профиля', en:'Copy profile link', uk:'Скопіювати посилання на профіль', es:'Copiar enlace del perfil', pt:'Copiar link do perfil', fi:'Kopioi profiilin linkki' },
+    'edit.logout': { ru:'Выйти из профиля', en:'Log out', uk:'Вийти з профілю', es:'Cerrar sesión', pt:'Sair do perfil', fi:'Kirjaudu ulos' },
+    'edit.uploading': { ru:'Загрузка…', en:'Uploading…', uk:'Завантаження…', es:'Subiendo…', pt:'Enviando…', fi:'Ladataan…' },
+    'edit.name': { ru:'Имя', en:'Name', uk:'Ім’я', es:'Nombre', pt:'Nome', fi:'Nimi' },
+    'edit.username': { ru:'Юзернейм', en:'Username', uk:'Юзернейм', es:'Nombre de usuario', pt:'Nome de usuário', fi:'Käyttäjätunnus' },
+    'edit.usernameHint': { ru:'По юзернейму вас смогут найти в поиске.', en:'People will be able to find you by this username.', uk:'За юзернеймом вас зможуть знайти в пошуку.', es:'Podrán encontrarte por este nombre de usuario.', pt:'As pessoas poderão encontrar você por esse nome de usuário.', fi:'Ihmiset löytävät sinut tällä käyttäjätunnuksella.' },
+    'edit.about': { ru:'О себе', en:'Bio', uk:'Про себе', es:'Biografía', pt:'Biografia', fi:'Tietoa minusta' },
+    'edit.aboutPlaceholder': { ru:'Расскажите немного о себе', en:'Tell people a bit about yourself', uk:'Розкажіть трохи про себе', es:'Cuéntanos un poco sobre ti', pt:'Conte um pouco sobre você', fi:'Kerro hieman itsestäsi' },
+    'edit.defaultAvatar': { ru:'Стандартная аватарка', en:'Default avatar', uk:'Стандартний аватар', es:'Avatar predeterminado', pt:'Avatar padrão', fi:'Oletusavatar' },
+    'edit.photoByLink': { ru:'Фото по ссылке', en:'Photo by link', uk:'Фото за посиланням', es:'Foto por enlace', pt:'Foto por link', fi:'Kuva linkillä' },
+    'edit.applyBtn': { ru:'Применить', en:'Apply', uk:'Застосувати', es:'Aplicar', pt:'Aplicar', fi:'Käytä' },
+    'edit.orHosting': { ru:'Или через hostimg.pw (ссылкой)', en:'Or via hostimg.pw (link)', uk:'Або через hostimg.pw (посиланням)', es:'O mediante hostimg.pw (enlace)', pt:'Ou via hostimg.pw (link)', fi:'Tai hostimg.pw:n kautta (linkki)' },
+    'edit.remove': { ru:'Удалить', en:'Remove', uk:'Видалити', es:'Eliminar', pt:'Remover', fi:'Poista' },
+    'edit.deleteProfile': { ru:'Удалить профиль', en:'Delete profile', uk:'Видалити профіль', es:'Eliminar perfil', pt:'Excluir perfil', fi:'Poista profiili' },
+    'edit.months': { ru:'месяцев', en:'months', uk:'місяців', es:'meses', pt:'meses', fi:'kuukautta' },
+    'edit.save': { ru:'Сохранить изменения', en:'Save changes', uk:'Зберегти зміни', es:'Guardar cambios', pt:'Salvar alterações', fi:'Tallenna muutokset' },
+    'edit.saving': { ru:'Сохраняем…', en:'Saving…', uk:'Зберігаємо…', es:'Guardando…', pt:'Salvando…', fi:'Tallennetaan…' },
+
+    // Уведомления
+    'notif.hint': { ru:'Разрешите браузеру показывать уведомления о новых сообщениях.', en:'Allow the browser to show notifications about new messages.', uk:'Дозвольте браузеру показувати сповіщення про нові повідомлення.', es:'Permite que el navegador muestre notificaciones de nuevos mensajes.', pt:'Permita que o navegador mostre notificações de novas mensagens.', fi:'Salli selaimen näyttää ilmoituksia uusista viesteistä.' },
+    'notif.enable': { ru:'Включить уведомления', en:'Enable notifications', uk:'Увімкнути сповіщення', es:'Activar notificaciones', pt:'Ativar notificações', fi:'Ota ilmoitukset käyttöön' },
+
+    // Приватность
+    'privacy.hideLastSeen': { ru:'Скрывать время последнего визита', en:'Hide last seen time', uk:'Приховувати час останнього відвідування', es:'Ocultar la última conexión', pt:'Ocultar hora da última visita', fi:'Piilota viimeisin nähty' },
+    'privacy.showLastSeen': { ru:'Показывать время последнего визита', en:'Show last seen time', uk:'Показувати час останнього відвідування', es:'Mostrar la última conexión', pt:'Mostrar hora da última visita', fi:'Näytä viimeisin nähty' },
+    'privacy.allowCalls': { ru:'Разрешать звонки', en:'Allow calls', uk:'Дозволити дзвінки', es:'Permitir llamadas', pt:'Permitir chamadas', fi:'Salli puhelut' },
+    'privacy.callsDenied': { ru:'Звонки запрещены', en:'Calls are disabled', uk:'Дзвінки заборонені', es:'Las llamadas están desactivadas', pt:'Chamadas desativadas', fi:'Puhelut estetty' },
+
+    // Устройства
+    'devices.title': { ru:'Устройства', en:'Devices', uk:'Пристрої', es:'Dispositivos', pt:'Dispositivos', fi:'Laitteet' },
+    'devices.none': { ru:'Нет активных устройств', en:'No active devices', uk:'Немає активних пристроїв', es:'No hay dispositivos activos', pt:'Nenhum dispositivo ativo', fi:'Ei aktiivisia laitteita' },
+    'devices.onlineNow': { ru:'В сети сейчас', en:'Online now', uk:'Онлайн зараз', es:'En línea ahora', pt:'Online agora', fi:'Paikalla nyt' },
+    'devices.lastSeen': { ru:'Последний визит:', en:'Last seen:', uk:'Востаннє був(ла):', es:'Última vez:', pt:'Visto por último:', fi:'Viimeksi nähty:' },
+    'devices.thisDevice': { ru:'Это устройство', en:'This device', uk:'Цей пристрій', es:'Este dispositivo', pt:'Este dispositivo', fi:'Tämä laite' },
+
+    // Аккаунт
+    'account.logout': { ru:'Выйти', en:'Log out', uk:'Вийти', es:'Cerrar sesión', pt:'Sair', fi:'Kirjaudu ulos' },
+    'account.delete': { ru:'Удалить аккаунт навсегда', en:'Delete account permanently', uk:'Видалити акаунт назавжди', es:'Eliminar cuenta permanentemente', pt:'Excluir conta permanentemente', fi:'Poista tili pysyvästi' },
+    'account.deleting': { ru:'Удаляем…', en:'Deleting…', uk:'Видаляємо…', es:'Eliminando…', pt:'Excluindo…', fi:'Poistetaan…' },
+    'account.deleteWarning': { ru:'Все данные будут удалены без возможности восстановления', en:'All data will be permanently deleted', uk:'Усі дані буде видалено без можливості відновлення', es:'Todos los datos se eliminarán de forma permanente', pt:'Todos os dados serão excluídos permanentemente', fi:'Kaikki tiedot poistetaan pysyvästi' },
+
+    // Папки
+    'folders.hint': { ru:'Папки помогают группировать чаты. Создайте папку и дайте ей название — чуть позже вы сможете добавлять в неё чаты.', en:'Folders help you group chats. Create one and give it a name — you\'ll be able to add chats to it soon.', uk:'Папки допомагають групувати чати. Створіть папку і дайте їй назву — незабаром зможете додавати до неї чати.', es:'Las carpetas te ayudan a agrupar chats. Crea una y dale un nombre — pronto podrás añadir chats.', pt:'As pastas ajudam a agrupar conversas. Crie uma e dê um nome — em breve você poderá adicionar conversas a ela.', fi:'Kansiot auttavat ryhmittelemään keskusteluja. Luo kansio ja nimeä se — voit pian lisätä siihen keskusteluja.' },
+    'folders.namePlaceholder': { ru:'Название новой папки', en:'New folder name', uk:'Назва нової папки', es:'Nombre de la nueva carpeta', pt:'Nome da nova pasta', fi:'Uuden kansion nimi' },
+    'folders.create': { ru:'Создать', en:'Create', uk:'Створити', es:'Crear', pt:'Criar', fi:'Luo' },
+    'folders.yourFolders': { ru:'Ваши папки', en:'Your folders', uk:'Ваші папки', es:'Tus carpetas', pt:'Suas pastas', fi:'Kansiosi' },
+
+    // Быстрая реакция
+    'reaction.hint': { ru:'Эта реакция ставится по двойному клику на сообщение.', en:'This reaction is added with a double tap on a message.', uk:'Ця реакція додається подвійним натисканням на повідомлення.', es:'Esta reacción se añade con doble toque en un mensaje.', pt:'Essa reação é adicionada com um toque duplo na mensagem.', fi:'Tämä reaktio lisätään kaksoisnapauttamalla viestiä.' },
+
+    // Оформление
+    'appearance.accentColor': { ru:'Цвет оформления', en:'Accent color', uk:'Колір оформлення', es:'Color de acento', pt:'Cor de destaque', fi:'Korostusväri' },
+    'appearance.customColor': { ru:'Свой цвет', en:'Custom color', uk:'Свій колір', es:'Color personalizado', pt:'Cor personalizada', fi:'Oma väri' },
+
+    // Автоудаление профиля
+    'autoDelete.title': { ru:'Автоудаление профиля', en:'Auto-delete profile', uk:'Автовидалення профілю', es:'Autoeliminación del perfil', pt:'Exclusão automática do perfil', fi:'Profiilin automaattinen poisto' },
+    'autoDelete.hint': { ru:'Если вы долго не заходите в аккаунт, он будет удалён через выбранный срок.', en:'If you don\'t log in for a while, your account will be deleted after the selected period.', uk:'Якщо ви довго не заходите в акаунт, його буде видалено через обраний термін.', es:'Si no inicias sesión durante un tiempo, tu cuenta se eliminará tras el período seleccionado.', pt:'Se você não fizer login por um tempo, sua conta será excluída após o período selecionado.', fi:'Jos et kirjaudu sisään pitkään aikaan, tilisi poistetaan valitun ajan kuluttua.' },
+
+    // Профиль (QR-модалка)
+    'profileModal.title': { ru:'Мой профиль', en:'My profile', uk:'Мій профіль', es:'Mi perfil', pt:'Meu perfil', fi:'Profiilini' },
+    'profileModal.copyLink': { ru:'Скопировать ссылку на профиль', en:'Copy profile link', uk:'Скопіювати посилання на профіль', es:'Copiar enlace del perfil', pt:'Copiar link do perfil', fi:'Kopioi profiilin linkki' },
+
+    // Статусы
+    'stories.myStatus': { ru:'Мой статус', en:'My status', uk:'Мій статус', es:'Mi estado', pt:'Meu status', fi:'Oma tilani' },
+    'stories.newStatus': { ru:'Новый статус', en:'New status', uk:'Новий статус', es:'Nuevo estado', pt:'Novo status', fi:'Uusi tila' },
+    'stories.text': { ru:'Текст', en:'Text', uk:'Текст', es:'Texto', pt:'Texto', fi:'Teksti' },
+    'stories.photo': { ru:'Фото', en:'Photo', uk:'Фото', es:'Foto', pt:'Foto', fi:'Kuva' },
+    'stories.voice': { ru:'Голос', en:'Voice', uk:'Голос', es:'Voz', pt:'Voz', fi:'Ääni' },
+    'stories.textPlaceholder': { ru:'Что у вас нового?', en:'What\'s new?', uk:'Що у вас нового?', es:'¿Qué hay de nuevo?', pt:'O que há de novo?', fi:'Mitä uutta?' },
+    'stories.pickPhoto': { ru:'Выбрать фото с устройства', en:'Choose photo from device', uk:'Вибрати фото з пристрою', es:'Elegir foto del dispositivo', pt:'Escolher foto do dispositivo', fi:'Valitse kuva laitteesta' },
+    'stories.photoLink': { ru:'Ссылка на фото', en:'Photo link', uk:'Посилання на фото', es:'Enlace de la foto', pt:'Link da foto', fi:'Kuvan linkki' },
+    'stories.ok': { ru:'Ок', en:'OK', uk:'Гаразд', es:'Aceptar', pt:'OK', fi:'OK' },
+    'stories.caption': { ru:'Подпись (необязательно)', en:'Caption (optional)', uk:'Підпис (необов’язково)', es:'Descripción (opcional)', pt:'Legenda (opcional)', fi:'Kuvateksti (valinnainen)' },
+    'stories.recordHint': { ru:'Нажмите, чтобы записать голосовой статус', en:'Tap to record a voice status', uk:'Натисніть, щоб записати голосовий статус', es:'Toca para grabar un estado de voz', pt:'Toque para gravar um status de voz', fi:'Napauta tallentaaksesi äänitilan' },
+    'stories.recording': { ru:'Запись…', en:'Recording…', uk:'Запис…', es:'Grabando…', pt:'Gravando…', fi:'Tallennetaan…' },
+    'stories.maxSeconds': { ru:'максимум 15с', en:'max 15s', uk:'максимум 15с', es:'máx. 15s', pt:'máx. 15s', fi:'enintään 15s' },
+    'stories.recorded': { ru:'Записано,', en:'Recorded,', uk:'Записано,', es:'Grabado,', pt:'Gravado,', fi:'Tallennettu,' },
+    'stories.reRecord': { ru:'Записать заново', en:'Record again', uk:'Записати ще раз', es:'Grabar de nuevo', pt:'Gravar novamente', fi:'Tallenna uudelleen' },
+    'stories.cancel': { ru:'Отмена', en:'Cancel', uk:'Скасувати', es:'Cancelar', pt:'Cancelar', fi:'Peruuta' },
+    'stories.publish': { ru:'Опубликовать', en:'Publish', uk:'Опублікувати', es:'Publicar', pt:'Publicar', fi:'Julkaise' },
+    'stories.publishing': { ru:'Публикуем…', en:'Publishing…', uk:'Публікуємо…', es:'Publicando…', pt:'Publicando…', fi:'Julkaistaan…' },
+    'stories.published': { ru:'Статус опубликован', en:'Status published', uk:'Статус опубліковано', es:'Estado publicado', pt:'Status publicado', fi:'Tila julkaistu' },
+
+    // Вход / регистрация
+    'auth.namePlaceholder': { ru:'Как вас зовут?', en:'What\'s your name?', uk:'Як вас звати?', es:'¿Cómo te llamas?', pt:'Qual é o seu nome?', fi:'Mikä on nimesi?' },
+    'auth.creating': { ru:'Создаём…', en:'Creating…', uk:'Створюємо…', es:'Creando…', pt:'Criando…', fi:'Luodaan…' },
+    'auth.createProfile': { ru:'Создать профиль', en:'Create profile', uk:'Створити профіль', es:'Crear perfil', pt:'Criar perfil', fi:'Luo profiili' },
+    'auth.connecting': { ru:'Подключаемся…', en:'Connecting…', uk:'Підключаємось…', es:'Conectando…', pt:'Conectando…', fi:'Yhdistetään…' },
+    'auth.connectingToMessenger': { ru:'Подключаемся к мессенджеру…', en:'Connecting to the messenger…', uk:'Підключаємось до месенджера…', es:'Conectando con la app…', pt:'Conectando ao mensageiro…', fi:'Yhdistetään sovellukseen…' },
+    'auth.login': { ru:'Вход', en:'Log in', uk:'Вхід', es:'Iniciar sesión', pt:'Entrar', fi:'Kirjaudu sisään' },
+    'auth.createAccount': { ru:'Создать аккаунт', en:'Create account', uk:'Створити акаунт', es:'Crear cuenta', pt:'Criar conta', fi:'Luo tili' },
+    'auth.loginSubtitle': { ru:'Войдите по почте и паролю', en:'Sign in with email and password', uk:'Увійдіть за поштою та паролем', es:'Inicia sesión con correo y contraseña', pt:'Entre com e-mail e senha', fi:'Kirjaudu sähköpostilla ja salasanalla' },
+    'auth.registerSubtitle': { ru:'Создайте аккаунт с привязкой почты', en:'Create an account linked to your email', uk:'Створіть акаунт із прив’язкою пошти', es:'Crea una cuenta vinculada a tu correo', pt:'Crie uma conta vinculada ao seu e-mail', fi:'Luo tili, joka on yhdistetty sähköpostiisi' },
+    'auth.name': { ru:'Имя', en:'Name', uk:'Ім’я', es:'Nombre', pt:'Nome', fi:'Nimi' },
+    'auth.username': { ru:'Юзернейм', en:'Username', uk:'Юзернейм', es:'Nombre de usuario', pt:'Nome de usuário', fi:'Käyttäjätunnus' },
+    'auth.email': { ru:'Email', en:'Email', uk:'Ел. пошта', es:'Correo electrónico', pt:'E-mail', fi:'Sähköposti' },
+    'auth.password': { ru:'Пароль', en:'Password', uk:'Пароль', es:'Contraseña', pt:'Senha', fi:'Salasana' },
+    'auth.passwordMin6': { ru:'Минимум 6 символов', en:'At least 6 characters', uk:'Мінімум 6 символів', es:'Mínimo 6 caracteres', pt:'Mínimo de 6 caracteres', fi:'Vähintään 6 merkkiä' },
+    'auth.loadingBtn': { ru:'Загрузка…', en:'Loading…', uk:'Завантаження…', es:'Cargando…', pt:'Carregando…', fi:'Ladataan…' },
+    'auth.signIn': { ru:'Войти', en:'Log in', uk:'Увійти', es:'Iniciar sesión', pt:'Entrar', fi:'Kirjaudu' },
+    'auth.register': { ru:'Зарегистрироваться', en:'Sign up', uk:'Зареєструватися', es:'Registrarse', pt:'Cadastrar-se', fi:'Rekisteröidy' },
+    'auth.or': { ru:'или', en:'or', uk:'або', es:'o', pt:'ou', fi:'tai' },
+    'auth.alreadyHaveAccount': { ru:'Уже есть аккаунт? Войти', en:'Already have an account? Log in', uk:'Вже є акаунт? Увійти', es:'¿Ya tienes una cuenta? Inicia sesión', pt:'Já tem uma conta? Entrar', fi:'Onko sinulla jo tili? Kirjaudu sisään' },
+    'auth.signInAnon': { ru:'Войти без регистрации', en:'Continue without an account', uk:'Увійти без реєстрації', es:'Continuar sin cuenta', pt:'Continuar sem cadastro', fi:'Jatka ilman tiliä' },
+    'auth.letsChat': { ru:'Погнали общаться', en:'Let\'s start chatting', uk:'Погнали спілкуватись', es:'Empecemos a chatear', pt:'Vamos conversar', fi:'Aloitetaan juttelu' },
+    'auth.registerHint2': { ru:'Создайте профиль. Люди будут находить вас по юзернейму.', en:'Create a profile. People will find you by your username.', uk:'Створіть профіль. Люди знаходитимуть вас за юзернеймом.', es:'Crea un perfil. La gente te encontrará por tu nombre de usuario.', pt:'Crie um perfil. As pessoas vão te encontrar pelo nome de usuário.', fi:'Luo profiili. Ihmiset löytävät sinut käyttäjätunnuksellasi.' },
+    'auth.emailOptional': { ru:'Email (опционально, для восстановления)', en:'Email (optional, for account recovery)', uk:'Email (необов’язково, для відновлення)', es:'Correo (opcional, para recuperación)', pt:'E-mail (opcional, para recuperação)', fi:'Sähköposti (valinnainen, tilin palautukseen)' },
+    'auth.signInWithEmail': { ru:'Войти через почту', en:'Log in with email', uk:'Увійти через пошту', es:'Iniciar sesión con correo', pt:'Entrar com e-mail', fi:'Kirjaudu sähköpostilla' },
+
+    // Composer чата
+    'chat.messagePlaceholder': { ru:'Сообщение', en:'Message', uk:'Повідомлення', es:'Mensaje', pt:'Mensagem', fi:'Viesti' },
+    'chat.editPlaceholder': { ru:'Изменить...', en:'Edit...', uk:'Змінити...', es:'Editar...', pt:'Editar...', fi:'Muokkaa...' },
+    'chat.postPlaceholder': { ru:'Напишите пост...', en:'Write a post...', uk:'Напишіть пост...', es:'Escribe una publicación...', pt:'Escreva uma publicação...', fi:'Kirjoita julkaisu...' },
+    'chat.stickers': { ru:'Стикеры', en:'Stickers', uk:'Стікери', es:'Stickers', pt:'Figurinhas', fi:'Tarrat' },
+    'chat.poll': { ru:'Опрос', en:'Poll', uk:'Опитування', es:'Encuesta', pt:'Enquete', fi:'Äänestys' },
+    'chat.voiceMsg': { ru:'Голосовое', en:'Voice message', uk:'Голосове', es:'Mensaje de voz', pt:'Mensagem de voz', fi:'Ääniviesti' },
+    'chat.attachments': { ru:'Вложения', en:'Attachments', uk:'Вкладення', es:'Adjuntos', pt:'Anexos', fi:'Liitteet' },
+    'chat.sendVoice': { ru:'Отправить голосовое', en:'Send voice message', uk:'Надіслати голосове', es:'Enviar mensaje de voz', pt:'Enviar mensagem de voz', fi:'Lähetä ääniviesti' },
+};
+
+function t(key, fallback) {
+    const lang = window.currentLang || localStorage.getItem('kuban-lang') || 'ru';
+    const entry = window.I18N[key];
+    if (!entry) return fallback !== undefined ? fallback : key;
+    return entry[lang] || entry.ru || fallback || key;
+}
+window.t = t;
+window.currentLang = localStorage.getItem('kuban-lang') || 'ru';
+window.setLang = function(code) {
+    localStorage.setItem('kuban-lang', code);
+    window.currentLang = code;
+    location.reload();
+};
+
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -4673,7 +5009,8 @@ function Icon({ name, size=22, stroke=2.25, fill="none", className="" }) {
         briefcase: <><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></>,
         wifi: <><path d="M2 8.5a17 17 0 0 1 20 0"/><path d="M5.5 12.5a12 12 0 0 1 13 0"/><path d="M9 16.5a6.5 6.5 0 0 1 6 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></>,
         link2: <><path d="M9 17H7a5 5 0 0 1 0-10h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><path d="M8 12h8"/></>,
-        phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.81.35 1.6.68 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.25a2 2 0 0 1 2.11-.45c.74.33 1.53.56 2.34.68A2 2 0 0 1 22 16.92z"/>
+        phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.81.35 1.6.68 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.25a2 2 0 0 1 2.11-.45c.74.33 1.53.56 2.34.68A2 2 0 0 1 22 16.92z"/>,
+        globe: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></>
     };
     return (
         <svg className={"icon "+className} width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
@@ -4925,7 +5262,7 @@ function ConnectionBar() {
     return (
         <div className="conn-bar">
             <span className="conn-spinner"/>
-            {status === 'connecting' ? 'Соединение…' : 'Обновление…'}
+            {status === 'connecting' ? t('conn.connecting') : t('conn.updating')}
         </div>
     );
 }
@@ -5101,49 +5438,49 @@ function AuthScreen({ onAuth, show }) {
         <div className="register screen">
             <div className="reg-card">
                 <div style={{ fontSize:13, color:"rgb(var(--ar),var(--ag),var(--ab))", fontWeight:700, marginBottom:8 }}>ТЕЛЕГРАММЫ ПО КУБАНИ</div>
-                <h1>{mode === 'login' ? 'Вход' : 'Создать аккаунт'}</h1>
-                <p>{mode === 'login' ? 'Войдите по почте и паролю' : 'Создайте аккаунт с привязкой почты'}</p>
+                <h1>{mode === 'login' ? t('auth.login') : t('auth.createAccount')}</h1>
+                <p>{mode === 'login' ? t('auth.loginSubtitle') : t('auth.registerSubtitle')}</p>
                 
                 {err && <div style={{ color:"#ba1a1a", fontSize:13, marginBottom:10, padding:'8px 12px', background:'rgba(186,26,26,0.1)', borderRadius:10 }}>{err}</div>}
                 
                 {mode === 'register' && (
                     <>
                         <div className="field">
-                            <label>Имя</label>
-                            <input placeholder="Как вас зовут?" value={name} onChange={e=>setName(e.target.value)} maxLength="40" />
+                            <label>{t('auth.name')}</label>
+                            <input placeholder={t('auth.namePlaceholder')} value={name} onChange={e=>setName(e.target.value)} maxLength="40" />
                         </div>
                         <div className="field">
-                            <label>Юзернейм</label>
+                            <label>{t('auth.username')}</label>
                             <input placeholder="@username" value={username} onChange={e=>setUsername(e.target.value)} maxLength="24" />
                         </div>
                     </>
                 )}
                 
                 <div className="field">
-                    <label>Email</label>
+                    <label>{t('auth.email')}</label>
                     <input type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} />
                 </div>
                 
                 <div className="field">
-                    <label>Пароль</label>
-                    <input type="password" placeholder="Минимум 6 символов" value={password} onChange={e=>setPassword(e.target.value)} />
+                    <label>{t('auth.password')}</label>
+                    <input type="password" placeholder={t('auth.passwordMin6')} value={password} onChange={e=>setPassword(e.target.value)} />
                 </div>
                 
                 <button className="primary" disabled={busy} onClick={mode === 'login' ? handleEmailLogin : handleEmailRegister}>
-                    {busy ? 'Загрузка…' : (mode === 'login' ? 'Войти' : 'Зарегистрироваться')}
+                    {busy ? t('auth.loadingBtn') : (mode === 'login' ? t('auth.signIn') : t('auth.register'))}
                 </button>
                 
-                <div className="reg-divider"><span>или</span></div>
+                <div className="reg-divider"><span>{t('auth.or')}</span></div>
                 
                 <button className="secondary" style={{ width:'100%' }} onClick={() => setMode(mode === 'login' ? 'register' : 'login')}>
-                    {mode === 'login' ? 'Создать аккаунт' : 'Уже есть аккаунт? Войти'}
+                    {mode === 'login' ? t('auth.createAccount') : t('auth.alreadyHaveAccount')}
                 </button>
                 
                 <div style={{ marginTop:12, textAlign:'center' }}>
                     <button className="secondary" style={{ fontSize:12, padding:'8px 16px' }} onClick={() => {
                         window.auth.signInAnonymously().then(() => {}).catch(e => show(friendlyError(e), true));
                     }}>
-                        <Icon name="person" size={16} /> Войти без регистрации
+                        <Icon name="person" size={16} /> {t('auth.signInAnon')}
                     </button>
                 </div>
             </div>
@@ -5192,27 +5529,27 @@ function Register({ uid, onDone, show }) {
         <div className="register screen">
             <div className="reg-card">
                 <div style={{ fontSize:13, color:"rgb(var(--ar),var(--ag),var(--ab))", fontWeight:700, marginBottom:8 }}>ТЕЛЕГРАММЫ ПО КУБАНИ</div>
-                <h1>Погнали общаться</h1>
-                <p>Создайте профиль. Люди будут находить вас по юзернейму.</p>
+                <h1>{t('auth.letsChat')}</h1>
+                <p>{t('auth.registerHint2')}</p>
                 <div className="field">
-                    <label>Имя</label>
-                    <input placeholder="Как вас зовут?" value={name} onChange={e=>setName(e.target.value)} maxLength="40" />
+                    <label>{t('auth.name')}</label>
+                    <input placeholder={t('auth.namePlaceholder')} value={name} onChange={e=>setName(e.target.value)} maxLength="40" />
                 </div>
                 <div className="field">
-                    <label>Юзернейм</label>
+                    <label>{t('auth.username')}</label>
                     <input placeholder="@username" value={username} onChange={e=>setUsername(e.target.value)} maxLength="24" />
                 </div>
                 <div className="field">
-                    <label>Email (опционально, для восстановления)</label>
+                    <label>{t('auth.emailOptional')}</label>
                     <input type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} />
                 </div>
                 {err && <div style={{ color:"#ba1a1a", fontSize:13, marginBottom:10 }}>{err}</div>}
-                <button className="primary" disabled={busy} onClick={create}>{busy ? "Создаём…" : "Создать профиль"}</button>
+                <button className="primary" disabled={busy} onClick={create}>{busy ? t('auth.creating') : t('auth.createProfile')}</button>
                 
-                <div className="reg-divider"><span>или</span></div>
+                <div className="reg-divider"><span>{t('auth.or')}</span></div>
                 
                 <button className="secondary" style={{ width:'100%' }} onClick={() => onDone({ action: 'show-auth' })}>
-                    <Icon name="mail" size={18} /> Войти через почту
+                    <Icon name="mail" size={18} /> {t('auth.signInWithEmail')}
                 </button>
             </div>
         </div>
@@ -5609,11 +5946,11 @@ function GroupModal({ users, me, onClose, onCreated, show }) {
                         value={tempAvatarUrl} 
                         onChange={e => setTempAvatarUrl(e.target.value)}
                     />
-                    <button className="primary" onClick={applyAvatarUrl}>Применить</button>
+                    <button className="primary" onClick={applyAvatarUrl}>{t('edit.applyBtn')}</button>
                 </div>
                 <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
                 <button className="primary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{width:'100%', marginTop:4, marginBottom: 4, justifyContent:'center'}}>
-                    {uploading ? 'Загрузка…' : '📷 Выбрать фото с устройства'}
+                    {uploading ? t('edit.uploading') : '📷 ' + t('stories.pickPhoto')}
                 </button>
                 <button className="secondary" onClick={openHosting} style={{width:'100%', marginTop:4, marginBottom: 8, justifyContent:'center'}}>
                     📤 Или через hostimg.pw (ссылкой)
@@ -6276,7 +6613,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
             {view === 'main' && (<>
                 <div className="tg-topbar">
                     <div className="tg-topbar-btn" onClick={() => setQrOpen(true)}><Icon name="qrcode" size={20}/></div>
-                    <div className="tg-topbar-title">Настройки</div>
+                    <div className="tg-topbar-title">{t('settings.title')}</div>
                     <div className="tg-topbar-btn" onClick={() => setView('edit')}><Icon name="edit" size={19}/></div>
                 </div>
 
@@ -6293,39 +6630,58 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
 
                 <button className="tg-invite" onClick={inviteFriends}>
                     <div className="tg-row-icon"><Icon name="share" size={17}/></div>
-                    Пригласить друзей
+                    {t('settings.invite')}
                 </button>
 
                 {onOpenSaved && (
                     <TgGroup>
-                        <TgRow icon="star" iconClass="tg-ic-yellow" label="Избранное" value="Заметки, файлы, сообщения для себя" onClick={onOpenSaved} />
+                        <TgRow icon="star" iconClass="tg-ic-yellow" label={t('settings.saved')} value={t('settings.savedHint')} onClick={onOpenSaved} />
                     </TgGroup>
                 )}
 
                 <TgGroup>
-                    <TgRow icon="bell" iconClass="tg-ic-red" label="Уведомления и звук" onClick={() => setView('notifications')} />
-                    <TgRow icon="lock" iconClass="tg-ic-green" label="Конфиденциальность" onClick={() => setView('privacy')} />
-                    <TgRow icon="device" iconClass="tg-ic-blue" label="Устройства" value={devices.length + ' активных'} onClick={() => setView('devices')} />
-                    <TgRow icon="mail" iconClass="tg-ic-teal" label="Почта" value={user.email || 'Не привязана'} onClick={() => setView('email')} />
+                    <TgRow icon="bell" iconClass="tg-ic-red" label={t('settings.notifications')} onClick={() => setView('notifications')} />
+                    <TgRow icon="lock" iconClass="tg-ic-green" label={t('settings.privacy')} onClick={() => setView('privacy')} />
+                    <TgRow icon="device" iconClass="tg-ic-blue" label={t('settings.devices')} value={devices.length + ' ' + t('settings.devicesActive')} onClick={() => setView('devices')} />
+                    <TgRow icon="mail" iconClass="tg-ic-teal" label={t('settings.email')} value={user.email || t('settings.emailNotLinked')} onClick={() => setView('email')} />
                 </TgGroup>
 
                 <TgGroup>
-                    <TgRow icon="folder" iconClass="tg-ic-purple" label="Папки" value={folders.length ? folders.length + ' папок' : 'Не настроены'} onClick={() => setView('folders')} />
-                    <TgRow icon="smile" iconClass="tg-ic-pink" label="Быстрая реакция" value={quickReaction} onClick={() => setView('reaction')} />
-                    <TgRow icon="palette" iconClass="tg-ic-indigo" label="Оформление" value={darkMode ? 'Тёмная тема' : 'Светлая тема'} onClick={() => setView('appearance')} />
+                    <TgRow icon="folder" iconClass="tg-ic-purple" label={t('settings.folders')} value={folders.length ? (folders.length + ' ' + t('settings.foldersCount')) : t('settings.foldersNotSet')} onClick={() => setView('folders')} />
+                    <TgRow icon="smile" iconClass="tg-ic-pink" label={t('settings.reaction')} value={quickReaction} onClick={() => setView('reaction')} />
+                    <TgRow icon="palette" iconClass="tg-ic-indigo" label={t('settings.appearance')} value={darkMode ? t('settings.darkTheme') : t('settings.lightTheme')} onClick={() => setView('appearance')} />
+                    <TgRow icon="globe" iconClass="tg-ic-teal" label={t('settings.language')} value={(window.SUPPORTED_LANGS.find(l=>l.code===(window.currentLang||'ru'))||{}).label} onClick={() => setView('language')} />
                 </TgGroup>
 
                 {isAdmin && (
                     <TgGroup>
-                        <TgRow icon="key" iconClass="tg-ic-orange" label="Администрирование" onClick={() => setView('admin')} />
+                        <TgRow icon="key" iconClass="tg-ic-orange" label={t('settings.admin')} onClick={() => setView('admin')} />
                     </TgGroup>
                 )}
 
                 <TgGroup>
-                    <TgRow icon="logout" iconClass="tg-ic-gray" label="Аккаунт" onClick={() => setView('account')} />
-                    <TgRow icon="info" iconClass="tg-ic-gray" label="О мессенджере" onClick={() => setView('about')} />
+                    <TgRow icon="logout" iconClass="tg-ic-gray" label={t('settings.account')} onClick={() => setView('account')} />
+                    <TgRow icon="info" iconClass="tg-ic-gray" label={t('settings.about')} onClick={() => setView('about')} />
                 </TgGroup>
             </>)}
+
+            {view === 'language' && (
+                <div>
+                    <div className="tg-topbar">
+                        <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
+                        <div className="tg-topbar-title">{t('settings.language')}</div>
+                        <div className="tg-topbar-spacer"/>
+                    </div>
+                    <TgGroup>
+                        {window.SUPPORTED_LANGS.map(l => (
+                            <button key={l.code} className="tg-row" onClick={() => window.setLang(l.code)}>
+                                <div className="tg-row-body"><div className="tg-row-label">{l.label}</div></div>
+                                {(window.currentLang || 'ru') === l.code && <Icon name="check" size={18}/>}
+                            </button>
+                        ))}
+                    </TgGroup>
+                </div>
+            )}
 
             {view === 'edit' && (
                 <EditProfileView
@@ -6350,13 +6706,13 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div>
                     <div className="tg-topbar">
                         <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
-                        <div className="tg-topbar-title">Уведомления и звук</div>
+                        <div className="tg-topbar-title">{t('settings.notifications')}</div>
                         <div className="tg-topbar-spacer"/>
                     </div>
                     <TgGroup>
-                        <div style={{padding:'14px 14px 4px'}} className="muted">Разрешите браузеру показывать уведомления о новых сообщениях.</div>
+                        <div style={{padding:'14px 14px 4px'}} className="muted">{t('notif.hint')}</div>
                         <div style={{padding:'6px 14px 14px'}}>
-                            <button className="secondary" onClick={enableNotifications}><Icon name="bell" size={18}/> Включить уведомления</button>
+                            <button className="secondary" onClick={enableNotifications}><Icon name="bell" size={18}/> {t('notif.enable')}</button>
                         </div>
                     </TgGroup>
                 </div>
@@ -6366,20 +6722,20 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div>
                     <div className="tg-topbar">
                         <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
-                        <div className="tg-topbar-title">Конфиденциальность</div>
+                        <div className="tg-topbar-title">{t('settings.privacy')}</div>
                         <div className="tg-topbar-spacer"/>
                     </div>
                     <TgGroup>
                         <Toggle value={hideLastSeen} onChange={setHideLastSeen} label={
                             <span style={{display:"flex",alignItems:"center",gap:8}}>
                                 <Icon name={hideLastSeen ? "eyeOff" : "eye"} size={18} />
-                                {hideLastSeen ? "Скрывать время последнего визита" : "Показывать время последнего визита"}
+                                {hideLastSeen ? t('privacy.hideLastSeen') : t('privacy.showLastSeen')}
                             </span>
                         } />
                         <Toggle value={allowCalls} onChange={setAllowCalls} label={
                             <span style={{display:"flex",alignItems:"center",gap:8}}>
                                 <span style={{fontSize:16, lineHeight:1}}>📞</span>
-                                {allowCalls ? "Разрешать звонки" : "Звонки запрещены"}
+                                {allowCalls ? t('privacy.allowCalls') : t('privacy.callsDenied')}
                             </span>
                         } />
                     </TgGroup>
@@ -6390,12 +6746,12 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div>
                     <div className="tg-topbar">
                         <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
-                        <div className="tg-topbar-title">Устройства</div>
+                        <div className="tg-topbar-title">{t('settings.devices')}</div>
                         <div className="tg-topbar-spacer"/>
                     </div>
                     <TgGroup>
                         {devices.length === 0 ? (
-                            <p className="muted" style={{padding:'14px'}}>Нет активных устройств</p>
+                            <p className="muted" style={{padding:'14px'}}>{t('devices.none')}</p>
                         ) : (
                             devices.map(device => (
                                 <div className="device-item" key={device.id}>
@@ -6404,13 +6760,13 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                                         <div className="device-name">{device.name}</div>
                                         <div className="device-time">
                                             {device.current ? (
-                                                <span className="device-current">● В сети сейчас</span>
+                                                <span className="device-current">● {t('devices.onlineNow')}</span>
                                             ) : (
-                                                'Последний визит: ' + fmtLastSeen(device.lastSeen)
+                                                t('devices.lastSeen') + ' ' + fmtLastSeen(device.lastSeen)
                                             )}
                                         </div>
                                     </div>
-                                    {device.current && <span className="device-badge">Это устройство</span>}
+                                    {device.current && <span className="device-badge">{t('devices.thisDevice')}</span>}
                                 </div>
                             ))
                         )}
@@ -6487,18 +6843,18 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div>
                     <div className="tg-topbar">
                         <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
-                        <div className="tg-topbar-title">Папки</div>
+                        <div className="tg-topbar-title">{t('settings.folders')}</div>
                         <div className="tg-topbar-spacer"/>
                     </div>
-                    <div className="tg-group-hint">Папки помогают группировать чаты. Создайте папку и дайте ей название — чуть позже вы сможете добавлять в неё чаты.</div>
+                    <div className="tg-group-hint">{t('folders.hint')}</div>
                     <TgGroup>
                         <div className="tg-new-folder-row">
-                            <input placeholder="Название новой папки" value={newFolderName} onChange={e=>setNewFolderName(e.target.value)} maxLength="24" onKeyDown={e => e.key==='Enter' && addFolder()} />
-                            <button className="primary" style={{height:40, padding:'0 16px'}} onClick={addFolder}>Создать</button>
+                            <input placeholder={t('folders.namePlaceholder')} value={newFolderName} onChange={e=>setNewFolderName(e.target.value)} maxLength="24" onKeyDown={e => e.key==='Enter' && addFolder()} />
+                            <button className="primary" style={{height:40, padding:'0 16px'}} onClick={addFolder}>{t('folders.create')}</button>
                         </div>
                     </TgGroup>
                     {folders.length > 0 && (
-                        <TgGroup title="Ваши папки">
+                        <TgGroup title={t('folders.yourFolders')}>
                             {folders.map(f => (
                                 <div className="tg-folder-item" key={f.id}>
                                     <div className="tg-folder-icon"><Icon name="folder" size={18}/></div>
@@ -6515,11 +6871,11 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div>
                     <div className="tg-topbar">
                         <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
-                        <div className="tg-topbar-title">Быстрая реакция</div>
+                        <div className="tg-topbar-title">{t('settings.reaction')}</div>
                         <div className="tg-topbar-spacer"/>
                     </div>
                     <div className="setting-card">
-                        <div className="muted" style={{marginBottom:8}}>Эта реакция ставится по двойному клику на сообщение.</div>
+                        <div className="muted" style={{marginBottom:8}}>{t('reaction.hint')}</div>
                         <div style={{display:'flex', gap:8, flexWrap:'wrap', marginTop:8}}>
                             {REACTIONS.map(r => (
                                 <button 
@@ -6540,19 +6896,19 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div>
                     <div className="tg-topbar">
                         <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
-                        <div className="tg-topbar-title">Оформление</div>
+                        <div className="tg-topbar-title">{t('settings.appearance')}</div>
                         <div className="tg-topbar-spacer"/>
                     </div>
                     <TgGroup>
                         <Toggle value={darkMode} onChange={setDarkMode} label={
                             <span style={{display:"flex",alignItems:"center",gap:8}}>
                                 <Icon name={darkMode ? "moon" : "sun"} size={18} />
-                                {darkMode ? "Тёмная тема" : "Светлая тема"}
+                                {darkMode ? t('settings.darkTheme') : t('settings.lightTheme')}
                             </span>
                         } />
                     </TgGroup>
                     <div className="setting-card">
-                        <label style={{fontSize:13, color:'var(--muted)', fontWeight:600}}>Цвет оформления</label>
+                        <label style={{fontSize:13, color:'var(--muted)', fontWeight:600}}>{t('appearance.accentColor')}</label>
                         <div style={{display:'flex', gap:10, flexWrap:'wrap', marginTop:10}}>
                             {window.ACCENT_PRESETS.map(c => (
                                 <button key={c} onClick={() => { window.applyAccentColor(c); setAccentTick(t=>t+1); }} style={{
@@ -6563,7 +6919,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                             <label style={{
                                 width:34, height:34, borderRadius:'50%', cursor:'pointer', position:'relative', overflow:'hidden',
                                 border:'2px dashed rgba(127,127,127,.4)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:15
-                            }} title="Свой цвет">
+                            }} title={t('appearance.customColor')}>
                                 🎨
                                 <input type="color" value={accentColor||'#6750a4'} onChange={e => { window.applyAccentColor(e.target.value); setAccentTick(t=>t+1); }} style={{position:'absolute', inset:0, opacity:0, cursor:'pointer'}} />
                             </label>
@@ -6610,18 +6966,18 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div>
                     <div className="tg-topbar">
                         <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
-                        <div className="tg-topbar-title">Аккаунт</div>
+                        <div className="tg-topbar-title">{t('settings.account')}</div>
                         <div className="tg-topbar-spacer"/>
                     </div>
                     <div className="setting-card">
                         <button className="primary danger" style={{marginBottom:8, width:'100%', justifyContent:'center'}} onClick={onLogout}>
-                            <Icon name="logout" size={18}/> Выйти
+                            <Icon name="logout" size={18}/> {t('account.logout')}
                         </button>
                         <button className="primary danger" style={{width:'100%', justifyContent:'center'}} onClick={deleteAccount} disabled={busy}>
-                            <Icon name="trash" size={18}/> {busy ? 'Удаляем…' : 'Удалить аккаунт навсегда'}
+                            <Icon name="trash" size={18}/> {busy ? t('account.deleting') : t('account.delete')}
                         </button>
                         <div style={{fontSize:11, color:'var(--err)', marginTop:8}}>
-                            ⚠️ Все данные будут удалены без возможности восстановления
+                            ⚠️ {t('account.deleteWarning')}
                         </div>
                     </div>
                 </div>
@@ -6631,7 +6987,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div>
                     <div className="tg-topbar">
                         <div className="tg-topbar-btn" onClick={() => setView('main')}><Icon name="back" size={20}/></div>
-                        <div className="tg-topbar-title">О мессенджере</div>
+                        <div className="tg-topbar-title">{t('settings.about')}</div>
                         <div className="tg-topbar-spacer"/>
                     </div>
                     <div className="setting-card">
@@ -6650,7 +7006,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div className="overlay" onClick={() => setQrOpen(false)}>
                     <div className="modal" onClick={e=>e.stopPropagation()} style={{maxWidth:340, textAlign:'center'}}>
                         <div className="modal-head">
-                            <h2 style={{margin:0, fontSize:17}}>Мой профиль</h2>
+                            <h2 style={{margin:0, fontSize:17}}>{t('profileModal.title')}</h2>
                             <button className="iconbtn close" onClick={() => setQrOpen(false)}><Icon name="close"/></button>
                         </div>
                         <div style={{display:'flex', justifyContent:'center', margin:'10px 0 16px'}}>
@@ -6659,7 +7015,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                         <div style={{fontWeight:700, fontSize:17}}>{name}</div>
                         <div className="muted" style={{marginBottom:16}}>@{normalizeUsername(username)}</div>
                         <button className="primary" style={{width:'100%', justifyContent:'center'}} onClick={copyProfileLink}>
-                            <Icon name="link2" size={18}/> Скопировать ссылку на профиль
+                            <Icon name="link2" size={18}/> {t('profileModal.copyLink')}
                         </button>
                     </div>
                 </div>
@@ -6669,13 +7025,13 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div className="overlay" onClick={() => setAutoDeleteOpen(false)}>
                     <div className="modal" onClick={e=>e.stopPropagation()} style={{maxWidth:340}}>
                         <div className="modal-head">
-                            <h2 style={{margin:0, fontSize:17}}>Автоудаление профиля</h2>
+                            <h2 style={{margin:0, fontSize:17}}>{t('autoDelete.title')}</h2>
                             <button className="iconbtn close" onClick={() => setAutoDeleteOpen(false)}><Icon name="close"/></button>
                         </div>
-                        <div className="muted" style={{marginBottom:10, fontSize:13}}>Если вы долго не заходите в аккаунт, он будет удалён через выбранный срок.</div>
+                        <div className="muted" style={{marginBottom:10, fontSize:13}}>{t('autoDelete.hint')}</div>
                         {[3,6,12].map(m => (
                             <button key={m} className={"tg-row"} style={{borderRadius:12, marginBottom:6}} onClick={() => setAutoDeleteMonths(m)}>
-                                <div className="tg-row-body"><div className="tg-row-label">{m} месяцев</div></div>
+                                <div className="tg-row-body"><div className="tg-row-label">{m} {t('edit.months')}</div></div>
                                 {autoDelete === m && <Icon name="check" size={18}/>}
                             </button>
                         ))}
@@ -6719,15 +7075,15 @@ function EditProfileView({
         <div>
             <div className="tg-topbar" style={{position:'relative'}}>
                 <div className="tg-topbar-btn" onClick={onBack}><Icon name="back" size={20}/></div>
-                <div className="tg-topbar-title">Изменить профиль</div>
+                <div className="tg-topbar-title">{t('edit.title')}</div>
                 <div className="tg-topbar-btn" onClick={() => setMoreOpen(o=>!o)}><Icon name="more" size={19}/></div>
                 {moreOpen && (
                     <div className="tg-more-menu">
                         <button className="tg-more-item" onClick={() => { setMoreOpen(false); copyProfileLink(); }}>
-                            <Icon name="link2" size={17}/> Скопировать ссылку профиля
+                            <Icon name="link2" size={17}/> {t('edit.copyLink')}
                         </button>
                         <button className="tg-more-item danger" onClick={() => { setMoreOpen(false); onLogout(); }}>
-                            <Icon name="logout" size={17}/> Выйти из профиля
+                            <Icon name="logout" size={17}/> {t('edit.logout')}
                         </button>
                     </div>
                 )}
@@ -6741,29 +7097,29 @@ function EditProfileView({
                     </div>
                 </div>
                 <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
-                {uploading && <div className="muted" style={{marginTop:8}}>Загрузка…</div>}
+                {uploading && <div className="muted" style={{marginTop:8}}>{t('edit.uploading')}</div>}
             </div>
 
             <div className="tg-input-group">
                 <div className="tg-input-row">
-                    <label>Имя</label>
-                    <input value={name} onChange={e=>setName(e.target.value)} maxLength="40" placeholder="Имя" />
+                    <label>{t('edit.name')}</label>
+                    <input value={name} onChange={e=>setName(e.target.value)} maxLength="40" placeholder={t('edit.name')} />
                 </div>
                 <div className="tg-input-row">
-                    <label>Юзернейм</label>
+                    <label>{t('edit.username')}</label>
                     <input value={"@"+username.replace(/^@/,"")} onChange={e=>setUsername(e.target.value.replace(/^@/,""))} maxLength="24" />
                 </div>
             </div>
-            <div className="tg-input-hint">По юзернейму вас смогут найти в поиске.</div>
+            <div className="tg-input-hint">{t('edit.usernameHint')}</div>
 
             <div className="tg-input-group">
                 <div className="tg-input-row">
-                    <label>О себе</label>
-                    <textarea rows="3" placeholder="Расскажите немного о себе" value={about} onChange={e=>setAbout(e.target.value)} maxLength="180" />
+                    <label>{t('edit.about')}</label>
+                    <textarea rows="3" placeholder={t('edit.aboutPlaceholder')} value={about} onChange={e=>setAbout(e.target.value)} maxLength="180" />
                 </div>
             </div>
 
-            <TgGroup title="Стандартная аватарка">
+            <TgGroup title={t('edit.defaultAvatar')}>
                 <div style={{padding:14}}>
                     <div className="avatar-grid">
                         {AVATARS.map(a => (
@@ -6775,7 +7131,7 @@ function EditProfileView({
                 </div>
             </TgGroup>
 
-            <TgGroup title="Фото по ссылке">
+            <TgGroup title={t('edit.photoByLink')}>
                 <div style={{padding:14}}>
                     <div className="avatar-url-input">
                         <input 
@@ -6784,33 +7140,33 @@ function EditProfileView({
                             value={tempAvatarUrl} 
                             onChange={e => setTempAvatarUrl(e.target.value)}
                         />
-                        <button className="primary" onClick={applyAvatarUrl}>Применить</button>
+                        <button className="primary" onClick={applyAvatarUrl}>{t('edit.applyBtn')}</button>
                     </div>
                     <div className="avatar-url-input" style={{ marginTop: 8 }}>
                         <button className="secondary" onClick={openHosting} style={{ width:'100%', justifyContent:'center' }}>
-                            📤 Или через hostimg.pw (ссылкой)
+                            📤 {t('edit.orHosting')}
                         </button>
                     </div>
                     {avatarUrl && (
                         <div className="avatar-url-preview">
                             <div className="avatar-preview" style={{ backgroundImage: `url(${avatarUrl})` }} />
                             <span className="muted">{avatarUrl.substring(0, 50)}...</span>
-                            <button className="remove-btn" onClick={removeAvatarUrl}>Удалить</button>
+                            <button className="remove-btn" onClick={removeAvatarUrl}>{t('edit.remove')}</button>
                         </div>
                     )}
                 </div>
             </TgGroup>
 
             <TgGroup>
-                <TgRow icon="trash" iconClass="tg-ic-red" label="Удалить профиль" value={autoDelete + ' месяцев'} onClick={() => setAutoDeleteOpen(true)} />
+                <TgRow icon="trash" iconClass="tg-ic-red" label={t('edit.deleteProfile')} value={autoDelete + ' ' + t('edit.months')} onClick={() => setAutoDeleteOpen(true)} />
             </TgGroup>
 
             <button className="primary danger" style={{width:'100%', justifyContent:'center', marginTop:4, marginBottom:18}} onClick={onLogout}>
-                <Icon name="logout" size={18}/> Выйти из профиля
+                <Icon name="logout" size={18}/> {t('edit.logout')}
             </button>
 
             <button className="primary" style={{width:'100%', justifyContent:'center'}} onClick={save} disabled={busy}>
-                {busy ? "Сохраняем…" : "Сохранить изменения"}
+                {busy ? t('edit.saving') : t('edit.save')}
             </button>
         </div>
     );
@@ -6926,11 +7282,11 @@ function CreateChannelModal({ onClose, onCreated, show, me }) {
                         value={tempAvatarUrl} 
                         onChange={e => setTempAvatarUrl(e.target.value)}
                     />
-                    <button className="primary" onClick={applyAvatarUrl}>Применить</button>
+                    <button className="primary" onClick={applyAvatarUrl}>{t('edit.applyBtn')}</button>
                 </div>
                 <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
                 <button className="primary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{width:'100%', marginTop:4, marginBottom:4, justifyContent:'center'}}>
-                    {uploading ? 'Загрузка…' : '📷 Выбрать фото с устройства'}
+                    {uploading ? t('edit.uploading') : '📷 ' + t('stories.pickPhoto')}
                 </button>
                 <button className="secondary" onClick={openHosting} style={{width:'100%', marginTop:4, justifyContent:'center'}}>
                     📤 Или через hostimg.pw (ссылкой)
@@ -7194,7 +7550,7 @@ function ChannelInfoModal({ chat, me, users, onClose, onUpdate, show }) {
                                     </div>
                                     <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{display:'none'}} />
                                     <button className="primary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{ marginTop: 4, width: '100%', justifyContent: 'center' }}>
-                                        {uploading ? 'Загрузка…' : '📷 Выбрать фото с устройства'}
+                                        {uploading ? t('edit.uploading') : '📷 ' + t('stories.pickPhoto')}
                                     </button>
                                     <button className="secondary" onClick={openHosting} style={{ marginTop: 4, width: '100%', justifyContent: 'center' }}>
                                         📤 Или через hostimg.pw (ссылкой)
@@ -9225,27 +9581,27 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                             {Array.from({length: 22}).map((_, i) => <span key={i} style={{'--i': i}} />)}
                         </span>
                         <span className="recording-time">{String(Math.floor(recordSeconds/60)).padStart(2,'0')}:{String(recordSeconds%60).padStart(2,'0')}</span>
-                        <button className="send ready" onClick={stopRecording} aria-label="Отправить голосовое">
+                        <button className="send ready" onClick={stopRecording} aria-label={t('chat.sendVoice')}>
                             <Icon name="send" size={20} />
                         </button>
                     </div>
                 ) : (
                     <>
                         <div style={{position:'relative'}}>
-                            <button className="iconbtn attach-btn" onClick={()=>setShowAttachMenu(v=>!v)} aria-label="Вложения"><Icon name="plus" size={21}/></button>
+                            <button className="iconbtn attach-btn" onClick={()=>setShowAttachMenu(v=>!v)} aria-label={t('chat.attachments')}><Icon name="plus" size={21}/></button>
                             {showAttachMenu && <div className="attach-menu" onClick={e=>e.stopPropagation()}>
-                                <button onClick={()=>{setShowStickerPanel(true);setShowAttachMenu(false);}}><span className="attach-icon">😊</span><span>Стикеры</span></button>
+                                <button onClick={()=>{setShowStickerPanel(true);setShowAttachMenu(false);}}><span className="attach-icon">😊</span><span>{t('chat.stickers')}</span></button>
                                 {(!isChannel || chat.createdBy === me.uid) && (
-                                    <button onClick={()=>{setShowPollCreator(true);setShowAttachMenu(false);}}><span className="attach-icon">📊</span><span>Опрос</span></button>
+                                    <button onClick={()=>{setShowPollCreator(true);setShowAttachMenu(false);}}><span className="attach-icon">📊</span><span>{t('chat.poll')}</span></button>
                                 )}
-                                <button onClick={()=>{setShowAttachMenu(false);startRecording();}}><span className="attach-icon">🎙️</span><span>Голосовое</span></button>
+                                <button onClick={()=>{setShowAttachMenu(false);startRecording();}}><span className="attach-icon">🎙️</span><span>{t('chat.voiceMsg')}</span></button>
                             </div>}
                         </div>
                         <div className="compose">
                             <textarea
                                 ref={composeRef}
                                 rows={1}
-                                placeholder={editingMessage ? "Изменить..." : (isChannel ? "Напишите пост..." : "Сообщение")}
+                                placeholder={editingMessage ? t('chat.editPlaceholder') : (isChannel ? t('chat.postPlaceholder') : t('chat.messagePlaceholder'))}
                                 value={text}
                                 onChange={change}
                                 onKeyDown={e => handleComposeKeyDown(e, editingMessage ? saveEdit : send)}
@@ -9257,7 +9613,7 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
                     </>
                 )}
             </div>
-            {showStickerPanel && <div className="overlay sticker-overlay" onClick={()=>setShowStickerPanel(false)}><div className="sticker-modal" onClick={e=>e.stopPropagation()}><div className="modal-head"><h2 style={{margin:0,fontSize:18}}>😊 Стикеры</h2><button className="iconbtn close" onClick={()=>setShowStickerPanel(false)}><Icon name="close"/></button></div>{STICKER_PACKS.map(pack=><div key={pack.name}><div className="sticker-pack-title">{pack.name}</div><div className="sticker-grid">{pack.stickers.map(st=><button key={st} onClick={()=>sendSticker(st)}>{st}</button>)}</div></div>)}</div></div>}
+            {showStickerPanel && <div className="overlay sticker-overlay" onClick={()=>setShowStickerPanel(false)}><div className="sticker-modal" onClick={e=>e.stopPropagation()}><div className="modal-head"><h2 style={{margin:0,fontSize:18}}>😊 {t('chat.stickers')}</h2><button className="iconbtn close" onClick={()=>setShowStickerPanel(false)}><Icon name="close"/></button></div>{STICKER_PACKS.map(pack=><div key={pack.name}><div className="sticker-pack-title">{pack.name}</div><div className="sticker-grid">{pack.stickers.map(st=><button key={st} onClick={()=>sendSticker(st)}>{st}</button>)}</div></div>)}</div></div>}
             {showPollCreator && <PollCreator onClose={()=>setShowPollCreator(false)} onCreate={createPoll} />}
             {profile && (
                 <UserProfileModal 
@@ -9299,7 +9655,382 @@ function ChatView({ me, chat, users, presence, onBack, show, hideLastSeen, onUpd
 }
 // ===== СПИСОК =====
 // ===== СПИСОК (С ПОИСКОМ КАНАЛОВ) =====
-function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateChannel, hideLastSeen, searchTick }) {
+// ===== СТАТУСЫ (ИСТОРИИ) =====
+const STORY_TTL = 24 * 60 * 60 * 1000;
+const STORY_COLORS = ['#6750a4', '#e0453b', '#e5851f', '#39ab5f', '#2e8fe6', '#8a56e0', '#e2477f'];
+
+function activeStoriesForUser(stories, uid) {
+    const now = Date.now();
+    const userStories = (stories && stories[uid]) ? stories[uid] : {};
+    return Object.keys(userStories)
+        .map(id => ({ id, ...userStories[id] }))
+        .filter(s => !s.expiresAt || s.expiresAt > now)
+        .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+}
+
+function StoriesBar({ me, users, metas, stories, show }) {
+    const [createOpen, setCreateOpen] = useState(false);
+    const [viewerUid, setViewerUid] = useState(null);
+
+    const myStories = useMemo(() => activeStoriesForUser(stories, me.uid), [stories, me.uid]);
+
+    const contactUids = useMemo(() => {
+        const set = new Set();
+        Object.values(metas || {}).forEach(meta => {
+            if (!meta || meta.type !== 'dm') return;
+            const members = meta.members || {};
+            if (!members[me.uid]) return;
+            const otherUid = Object.keys(members).find(uid => uid !== me.uid);
+            if (otherUid) set.add(otherUid);
+        });
+        return Array.from(set);
+    }, [metas, me.uid]);
+
+    const peopleWithStories = useMemo(() => {
+        return contactUids
+            .map(uid => ({ uid, list: activeStoriesForUser(stories, uid) }))
+            .filter(x => x.list.length > 0 && users[x.uid])
+            .sort((a, b) => {
+                const at = a.list[a.list.length - 1]?.createdAt || 0;
+                const bt = b.list[b.list.length - 1]?.createdAt || 0;
+                return bt - at;
+            });
+    }, [contactUids, stories, users]);
+
+    const allUids = useMemo(() => [me.uid, ...peopleWithStories.map(p => p.uid)], [me.uid, peopleWithStories]);
+
+    return (
+        <>
+            <div className="stories-bar">
+                <button className="story-circle" onClick={() => myStories.length ? setViewerUid(me.uid) : setCreateOpen(true)}>
+                    <div className={"story-ring " + (myStories.length ? "story-ring-mine" : "story-ring-empty")}>
+                        <Avatar name={me.name} uid={me.uid} avatar={me.avatar} avatarUrl={me.avatarUrl} size={58} verified={me.verified} />
+                    </div>
+                    <span className="story-add-badge" onClick={(e) => { e.stopPropagation(); setCreateOpen(true); }}><Icon name="plus" size={13} /></span>
+                    <span className="story-name">{t('stories.myStatus')}</span>
+                </button>
+                {peopleWithStories.map(({ uid, list }) => {
+                    const u = users[uid];
+                    const seen = list.every(s => s.viewedBy && s.viewedBy[me.uid]);
+                    return (
+                        <button className="story-circle" key={uid} onClick={() => setViewerUid(uid)}>
+                            <div className={"story-ring " + (seen ? "story-ring-seen" : "story-ring-new")}>
+                                <Avatar name={u.name} uid={uid} avatar={u.avatar} avatarUrl={u.avatarUrl} size={58} verified={u.verified} />
+                            </div>
+                            <span className="story-name">{(u.name || '').split(' ')[0]}</span>
+                        </button>
+                    );
+                })}
+            </div>
+            {createOpen && <CreateStoryModal me={me} onClose={() => setCreateOpen(false)} show={show} />}
+            {viewerUid && (
+                <StoryViewer
+                    uid={viewerUid}
+                    allUids={allUids}
+                    me={me}
+                    users={users}
+                    stories={stories}
+                    onClose={() => setViewerUid(null)}
+                    onChangeUid={setViewerUid}
+                    show={show}
+                />
+            )}
+        </>
+    );
+}
+
+function StoryViewer({ uid, allUids, me, users, stories, onClose, onChangeUid, show }) {
+    const list = useMemo(() => activeStoriesForUser(stories, uid), [stories, uid]);
+    const [idx, setIdx] = useState(0);
+    const [paused, setPaused] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const audioRef = useRef(null);
+
+    useEffect(() => { setIdx(0); }, [uid]);
+
+    const story = list[idx];
+
+    useEffect(() => {
+        if (!story || story.uid === me.uid) return;
+        if (story.viewedBy && story.viewedBy[me.uid]) return;
+        if (window.db) window.db.ref('stories/' + uid + '/' + story.id + '/viewedBy/' + me.uid).set(true).catch(() => {});
+    }, [story?.id]);
+
+    function goNext() {
+        if (idx < list.length - 1) { setIdx(i => i + 1); return; }
+        const pos = allUids.indexOf(uid);
+        const nextUid = allUids[pos + 1];
+        if (nextUid) onChangeUid(nextUid); else onClose();
+    }
+    function goPrev() {
+        if (idx > 0) { setIdx(i => i - 1); return; }
+        const pos = allUids.indexOf(uid);
+        const prevUid = allUids[pos - 1];
+        if (prevUid) onChangeUid(prevUid); else onClose();
+    }
+
+    const duration = story?.type === 'voice' ? Math.max(1, story.voiceDuration || 5) * 1000 : 5000;
+
+    useEffect(() => {
+        if (!story) { onClose(); return; }
+        setProgress(0);
+        if (story.type === 'voice' && audioRef.current) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play().catch(() => {});
+        }
+        const start = Date.now();
+        let raf;
+        function tick() {
+            if (paused) { raf = requestAnimationFrame(tick); return; }
+            const elapsed = Date.now() - start;
+            const p = Math.min(1, elapsed / duration);
+            setProgress(p);
+            if (p >= 1) { goNext(); return; }
+            raf = requestAnimationFrame(tick);
+        }
+        raf = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(raf);
+        // eslint-disable-next-line
+    }, [story?.id, paused]);
+
+    if (!story) return null;
+    const u = users[uid] || me;
+
+    return (
+        <div className="story-viewer" onClick={onClose}>
+            <div className="story-viewer-inner" onClick={e => e.stopPropagation()}>
+                <div className="story-progress-row">
+                    {list.map((s, i) => (
+                        <div className="story-progress-track" key={s.id}>
+                            <div className="story-progress-fill" style={{ width: (i < idx ? '100%' : i === idx ? (progress * 100) + '%' : '0%') }} />
+                        </div>
+                    ))}
+                </div>
+                <div className="story-viewer-head">
+                    <Avatar name={u.name} uid={uid} avatar={u.avatar} avatarUrl={u.avatarUrl} size={34} verified={u.verified} />
+                    <div className="story-viewer-name">{uid === me.uid ? t('stories.myStatus') : u.name}</div>
+                    <div className="story-viewer-time">{fmtTime(story.createdAt)}</div>
+                    <button className="iconbtn" onClick={onClose}><Icon name="close" size={20} /></button>
+                </div>
+                <div
+                    className="story-content"
+                    style={{ background: story.type === 'text' ? (story.bgColor || '#6750a4') : undefined }}
+                    onMouseDown={() => setPaused(true)}
+                    onMouseUp={() => setPaused(false)}
+                    onTouchStart={() => setPaused(true)}
+                    onTouchEnd={() => setPaused(false)}
+                >
+                    {story.type === 'text' && <div className="story-text">{story.text}</div>}
+                    {story.type === 'image' && <img src={story.mediaUrl} className="story-image" alt="" />}
+                    {story.type === 'voice' && (
+                        <div className="story-voice">
+                            <div className="story-voice-icon">🎤</div>
+                            <audio ref={audioRef} src={story.voiceData} onEnded={goNext} />
+                        </div>
+                    )}
+                </div>
+                <div className="story-tap-zone story-tap-left" onClick={goPrev} />
+                <div className="story-tap-zone story-tap-right" onClick={goNext} />
+                {story.uid === me.uid && (
+                    <div className="story-views-count"><Icon name="eye" size={15} /> {Object.keys(story.viewedBy || {}).length}</div>
+                )}
+            </div>
+        </div>
+    );
+}
+
+function CreateStoryModal({ me, onClose, show }) {
+    const [mode, setMode] = useState('text');
+    const [text, setText] = useState('');
+    const [bgColor, setBgColor] = useState(STORY_COLORS[0]);
+    const [imageUrl, setImageUrl] = useState('');
+    const [tempImageUrl, setTempImageUrl] = useState('');
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
+    const [busy, setBusy] = useState(false);
+    const [recording, setRecording] = useState(false);
+    const [recordSeconds, setRecordSeconds] = useState(0);
+    const recordSecondsRef = useRef(0);
+    const [voiceData, setVoiceData] = useState(null);
+    const mediaRecorderRef = useRef(null);
+    const recordTimerRef = useRef(null);
+    const recordStreamRef = useRef(null);
+
+    async function handleFilePick(e) {
+        const file = e.target.files && e.target.files[0];
+        e.target.value = '';
+        if (!file) return;
+        setUploading(true);
+        try {
+            const url = await window.uploadImageFile(file);
+            setImageUrl(url);
+        } catch (err) {
+            show((err && err.message) || 'Не удалось загрузить фото', true);
+        }
+        setUploading(false);
+    }
+
+    function applyImageUrl() {
+        const safe = sanitizeUrl(tempImageUrl);
+        if (!safe) { show('Некорректная ссылка (нужен http:// или https://)', true); return; }
+        setImageUrl(safe);
+    }
+
+    async function startVoiceRecording() {
+        if (recording) return;
+        if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) { show('Этот браузер не поддерживает запись голосовых', true); return; }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+            recordStreamRef.current = stream;
+            const candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4'];
+            const mime = candidates.find(x => MediaRecorder.isTypeSupported(x)) || '';
+            const rec = new MediaRecorder(stream, mime ? { mimeType: mime, audioBitsPerSecond: 24000 } : undefined);
+            const chunks = [];
+            rec.ondataavailable = e => { if (e.data?.size) chunks.push(e.data); };
+            rec.onerror = () => show('Не удалось записать голосовое', true);
+            rec.onstop = () => {
+                clearInterval(recordTimerRef.current);
+                setRecording(false);
+                stream.getTracks().forEach(t => t.stop());
+                const blob = new Blob(chunks, { type: rec.mimeType || mime || 'audio/webm' });
+                if (blob.size < 800) { show('Запись слишком короткая', true); return; }
+                const reader = new FileReader();
+                reader.onload = () => setVoiceData({ data: reader.result, duration: recordSecondsRef.current || 1 });
+                reader.readAsDataURL(blob);
+            };
+            mediaRecorderRef.current = rec;
+            rec.start(250);
+            setRecording(true);
+            setRecordSeconds(0);
+            recordSecondsRef.current = 0;
+            recordTimerRef.current = setInterval(() => setRecordSeconds(s => {
+                const next = s >= 14 ? s : s + 1;
+                recordSecondsRef.current = next;
+                if (s >= 14) stopVoiceRecording();
+                return next;
+            }), 1000);
+        } catch (e) {
+            show(e?.name === 'NotAllowedError' ? 'Разрешите доступ к микрофону в браузере' : 'Не удалось открыть микрофон', true);
+        }
+    }
+
+    function stopVoiceRecording() {
+        clearInterval(recordTimerRef.current);
+        if (mediaRecorderRef.current?.state === 'recording') mediaRecorderRef.current.stop();
+        else { setRecording(false); recordStreamRef.current?.getTracks().forEach(t => t.stop()); }
+    }
+
+    function resetVoice() { setVoiceData(null); setRecordSeconds(0); }
+
+    async function publish() {
+        if (mode === 'text' && !text.trim()) { show('Введите текст статуса', true); return; }
+        if (mode === 'image' && !imageUrl) { show('Добавьте фото', true); return; }
+        if (mode === 'voice' && !voiceData) { show('Запишите голосовое', true); return; }
+        if (!window.db) { show('Нет подключения к серверу', true); return; }
+        setBusy(true);
+        try {
+            const now = Date.now();
+            const ref = window.db.ref('stories/' + me.uid).push();
+            const data = {
+                uid: me.uid,
+                type: mode,
+                createdAt: window.SV_TS || now,
+                expiresAt: now + STORY_TTL,
+                viewedBy: {}
+            };
+            if (mode === 'text') { data.text = text.trim().slice(0, 200); data.bgColor = bgColor; }
+            if (mode === 'image') { data.mediaUrl = imageUrl; if (text.trim()) data.text = text.trim().slice(0, 200); }
+            if (mode === 'voice') { data.voiceData = voiceData.data; data.voiceDuration = voiceData.duration; }
+            await ref.set(data);
+            show('Статус опубликован');
+            onClose();
+        } catch (e) {
+            show(friendlyError(e), true);
+        }
+        setBusy(false);
+    }
+
+    return (
+        <div className="overlay" onClick={onClose}>
+            <div className="modal story-create-modal" onClick={e => e.stopPropagation()}>
+                <div className="modal-head">
+                    <h2 style={{ margin: 0, fontSize: 19 }}>{t('stories.newStatus')}</h2>
+                    <button className="iconbtn close" onClick={onClose}><Icon name="close" /></button>
+                </div>
+
+                <div className="story-mode-tabs">
+                    <button className={"story-mode-tab " + (mode === 'text' ? 'active' : '')} onClick={() => setMode('text')}>{t('stories.text')}</button>
+                    <button className={"story-mode-tab " + (mode === 'image' ? 'active' : '')} onClick={() => setMode('image')}>{t('stories.photo')}</button>
+                    <button className={"story-mode-tab " + (mode === 'voice' ? 'active' : '')} onClick={() => setMode('voice')}>{t('stories.voice')}</button>
+                </div>
+
+                {mode === 'text' && (
+                    <>
+                        <div className="story-text-preview" style={{ background: bgColor }}>
+                            <textarea rows="4" value={text} onChange={e => setText(e.target.value)} maxLength="200" placeholder={t('stories.textPlaceholder')} />
+                        </div>
+                        <div className="story-color-row">
+                            {STORY_COLORS.map(c => (
+                                <button key={c} className={"story-color-dot " + (bgColor === c ? 'selected' : '')} style={{ background: c }} onClick={() => setBgColor(c)} />
+                            ))}
+                        </div>
+                    </>
+                )}
+
+                {mode === 'image' && (
+                    <>
+                        {imageUrl ? (
+                            <div className="story-image-preview" style={{ backgroundImage: `url(${imageUrl})` }}>
+                                <button className="story-image-remove" onClick={() => { setImageUrl(''); setTempImageUrl(''); }}><Icon name="close" size={16} /></button>
+                            </div>
+                        ) : (
+                            <div className="field">
+                                <button className="secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{ width: '100%', justifyContent: 'center' }}>
+                                    {uploading ? t('edit.uploading') : '📷 ' + t('stories.pickPhoto')}
+                                </button>
+                                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{ display: 'none' }} />
+                                <div className="avatar-url-input" style={{ marginTop: 8 }}>
+                                    <input type="text" placeholder={t('stories.photoLink')} value={tempImageUrl} onChange={e => setTempImageUrl(e.target.value)} />
+                                    <button className="primary" onClick={applyImageUrl}>{t('stories.ok')}</button>
+                                </div>
+                            </div>
+                        )}
+                        <div className="field">
+                            <input placeholder={t('stories.caption')} value={text} onChange={e => setText(e.target.value)} maxLength="200" />
+                        </div>
+                    </>
+                )}
+
+                {mode === 'voice' && (
+                    <div className="story-voice-recorder">
+                        {!voiceData ? (
+                            <>
+                                <button className={"story-record-btn " + (recording ? 'recording' : '')} onClick={recording ? stopVoiceRecording : startVoiceRecording}>
+                                    <Icon name="mic" size={26} />
+                                </button>
+                                <div className="muted" style={{ marginTop: 10 }}>
+                                    {recording ? `${t('stories.recording')} ${recordSeconds}с (${t('stories.maxSeconds')})` : t('stories.recordHint')}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="story-voice-ready">🎤 {t('stories.recorded')} {voiceData.duration}с</div>
+                                <button className="secondary" onClick={resetVoice}>{t('stories.reRecord')}</button>
+                            </>
+                        )}
+                    </div>
+                )}
+
+                <div className="modal-actions" style={{ marginTop: 16 }}>
+                    <button className="secondary" onClick={onClose}>{t('stories.cancel')}</button>
+                    <button className="primary" onClick={publish} disabled={busy}>{busy ? t('stories.publishing') : t('stories.publish')}</button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateChannel, hideLastSeen, searchTick, stories, show }) {
     const [search, setSearch] = useState("");
     const [focused, setFocused] = useState(false);
     const searchInputRef = useRef(null);
@@ -9393,16 +10124,17 @@ function List({ me, users, presence, metas, active, onSelect, onGroup, onCreateC
 
     return (
         <div className="list">
+            {!showPeople && <StoriesBar me={me} users={users} metas={metas} stories={stories} show={show} />}
             <div className="list-head">
-                <h1 className="title">Чаты</h1>
+                <h1 className="title">{t('list.title')}</h1>
                 <div className="head-actions">
-                    <button className="iconbtn" onClick={onGroup} title="Создать группу"><Icon name="group"/></button>
-                    <button className="iconbtn" onClick={onCreateChannel} title="Создать канал"><Icon name="channel"/></button>
+                    <button className="iconbtn" onClick={onGroup} title={t('list.createGroup')}><Icon name="group"/></button>
+                    <button className="iconbtn" onClick={onCreateChannel} title={t('list.createChannel')}><Icon name="channel"/></button>
                 </div>
             </div>
             <div className="search">
                 <Icon name="search" size={19} />
-                <input value={search} onFocus={()=>setFocused(true)} onChange={e=>setSearch(e.target.value)} placeholder="Поиск по @юзернейму или каналу" ref={searchInputRef} />
+                <input value={search} onFocus={()=>setFocused(true)} onChange={e=>setSearch(e.target.value)} placeholder={t('list.searchPlaceholder')} ref={searchInputRef} />
                 {search && <button onClick={()=>setSearch("")}><Icon name="close" size={18} /></button>}
             </div>
             <div className="list-scroll">
@@ -9525,19 +10257,19 @@ function Rail({ section, setSection, user, onProfile, unreadCount }) {
             <div className="rail-items">
                 <button className={"rail-item " + (section === "contacts" ? "active" : "")} onClick={()=>setSection("contacts")}>
                     <span className="rail-pill"><Icon name="users"/></span>
-                    <span>Контакты</span>
+                    <span>{t('nav.contacts')}</span>
                 </button>
                 <button className={"rail-item " + (section === "calls" ? "active" : "")} onClick={()=>setSection("calls")}>
                     <span className="rail-pill"><Icon name="phone"/></span>
-                    <span>Звонки</span>
+                    <span>{t('nav.calls')}</span>
                 </button>
                 <button className={"rail-item " + (section === "chats" ? "active" : "")} onClick={()=>setSection("chats")} style={{position:'relative'}}>
                     <span className="rail-pill"><Icon name="chat"/>{unreadCount > 0 && <span className="tg-bottomnav-badge" style={{position:'absolute', top:-2, right:-2}}>{unreadCount > 99 ? "99+" : unreadCount}</span>}</span>
-                    <span>Чаты</span>
+                    <span>{t('nav.chats')}</span>
                 </button>
                 <button className={"rail-item " + (section === "settings" ? "active" : "")} onClick={()=>setSection("settings")}>
                     <span className="rail-pill"><Icon name="settings"/></span>
-                    <span>Настройки</span>
+                    <span>{t('nav.settings')}</span>
                 </button>
             </div>
             <button onClick={onProfile}>
@@ -9559,14 +10291,14 @@ function MobileNav({ section, setSection, onProfile, user, mobileChat, unreadCou
                     onClick={() => setSection("contacts")}
                 >
                     <Icon name="users" size={23} />
-                    <span className="tg-nav-label">Контакты</span>
+                    <span className="tg-nav-label">{t('nav.contacts')}</span>
                 </button>
                 <button
                     className={"tg-bottomnav-item " + (section === "calls" ? "active" : "")}
                     onClick={() => setSection("calls")}
                 >
                     <Icon name="phone" size={23} />
-                    <span className="tg-nav-label">Звонки</span>
+                    <span className="tg-nav-label">{t('nav.calls')}</span>
                 </button>
                 <button
                     className={"tg-bottomnav-item " + (section === "chats" ? "active" : "")}
@@ -9574,17 +10306,17 @@ function MobileNav({ section, setSection, onProfile, user, mobileChat, unreadCou
                 >
                     {unreadCount > 0 && <span className="tg-bottomnav-badge">{unreadCount > 99 ? "99+" : unreadCount}</span>}
                     <Icon name="chat" size={23} />
-                    <span className="tg-nav-label">Чаты</span>
+                    <span className="tg-nav-label">{t('nav.chats')}</span>
                 </button>
                 <button
                     className={"tg-bottomnav-item " + (section === "settings" ? "active" : "")}
                     onClick={() => setSection("settings")}
                 >
                     <Icon name="settings" size={23} />
-                    <span className="tg-nav-label">Настройки</span>
+                    <span className="tg-nav-label">{t('nav.settings')}</span>
                 </button>
             </nav>
-            <button className="tg-search-fab" onClick={onSearch} title="Поиск" aria-label="Поиск">
+            <button className="tg-search-fab" onClick={onSearch} title={t('nav.search')} aria-label={t('nav.search')}>
                 <Icon name="search" size={21}/>
             </button>
         </div>
@@ -9632,21 +10364,21 @@ function ContactsView({ me, users, metas, presence, onSelect, setSection }) {
     return (
         <div className="tg-contactscalls">
             <div className="tg-cc-head">
-                <h1>Контакты</h1>
+                <h1>{t('contacts.title')}</h1>
             </div>
             <div className="search" style={{margin:'0 20px 14px'}}>
                 <Icon name="search" size={19} />
-                <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Поиск по имени или @юзернейму" />
+                <input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('contacts.searchPlaceholder')} />
                 {search && <button onClick={()=>setSearch("")}><Icon name="close" size={18} /></button>}
             </div>
             {listToShow.length === 0 ? (
                 <div className="empty" style={{padding:40}}>
                     <div className="empty-symbol"><Icon name="users" size={32} /></div>
-                    <p>{showSearch ? 'Никого не нашли.' : 'Здесь появятся люди, с которыми вы переписываетесь.\nНачните с поиска по юзернейму.'}</p>
+                    <p>{(showSearch ? t('contacts.emptySearch') : t('contacts.emptyContacts')).split('\n').map((line,i,arr) => <React.Fragment key={i}>{line}{i<arr.length-1 && <br/>}</React.Fragment>)}</p>
                 </div>
             ) : (
                 <>
-                    {!showSearch && <div className="tg-cc-hint">Ваши контакты</div>}
+                    {!showSearch && <div className="tg-cc-hint">{t('contacts.hint')}</div>}
                     {listToShow.map(u => (
                         <button className="tg-cc-row" key={u.uid} onClick={() => openContact(u)}>
                             <Avatar name={u.name} uid={u.uid} avatar={u.avatar} avatarUrl={u.avatarUrl} size={48} online={!!presence[u.uid]?.online} verified={u.verified} />
@@ -9681,7 +10413,7 @@ function CallsView({ me, users, metas, presence, onSelect, setSection, show }) {
 
     function callUser(u, e) {
         e.stopPropagation();
-        if (!window.MessengerCallUI) { show && show('Звонки недоступны', true); return; }
+        if (!window.MessengerCallUI) { show && show(t('calls.noCalls'), true); return; }
         window.MessengerCallUI.call(u.uid, u.chatId, u);
     }
 
@@ -9693,16 +10425,16 @@ function CallsView({ me, users, metas, presence, onSelect, setSection, show }) {
     return (
         <div className="tg-contactscalls">
             <div className="tg-cc-head">
-                <h1>Звонки</h1>
+                <h1>{t('calls.title')}</h1>
             </div>
             {contacts.length === 0 ? (
                 <div className="empty" style={{padding:40}}>
                     <div className="empty-symbol"><Icon name="phone" size={32} /></div>
-                    <p>Здесь появятся ваши контакты для звонков.<br/>Напишите кому-нибудь в чатах, чтобы позвонить.</p>
+                    <p>{t('calls.empty').split('\n').map((line,i,arr) => <React.Fragment key={i}>{line}{i<arr.length-1 && <br/>}</React.Fragment>)}</p>
                 </div>
             ) : (
                 <>
-                    <div className="tg-cc-hint">Нажмите на человека, чтобы открыть чат, или на иконку — чтобы позвонить</div>
+                    <div className="tg-cc-hint">{t('calls.hint')}</div>
                     {contacts.map(u => (
                         <div className="tg-cc-row" key={u.uid} onClick={() => openChat(u)} style={{cursor:'pointer'}}>
                             <Avatar name={u.name} uid={u.uid} avatar={u.avatar} avatarUrl={u.avatarUrl} size={48} online={!!presence[u.uid]?.online} verified={u.verified} />
@@ -9710,7 +10442,7 @@ function CallsView({ me, users, metas, presence, onSelect, setSection, show }) {
                                 <div className="person-row"><span className="person-name">{u.name}</span></div>
                                 <div className="person-sub">@{u.username}</div>
                             </div>
-                            <button className="tg-cc-call-btn" onClick={(e) => callUser(u, e)} title="Позвонить" aria-label="Позвонить">
+                            <button className="tg-cc-call-btn" onClick={(e) => callUser(u, e)} title={t('calls.callBtn')} aria-label={t('calls.callBtn')}>
                                 <Icon name="phone" size={17}/>
                             </button>
                         </div>
@@ -9748,6 +10480,7 @@ function App() {
     const [users, setUsers] = useState({});
     const [presence, setPresence] = useState({});
     const [metas, setMetas] = useState({});
+    const [stories, setStories] = useState({});
     const [section, setSection] = useState("chats");
     const [active, setActive] = useState(null);
     const [profile, setProfile] = useState(false);
@@ -9911,6 +10644,7 @@ function App() {
         }, e => show(friendlyError(e), true));
         
         const mh = window.db.ref("chatsMeta").on("value", s => setMetas(s.val() || {}), e => show(friendlyError(e), true));
+        const sh = window.db.ref("stories").on("value", s => setStories(s.val() || {}), () => {});
         
         const pr = window.db.ref("presence/"+me.uid);
         presenceRef.current = pr;
@@ -9932,6 +10666,7 @@ function App() {
             window.db.ref("users").off("value", uh);
             window.db.ref("presence").off("value", ph);
             window.db.ref("chatsMeta").off("value", mh);
+            window.db.ref("stories").off("value", sh);
             document.removeEventListener("visibilitychange", vis);
             window.removeEventListener("focus", vis);
             window.removeEventListener("blur", vis);
@@ -10127,6 +10862,8 @@ function App() {
                                 onCreateChannel={() => setCreateChannel(true)}
                                 hideLastSeen={hideLastSeen} 
                                 searchTick={searchTick}
+                                stories={stories}
+                                show={show}
                             />
                             {activeChat ? (
                                 <ChatView 
@@ -10145,8 +10882,8 @@ function App() {
                             ) : (
                                 <div className="empty">
                                     <div className="empty-symbol"><Icon name="chat" size={40} /></div>
-                                    <h2>Выберите чат</h2>
-                                    <p>Или нажмите поиск и найдите человека по юзернейму.<br/>Или создайте канал или группу.</p>
+                                    <h2>{t('list.emptyTitle')}</h2>
+                                    <p>{t('list.emptyText').split('\n').map((line,i,arr) => <React.Fragment key={i}>{line}{i<arr.length-1 && <br/>}</React.Fragment>)}</p>
                                 </div>
                             )}
                         </>
