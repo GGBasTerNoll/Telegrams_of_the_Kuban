@@ -3885,7 +3885,7 @@ body.dark .poll-creator-modern .option-row input:focus{
     display:flex;align-items:center;justify-content:center;
     padding:3px;position:relative;
 }
-.story-ring-new{background:conic-gradient(from 180deg, #6750a4, #a97ff0, #f26ea0, #f2a13f, #6750a4);}
+.story-ring-new{background:conic-gradient(from -90deg, #f9ce34, #ee2a7b, #6228d7, #f9ce34);}
 .story-ring-seen{background:rgba(127,127,127,.35);}
 .story-ring-mine{background:rgba(127,127,127,.4);}
 .story-ring-empty{background:rgba(127,127,127,.28);}
@@ -3954,7 +3954,9 @@ body.dark .poll-creator-modern .option-row input:focus{
 }
 
 /* --- Create story modal --- */
-.story-create-modal{width:min(420px,100%);}
+/* ============================================================
+   FULL-SCREEN STATUS EDITOR (WhatsApp-style)
+   ============================================================ */
 .story-mode-tabs{display:flex;gap:8px;margin:14px 0;}
 .story-mode-tab{
     flex:1;padding:10px;border-radius:12px;text-align:center;
@@ -3964,40 +3966,120 @@ body.dark .poll-creator-modern .option-row input:focus{
 .story-mode-tab.active{
     background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;
 }
-.story-text-preview{
-    border-radius:18px;min-height:180px;
+.story-full-editor{
+    position:fixed;inset:0;z-index:2100;
+    display:flex;flex-direction:column;
+    color:#fff;
+    transition:background .25s ease;
+}
+.story-full-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px;padding-top:max(14px, env(safe-area-inset-top));
+    padding-left:max(14px, env(safe-area-inset-left));
+    padding-right:max(14px, env(safe-area-inset-right));
+    flex-shrink:0;
+}
+.story-full-header-btn{
+    width:40px;height:40px;border-radius:50%;flex-shrink:0;
+    background:rgba(0,0,0,.28);color:#fff;
     display:flex;align-items:center;justify-content:center;
-    padding:20px;transition:background .25s ease;
+    transition:background .15s ease,transform .15s ease;
 }
-.story-text-preview textarea{
-    width:100%;background:transparent;border:0;outline:0;resize:none;
-    color:#fff;font-size:19px;font-weight:650;text-align:center;
-    text-shadow:0 2px 10px rgba(0,0,0,.15);
+.story-full-header-btn:active{transform:scale(.92);}
+.story-full-header-btn.active{background:rgba(255,255,255,.32);}
+.story-full-header-right{display:flex;gap:10px;}
+
+.story-full-body{
+    flex:1;min-height:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:10px 20px;overflow:auto;position:relative;
 }
-.story-color-row{display:flex;gap:9px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+.story-full-textarea{
+    width:100%;max-width:480px;background:transparent;border:0;outline:0;resize:none;
+    color:#fff;font-size:30px;font-weight:650;text-align:center;line-height:1.35;
+    text-shadow:0 2px 14px rgba(0,0,0,.18);
+}
+.story-full-textarea::placeholder{color:rgba(255,255,255,.55);}
+
+.story-full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+.story-full-image{max-width:100%;max-height:100%;border-radius:14px;object-fit:contain;}
+
+.story-full-picker{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:340px;}
+.story-full-pick-btn{
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    width:100%;padding:26px 16px;border-radius:18px;
+    background:rgba(255,255,255,.12);color:#fff;font-size:14px;font-weight:600;
+    border:1.5px dashed rgba(255,255,255,.35);
+    transition:background .18s ease;
+}
+.story-full-pick-btn:hover{background:rgba(255,255,255,.18);}
+.story-full-url-row{display:flex;gap:8px;width:100%;}
+.story-full-url-row input{
+    flex:1;border:0;border-radius:12px;background:rgba(255,255,255,.14);
+    padding:11px 14px;font-size:14px;color:#fff;outline:0;
+}
+.story-full-url-row input::placeholder{color:rgba(255,255,255,.55);}
+.story-full-url-row button{
+    border-radius:12px;padding:0 18px;background:rgba(255,255,255,.2);color:#fff;font-weight:650;
+}
+.story-full-hint{margin-top:10px;color:rgba(255,255,255,.7);font-size:13.5px;text-align:center;}
+
+.story-full-caption-row{padding:0 16px 10px;flex-shrink:0;}
+.story-full-caption-row input{
+    width:100%;border:0;border-radius:14px;background:rgba(255,255,255,.14);
+    padding:12px 16px;font-size:14.5px;color:#fff;outline:0;
+}
+.story-full-caption-row input::placeholder{color:rgba(255,255,255,.6);}
+
+.story-color-strip{display:flex;gap:10px;padding:6px 16px 14px;overflow-x:auto;flex-shrink:0;}
+.story-color-strip .story-color-dot{width:30px;height:30px;flex-shrink:0;}
+
+.story-full-footer{
+    flex-shrink:0;
+    padding:6px 16px;
+    padding-bottom:max(16px, env(safe-area-inset-bottom));
+    padding-left:max(16px, env(safe-area-inset-left));
+    padding-right:max(16px, env(safe-area-inset-right));
+    display:flex;flex-direction:column;gap:12px;
+}
+.story-full-tabs{display:flex;justify-content:center;gap:22px;}
+.story-full-tab{
+    font-size:12.5px;font-weight:750;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(255,255,255,.55);padding:6px 2px;border-bottom:2px solid transparent;
+    transition:color .15s ease,border-color .15s ease;
+}
+.story-full-tab.active{color:#fff;border-color:#fff;}
+.story-full-actionrow{display:flex;align-items:center;justify-content:flex-end;}
+.story-full-send{
+    width:56px;height:56px;border-radius:50%;flex-shrink:0;
+    background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 20px rgba(0,0,0,.35);
+    transition:transform .15s ease;
+}
+.story-full-send:active{transform:scale(.92);}
+.story-full-send:disabled{opacity:.5;}
+.story-full-send .conn-spinner{border-color:rgba(255,255,255,.4);border-top-color:#fff;}
+
 .story-color-dot{
     width:28px;height:28px;border-radius:50%;border:3px solid transparent;
     transition:border-color .18s ease,transform .15s ease;
 }
-.story-color-dot.selected{border-color:var(--txt);transform:scale(1.1);}
-.story-image-preview{
-    width:100%;height:220px;border-radius:18px;background-size:cover;background-position:center;
-    position:relative;margin-bottom:10px;
-}
+.story-color-dot.selected{border-color:#fff;transform:scale(1.15);}
 .story-image-remove{
     position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;
     background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;
 }
 .story-voice-recorder{display:flex;flex-direction:column;align-items:center;padding:26px 10px;}
 .story-record-btn{
-    width:74px;height:74px;border-radius:50%;
+    width:78px;height:78px;border-radius:50%;
     background:rgb(var(--ar),var(--ag),var(--ab));color:#fff;
     display:flex;align-items:center;justify-content:center;
     transition:transform .15s ease, background .2s ease;
 }
 .story-record-btn.recording{background:var(--err);animation:storyPulse 1s ease-in-out infinite;}
 .story-record-btn:active{transform:scale(.92);}
-.story-voice-ready{font-size:15px;font-weight:650;margin-bottom:12px;}
+.story-voice-ready{font-size:16px;font-weight:650;margin-bottom:14px;color:#fff;}
 
 /* ============================================================
    QR CODE / SCANNER
@@ -4452,7 +4534,7 @@ window.copyChannelId = window.copyChannelId || async function(id){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 
 <script>
 try {
@@ -4570,58 +4652,65 @@ window.E2E = (function () {
         );
         const privJwk = await crypto.subtle.exportKey('jwk', pair.privateKey);
         const pubJwk = await crypto.subtle.exportKey('jwk', pair.publicKey);
-        localStorage.setItem('kuban_e2e_priv', JSON.stringify(privJwk));
-        localStorage.setItem('kuban_e2e_pub', JSON.stringify(pubJwk));
+        if (uid) {
+            localStorage.setItem('kuban_e2e_priv_' + uid, JSON.stringify(privJwk));
+            localStorage.setItem('kuban_e2e_pub_' + uid, JSON.stringify(pubJwk));
+        }
         if (window.db && uid) {
             await window.db.ref('privateKeys/' + uid).set(JSON.stringify(privJwk)).catch(() => {});
         }
         return { privateKey: pair.privateKey, publicKeyJwk: pubJwk };
     }
 
-    // Ключ синхронизируется через Firebase (путь читаем только владельцем), поэтому один и тот же
-    // ключ действует на всех устройствах/браузерах аккаунта — иначе на новом устройстве
-    // генерировался бы новый ключ и старые сообщения переставали бы расшифровываться.
+    // Ключ синхронизируется через Firebase (путь читаем только владельцем) и кэшируется ЛОКАЛЬНО
+    // ОТДЕЛЬНО ДЛЯ КАЖДОГО uid (kuban_e2e_priv_<uid>), а не в общем ключе localStorage — иначе при
+    // входе в разные аккаунты на одном устройстве/браузере ключ одного аккаунта "утекал" бы в другой
+    // и сообщения переставали бы расшифровываться. Облако (privateKeys/<uid>) всегда приоритетнее
+    // локального кэша, чтобы все устройства аккаунта гарантированно сходились на одном ключе.
     async function getOrCreateKeyPair(uid) {
-        const savedPriv = localStorage.getItem('kuban_e2e_priv');
-        const savedPub = localStorage.getItem('kuban_e2e_pub');
+        if (!uid) throw new Error('E2E: uid required');
+        const localPrivKey = 'kuban_e2e_priv_' + uid;
+        const localPubKey = 'kuban_e2e_pub_' + uid;
+
+        if (window.db) {
+            try {
+                const snap = await window.db.ref('privateKeys/' + uid).get();
+                if (snap.exists()) {
+                    const rawPriv = snap.val();
+                    const privJwk = JSON.parse(rawPriv);
+                    const privateKey = await crypto.subtle.importKey(
+                        'jwk', privJwk, { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveKey']
+                    );
+                    const pubJwk = { kty: privJwk.kty, crv: privJwk.crv, x: privJwk.x, y: privJwk.y, ext: true };
+                    localStorage.setItem(localPrivKey, rawPriv);
+                    localStorage.setItem(localPubKey, JSON.stringify(pubJwk));
+                    return { privateKey, publicKeyJwk: pubJwk };
+                }
+            } catch (e) {
+                console.warn('E2E: не удалось получить ключ из облака, используем локальный кэш', e);
+            }
+        }
+
+        const savedPriv = localStorage.getItem(localPrivKey);
+        const savedPub = localStorage.getItem(localPubKey);
         if (savedPriv && savedPub) {
             const privateKey = await crypto.subtle.importKey(
                 'jwk', JSON.parse(savedPriv), { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveKey']
             );
-            // На всякий случай убеждаемся, что ключ также сохранён в облаке (например, если раньше
-            // он был только локальным из старой версии до синхронизации через Firebase).
-            if (window.db && uid) {
-                window.db.ref('privateKeys/' + uid).get().then(snap => {
-                    if (!snap.exists()) window.db.ref('privateKeys/' + uid).set(savedPriv).catch(() => {});
-                }).catch(() => {});
+            if (window.db) {
+                window.db.ref('privateKeys/' + uid).set(savedPriv).catch(() => {});
             }
             return { privateKey, publicKeyJwk: JSON.parse(savedPub) };
-        }
-
-        if (window.db && uid) {
-            try {
-                const snap = await window.db.ref('privateKeys/' + uid).get();
-                if (snap.exists()) {
-                    const privJwk = JSON.parse(snap.val());
-                    const privateKey = await crypto.subtle.importKey(
-                        'jwk', privJwk, { name: 'ECDH', namedCurve: 'P-256' }, false, ['deriveKey']
-                    );
-                    // Из приватного JWK можно восстановить публичный (те же x/y координаты).
-                    const pubJwk = { kty: privJwk.kty, crv: privJwk.crv, x: privJwk.x, y: privJwk.y, ext: true };
-                    localStorage.setItem('kuban_e2e_priv', JSON.stringify(privJwk));
-                    localStorage.setItem('kuban_e2e_pub', JSON.stringify(pubJwk));
-                    return { privateKey, publicKeyJwk: pubJwk };
-                }
-            } catch (e) {
-                console.warn('E2E: не удалось получить ключ из облака', e);
-            }
         }
 
         return generateAndStoreKeyPair(uid);
     }
 
     function myKeyPair(uid) {
-        if (uid) myUid = uid;
+        if (uid && uid !== myUid) {
+            myUid = uid;
+            myPrivateKeyPromise = null; // сменился аккаунт — сбрасываем кэш ключа в памяти
+        }
         if (!myPrivateKeyPromise) myPrivateKeyPromise = getOrCreateKeyPair(myUid);
         return myPrivateKeyPromise;
     }
@@ -5031,7 +5120,8 @@ function Icon({ name, size=22, stroke=2.25, fill="none", className="" }) {
         wifi: <><path d="M2 8.5a17 17 0 0 1 20 0"/><path d="M5.5 12.5a12 12 0 0 1 13 0"/><path d="M9 16.5a6.5 6.5 0 0 1 6 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></>,
         link2: <><path d="M9 17H7a5 5 0 0 1 0-10h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><path d="M8 12h8"/></>,
         phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.81.35 1.6.68 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.25a2 2 0 0 1 2.11-.45c.74.33 1.53.56 2.34.68A2 2 0 0 1 22 16.92z"/>,
-        globe: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></>
+        globe: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></>,
+        image: <><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></>
     };
     return (
         <svg className={"icon "+className} width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
@@ -10002,6 +10092,7 @@ function CreateStoryModal({ me, onClose, show }) {
     const [mode, setMode] = useState('text');
     const [text, setText] = useState('');
     const [bgColor, setBgColor] = useState(STORY_COLORS[0]);
+    const [colorPickerOpen, setColorPickerOpen] = useState(false);
     const [imageUrl, setImageUrl] = useState('');
     const [tempImageUrl, setTempImageUrl] = useState('');
     const [uploading, setUploading] = useState(false);
@@ -10110,54 +10201,55 @@ function CreateStoryModal({ me, onClose, show }) {
     }
 
     return ReactDOM.createPortal((
-        <div className="overlay" onClick={onClose}>
-            <div className="modal story-create-modal" onClick={e => e.stopPropagation()}>
-                <div className="modal-head">
-                    <h2 style={{ margin: 0, fontSize: 19 }}>{t('stories.newStatus')}</h2>
-                    <button className="iconbtn close" onClick={onClose}><Icon name="close" /></button>
+        <div
+            className="story-full-editor"
+            style={{ background: mode === 'text' ? bgColor : '#000' }}
+        >
+            <div className="story-full-header">
+                <button className="story-full-header-btn" onClick={onClose} aria-label={t('stories.cancel')}>
+                    <Icon name="close" size={20} />
+                </button>
+                <div className="story-full-header-right">
+                    {mode === 'text' && (
+                        <button className={"story-full-header-btn " + (colorPickerOpen ? 'active' : '')} onClick={() => setColorPickerOpen(v => !v)} aria-label={t('appearance.accentColor')}>
+                            <Icon name="palette" size={19} />
+                        </button>
+                    )}
                 </div>
+            </div>
 
-                <div className="story-mode-tabs">
-                    <button className={"story-mode-tab " + (mode === 'text' ? 'active' : '')} onClick={() => setMode('text')}>{t('stories.text')}</button>
-                    <button className={"story-mode-tab " + (mode === 'image' ? 'active' : '')} onClick={() => setMode('image')}>{t('stories.photo')}</button>
-                    <button className={"story-mode-tab " + (mode === 'voice' ? 'active' : '')} onClick={() => setMode('voice')}>{t('stories.voice')}</button>
-                </div>
-
+            <div className="story-full-body">
                 {mode === 'text' && (
-                    <>
-                        <div className="story-text-preview" style={{ background: bgColor }}>
-                            <textarea rows="4" value={text} onChange={e => setText(e.target.value)} maxLength="200" placeholder={t('stories.textPlaceholder')} />
-                        </div>
-                        <div className="story-color-row">
-                            {STORY_COLORS.map(c => (
-                                <button key={c} className={"story-color-dot " + (bgColor === c ? 'selected' : '')} style={{ background: c }} onClick={() => setBgColor(c)} />
-                            ))}
-                        </div>
-                    </>
+                    <textarea
+                        className="story-full-textarea"
+                        rows="4"
+                        value={text}
+                        onChange={e => setText(e.target.value)}
+                        maxLength="200"
+                        placeholder={t('stories.textPlaceholder')}
+                        autoFocus
+                    />
                 )}
 
                 {mode === 'image' && (
-                    <>
-                        {imageUrl ? (
-                            <div className="story-image-preview" style={{ backgroundImage: `url(${imageUrl})` }}>
-                                <button className="story-image-remove" onClick={() => { setImageUrl(''); setTempImageUrl(''); }}><Icon name="close" size={16} /></button>
-                            </div>
-                        ) : (
-                            <div className="field">
-                                <button className="secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{ width: '100%', justifyContent: 'center' }}>
-                                    {uploading ? t('edit.uploading') : '📷 ' + t('stories.pickPhoto')}
-                                </button>
-                                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{ display: 'none' }} />
-                                <div className="avatar-url-input" style={{ marginTop: 8 }}>
-                                    <input type="text" placeholder={t('stories.photoLink')} value={tempImageUrl} onChange={e => setTempImageUrl(e.target.value)} />
-                                    <button className="primary" onClick={applyImageUrl}>{t('stories.ok')}</button>
-                                </div>
-                            </div>
-                        )}
-                        <div className="field">
-                            <input placeholder={t('stories.caption')} value={text} onChange={e => setText(e.target.value)} maxLength="200" />
+                    imageUrl ? (
+                        <div className="story-full-image-wrap">
+                            <img src={imageUrl} className="story-full-image" alt="" />
+                            <button className="story-image-remove" onClick={() => { setImageUrl(''); setTempImageUrl(''); }}><Icon name="close" size={16} /></button>
                         </div>
-                    </>
+                    ) : (
+                        <div className="story-full-picker">
+                            <button className="story-full-pick-btn" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                                <Icon name="image" size={26} />
+                                <span>{uploading ? t('edit.uploading') : t('stories.pickPhoto')}</span>
+                            </button>
+                            <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFilePick} style={{ display: 'none' }} />
+                            <div className="story-full-url-row">
+                                <input type="text" placeholder={t('stories.photoLink')} value={tempImageUrl} onChange={e => setTempImageUrl(e.target.value)} />
+                                <button onClick={applyImageUrl}>{t('stories.ok')}</button>
+                            </div>
+                        </div>
+                    )
                 )}
 
                 {mode === 'voice' && (
@@ -10167,22 +10259,44 @@ function CreateStoryModal({ me, onClose, show }) {
                                 <button className={"story-record-btn " + (recording ? 'recording' : '')} onClick={recording ? stopVoiceRecording : startVoiceRecording}>
                                     <Icon name="mic" size={26} />
                                 </button>
-                                <div className="muted" style={{ marginTop: 10 }}>
+                                <div className="story-full-hint">
                                     {recording ? `${t('stories.recording')} ${recordSeconds}с (${t('stories.maxSeconds')})` : t('stories.recordHint')}
                                 </div>
                             </>
                         ) : (
                             <>
                                 <div className="story-voice-ready">🎤 {t('stories.recorded')} {voiceData.duration}с</div>
-                                <button className="secondary" onClick={resetVoice}>{t('stories.reRecord')}</button>
+                                <button className="story-full-pick-btn" style={{ width: 'auto', display: 'inline-flex' }} onClick={resetVoice}>{t('stories.reRecord')}</button>
                             </>
                         )}
                     </div>
                 )}
+            </div>
 
-                <div className="modal-actions" style={{ marginTop: 16 }}>
-                    <button className="secondary" onClick={onClose}>{t('stories.cancel')}</button>
-                    <button className="primary" onClick={publish} disabled={busy}>{busy ? t('stories.publishing') : t('stories.publish')}</button>
+            {mode === 'image' && imageUrl && (
+                <div className="story-full-caption-row">
+                    <input placeholder={t('stories.caption')} value={text} onChange={e => setText(e.target.value)} maxLength="200" />
+                </div>
+            )}
+
+            {mode === 'text' && colorPickerOpen && (
+                <div className="story-color-strip">
+                    {STORY_COLORS.map(c => (
+                        <button key={c} className={"story-color-dot " + (bgColor === c ? 'selected' : '')} style={{ background: c }} onClick={() => setBgColor(c)} />
+                    ))}
+                </div>
+            )}
+
+            <div className="story-full-footer">
+                <div className="story-full-tabs">
+                    <button className={"story-full-tab " + (mode === 'text' ? 'active' : '')} onClick={() => setMode('text')}>{t('stories.text')}</button>
+                    <button className={"story-full-tab " + (mode === 'image' ? 'active' : '')} onClick={() => setMode('image')}>{t('stories.photo')}</button>
+                    <button className={"story-full-tab " + (mode === 'voice' ? 'active' : '')} onClick={() => setMode('voice')}>{t('stories.voice')}</button>
+                </div>
+                <div className="story-full-actionrow">
+                    <button className="story-full-send" onClick={publish} disabled={busy} aria-label={t('stories.publish')}>
+                        {busy ? <span className="conn-spinner" /> : <Icon name="send" size={22} />}
+                    </button>
                 </div>
             </div>
         </div>
