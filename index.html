@@ -2063,7 +2063,7 @@ body.dark .mobile-nav-item.active {
         inset: 0;
         z-index: 1;
         padding: 14px;
-        padding-top: 8px !important;
+        padding-top: max(8px, env(safe-area-inset-top)) !important;
         padding-bottom: 8px !important;
         overflow: auto;
         background: var(--bg);
@@ -2079,7 +2079,7 @@ body.dark .mobile-nav-item.active {
     }
     .panel{
         padding:14px;
-        padding-top: 8px !important;
+        padding-top: max(8px, env(safe-area-inset-top)) !important;
         padding-bottom: 8px !important;
     }
     .chatbar{
@@ -2876,7 +2876,7 @@ body.dark .tg-search-fab{
    CONTACTS / CALLS screens
    ============================================================ */
 .tg-contactscalls{width:100%;height:100%;overflow:auto;}
-.tg-cc-head{padding:20px 20px 6px;}
+.tg-cc-head{padding:20px 20px 6px;padding-top:max(20px, env(safe-area-inset-top));}
 .tg-cc-head h1{margin:0 0 14px;font-size:26px;}
 .tg-cc-hint{padding:10px 20px 4px;font-size:13px;color:var(--muted);}
 .tg-cc-row{
@@ -3870,6 +3870,9 @@ body.dark .poll-creator-modern .option-row input:focus{
 .stories-bar{
     display:flex;gap:14px;overflow-x:auto;
     padding:14px 16px 10px;
+    padding-top:max(14px, env(safe-area-inset-top));
+    padding-left:max(16px, env(safe-area-inset-left));
+    padding-right:max(16px, env(safe-area-inset-right));
     scrollbar-width:none;
 }
 .stories-bar::-webkit-scrollbar{display:none;}
@@ -3884,7 +3887,7 @@ body.dark .poll-creator-modern .option-row input:focus{
 }
 .story-ring-new{background:conic-gradient(from 180deg, #6750a4, #a97ff0, #f26ea0, #f2a13f, #6750a4);}
 .story-ring-seen{background:rgba(127,127,127,.35);}
-.story-ring-mine{background:conic-gradient(from 180deg, #6750a4, #a97ff0, #f26ea0, #f2a13f, #6750a4);}
+.story-ring-mine{background:rgba(127,127,127,.4);}
 .story-ring-empty{background:rgba(127,127,127,.28);}
 .story-ring > .avatar-wrap, .story-ring > div{border:2.5px solid var(--bg);border-radius:50%;}
 .story-add-badge{
@@ -3894,7 +3897,7 @@ body.dark .poll-creator-modern .option-row input:focus{
     display:flex;align-items:center;justify-content:center;
     border:2.5px solid var(--bg);
 }
-.story-name{font-size:11.5px;color:var(--txt);max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.story-name{font-size:12px;font-weight:500;color:var(--txt);max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.1px;}
 
 /* --- Viewer --- */
 .story-viewer{
@@ -3995,6 +3998,27 @@ body.dark .poll-creator-modern .option-row input:focus{
 .story-record-btn.recording{background:var(--err);animation:storyPulse 1s ease-in-out infinite;}
 .story-record-btn:active{transform:scale(.92);}
 .story-voice-ready{font-size:15px;font-weight:650;margin-bottom:12px;}
+
+/* ============================================================
+   QR CODE / SCANNER
+   ============================================================ */
+.qr-scanner{
+    position:relative;width:100%;aspect-ratio:1/1;border-radius:18px;
+    overflow:hidden;background:#000;
+}
+.qr-scanner-video{
+    width:100%;height:100%;object-fit:cover;display:block;
+}
+.qr-scanner-frame{
+    position:absolute;inset:12%;border:3px solid rgba(255,255,255,.85);
+    border-radius:20px;box-shadow:0 0 0 2000px rgba(0,0,0,.28);
+    pointer-events:none;
+}
+.qr-scanner-error{
+    display:flex;align-items:center;justify-content:center;
+    width:100%;height:100%;color:#fff;font-size:13.5px;
+    text-align:center;padding:20px;
+}
 
 /* Attach menu: stickers + poll only. Voice is intentionally NOT here. */
 .attach-menu{
@@ -4427,6 +4451,8 @@ window.copyChannelId = window.copyChannelId || async function(id){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-app-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-auth-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.16.0/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.js"></script>
 
 <script>
 try {
@@ -4821,6 +4847,10 @@ window.I18N = {
     // Профиль (QR-модалка)
     'profileModal.title': { ru:'Мой профиль', en:'My profile', uk:'Мій профіль', es:'Mi perfil', pt:'Meu perfil', fi:'Profiilini' },
     'profileModal.copyLink': { ru:'Скопировать ссылку на профиль', en:'Copy profile link', uk:'Скопіювати посилання на профіль', es:'Copiar enlace del perfil', pt:'Copiar link do perfil', fi:'Kopioi profiilin linkki' },
+    'qr.myCode': { ru:'Мой код', en:'My code', uk:'Мій код', es:'Mi código', pt:'Meu código', fi:'Oma koodi' },
+    'qr.scan': { ru:'Сканировать', en:'Scan', uk:'Сканувати', es:'Escanear', pt:'Escanear', fi:'Skannaa' },
+    'qr.scanTitle': { ru:'Сканировать код', en:'Scan code', uk:'Сканувати код', es:'Escanear código', pt:'Escanear código', fi:'Skannaa koodi' },
+    'qr.scanHint': { ru:'Наведите камеру на QR-код профиля собеседника', en:'Point your camera at the other person\'s profile QR code', uk:'Наведіть камеру на QR-код профілю співрозмовника', es:'Apunta la cámara al código QR del perfil de la otra persona', pt:'Aponte a câmera para o código QR do perfil da outra pessoa', fi:'Suuntaa kamera keskustelukumppanin profiilin QR-koodiin' },
 
     // Статусы
     'stories.myStatus': { ru:'Мой статус', en:'My status', uk:'Мій статус', es:'Mi estado', pt:'Meu status', fi:'Oma tilani' },
@@ -6244,7 +6274,109 @@ function GroupInfoModal({ chat, me, users, onClose, onUpdate, onChat, show }) {
 }
 
 // ===== НАСТРОЙКИ =====
-function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLastSeen, setHideLastSeen, allowCalls, setAllowCalls, onOpenSaved }) {
+function parseScannedUsername(text) {
+    if (!text) return null;
+    try {
+        const url = new URL(text);
+        const u = url.searchParams.get('u');
+        if (u) return normalizeUsername(u);
+    } catch (e) { /* not a URL, fall through */ }
+    const trimmed = text.trim();
+    if (/^@?[a-zA-Z0-9_]{3,24}$/.test(trimmed)) return normalizeUsername(trimmed);
+    return null;
+}
+
+function QrCanvas({ value, size = 220 }) {
+    const canvasRef = useRef(null);
+    useEffect(() => {
+        if (!canvasRef.current || !window.QRious || !value) return;
+        new window.QRious({
+            element: canvasRef.current,
+            value,
+            size,
+            background: '#ffffff',
+            foreground: '#1a1b20',
+            level: 'M'
+        });
+    }, [value, size]);
+    return <canvas ref={canvasRef} style={{ borderRadius: 16, display: 'block', maxWidth: '100%' }} />;
+}
+
+function QrScanner({ onResult }) {
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const streamRef = useRef(null);
+    const rafRef = useRef(null);
+    const doneRef = useRef(false);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        let cancelled = false;
+
+        function tick() {
+            if (doneRef.current || cancelled) return;
+            const video = videoRef.current;
+            const canvas = canvasRef.current;
+            if (video && canvas && video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                try {
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = window.jsQR && window.jsQR(imageData.data, imageData.width, imageData.height);
+                    if (code && code.data) {
+                        doneRef.current = true;
+                        onResult(code.data);
+                        return;
+                    }
+                } catch (e) { /* frame not ready */ }
+            }
+            rafRef.current = requestAnimationFrame(tick);
+        }
+
+        async function start() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { setError('Камера недоступна в этом браузере'); return; }
+            if (!window.jsQR) { setError('Не удалось загрузить модуль сканера'); return; }
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                if (cancelled) { stream.getTracks().forEach(tr => tr.stop()); return; }
+                streamRef.current = stream;
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                    await videoRef.current.play().catch(() => {});
+                }
+                tick();
+            } catch (e) {
+                setError('Нет доступа к камере. Разрешите доступ в настройках браузера.');
+            }
+        }
+
+        start();
+        return () => {
+            cancelled = true;
+            doneRef.current = true;
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            if (streamRef.current) streamRef.current.getTracks().forEach(tr => tr.stop());
+        };
+    }, []);
+
+    return (
+        <div className="qr-scanner">
+            {error ? (
+                <div className="qr-scanner-error">{error}</div>
+            ) : (
+                <>
+                    <video ref={videoRef} playsInline muted className="qr-scanner-video" />
+                    <div className="qr-scanner-frame" />
+                </>
+            )}
+            <canvas ref={canvasRef} style={{ display: 'none' }} />
+        </div>
+    );
+}
+
+function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLastSeen, setHideLastSeen, allowCalls, setAllowCalls, onOpenSaved, users, onScanUser }) {
     const [name, setName] = useState(user.name || "");
     const [username, setUsername] = useState(user.username || "");
     const [about, setAbout] = useState(user.about || "");
@@ -6275,6 +6407,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
     const [autoDelete, setAutoDelete] = useState(user.autoDeleteMonths || 6);
     const [autoDeleteOpen, setAutoDeleteOpen] = useState(false);
     const [qrOpen, setQrOpen] = useState(false);
+    const [qrTab, setQrTab] = useState('mine');
     const [folders, setFolders] = useState(() => {
         try { return JSON.parse(localStorage.getItem('tgFolders') || '[]'); } catch(e) { return []; }
     });
@@ -6322,6 +6455,18 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
         } else {
             show(link);
         }
+    }
+
+    const myProfileLink = location.origin + location.pathname + '?u=' + normalizeUsername(username);
+
+    function handleQrScanResult(text) {
+        const found = parseScannedUsername(text);
+        if (!found) { show('Это не похоже на код профиля', true); return; }
+        if (found === normalizeUsername(username)) { show('Это ваш собственный код'); setQrOpen(false); return; }
+        const match = users && Object.values(users).find(u => normalizeUsername(u.username) === found);
+        if (!match) { show('Пользователь не найден', true); return; }
+        setQrOpen(false);
+        if (onScanUser) onScanUser(match);
     }
 
     useEffect(() => {
@@ -6606,7 +6751,7 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
 
             {view === 'main' && (<>
                 <div className="tg-topbar">
-                    <div className="tg-topbar-btn" onClick={() => setQrOpen(true)}><Icon name="qrcode" size={20}/></div>
+                    <div className="tg-topbar-btn" onClick={() => { setQrTab('mine'); setQrOpen(true); }}><Icon name="qrcode" size={20}/></div>
                     <div className="tg-topbar-title">{t('settings.title')}</div>
                     <div className="tg-topbar-btn" onClick={() => setView('edit')}><Icon name="edit" size={19}/></div>
                 </div>
@@ -7000,17 +7145,37 @@ function Settings({ user, onSave, onLogout, show, darkMode, setDarkMode, hideLas
                 <div className="overlay" onClick={() => setQrOpen(false)}>
                     <div className="modal" onClick={e=>e.stopPropagation()} style={{maxWidth:340, textAlign:'center'}}>
                         <div className="modal-head">
-                            <h2 style={{margin:0, fontSize:17}}>{t('profileModal.title')}</h2>
+                            <h2 style={{margin:0, fontSize:17}}>{qrTab === 'mine' ? t('profileModal.title') : t('qr.scanTitle')}</h2>
                             <button className="iconbtn close" onClick={() => setQrOpen(false)}><Icon name="close"/></button>
                         </div>
-                        <div style={{display:'flex', justifyContent:'center', margin:'10px 0 16px'}}>
-                            <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={90} verified={user.verified} />
+
+                        <div className="story-mode-tabs" style={{marginTop:0}}>
+                            <button className={"story-mode-tab " + (qrTab === 'mine' ? 'active' : '')} onClick={() => setQrTab('mine')}>{t('qr.myCode')}</button>
+                            <button className={"story-mode-tab " + (qrTab === 'scan' ? 'active' : '')} onClick={() => setQrTab('scan')}>{t('qr.scan')}</button>
                         </div>
-                        <div style={{fontWeight:700, fontSize:17}}>{name}</div>
-                        <div className="muted" style={{marginBottom:16}}>@{normalizeUsername(username)}</div>
-                        <button className="primary" style={{width:'100%', justifyContent:'center'}} onClick={copyProfileLink}>
-                            <Icon name="link2" size={18}/> {t('profileModal.copyLink')}
-                        </button>
+
+                        {qrTab === 'mine' ? (
+                            <>
+                                <div style={{display:'flex', justifyContent:'center', margin:'16px 0 10px'}}>
+                                    <QrCanvas value={myProfileLink} size={200} />
+                                </div>
+                                <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:8, marginBottom:6}}>
+                                    <Avatar name={name} uid={user.uid} avatar={avatar} avatarUrl={avatarUrl} size={28} verified={user.verified} />
+                                    <div style={{fontWeight:700, fontSize:16}}>{name}</div>
+                                </div>
+                                <div className="muted" style={{marginBottom:16}}>@{normalizeUsername(username)}</div>
+                                <button className="primary" style={{width:'100%', justifyContent:'center'}} onClick={copyProfileLink}>
+                                    <Icon name="link2" size={18}/> {t('profileModal.copyLink')}
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <div style={{margin:'14px 0'}}>
+                                    <QrScanner onResult={handleQrScanResult} />
+                                </div>
+                                <div className="muted" style={{fontSize:12.5}}>{t('qr.scanHint')}</div>
+                            </>
+                        )}
                     </div>
                 </div>
             )}
@@ -10318,8 +10483,9 @@ function MobileNav({ section, setSection, onProfile, user, mobileChat, unreadCou
 }
 
 // ===== КОНТАКТЫ =====
-function ContactsView({ me, users, metas, presence, onSelect, setSection }) {
+function ContactsView({ me, users, metas, presence, onSelect, setSection, show }) {
     const [search, setSearch] = useState("");
+    const [scanOpen, setScanOpen] = useState(false);
     const qUsername = normalizeUsername(search);
     const q = search.trim().toLowerCase();
 
@@ -10355,10 +10521,23 @@ function ContactsView({ me, users, metas, presence, onSelect, setSection }) {
         setSection('chats');
     }
 
+    function handleScanResult(text) {
+        const found = parseScannedUsername(text);
+        if (!found) { show && show('Это не похоже на код профиля', true); return; }
+        if (found === normalizeUsername(me.username)) { show && show('Это ваш собственный код'); setScanOpen(false); return; }
+        const match = Object.values(users || {}).find(u => normalizeUsername(u.username) === found);
+        if (!match) { show && show('Пользователь не найден', true); return; }
+        setScanOpen(false);
+        openContact(match);
+    }
+
     return (
         <div className="tg-contactscalls">
-            <div className="tg-cc-head">
+            <div className="tg-cc-head" style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
                 <h1>{t('contacts.title')}</h1>
+                <button className="tg-topbar-btn" onClick={() => setScanOpen(true)} title={t('qr.scan')} aria-label={t('qr.scan')}>
+                    <Icon name="qrcode" size={20}/>
+                </button>
             </div>
             <div className="search" style={{margin:'0 20px 14px'}}>
                 <Icon name="search" size={19} />
@@ -10383,6 +10562,21 @@ function ContactsView({ me, users, metas, presence, onSelect, setSection }) {
                         </button>
                     ))}
                 </>
+            )}
+
+            {scanOpen && (
+                <div className="overlay" onClick={() => setScanOpen(false)}>
+                    <div className="modal" onClick={e=>e.stopPropagation()} style={{maxWidth:340, textAlign:'center'}}>
+                        <div className="modal-head">
+                            <h2 style={{margin:0, fontSize:17}}>{t('qr.scanTitle')}</h2>
+                            <button className="iconbtn close" onClick={() => setScanOpen(false)}><Icon name="close"/></button>
+                        </div>
+                        <div style={{margin:'14px 0'}}>
+                            <QrScanner onResult={handleScanResult} />
+                        </div>
+                        <div className="muted" style={{fontSize:12.5}}>{t('qr.scanHint')}</div>
+                    </div>
+                </div>
             )}
         </div>
     );
@@ -10838,9 +11032,11 @@ function App() {
                             allowCalls={allowCalls}
                             setAllowCalls={setAllowCalls}
                             onOpenSaved={() => { select({ id: savedChatId(me.uid), type: 'saved', name: 'Избранное' }); setSection('chats'); }}
+                            users={users}
+                            onScanUser={(u) => { select({ type:"dm", id:chatIdFor(me.uid, u.uid), uid:u.uid, name:u.name, username:u.username, avatar:u.avatar, avatarUrl:u.avatarUrl, verified:u.verified }); setSection('chats'); }}
                         />
                     ) : section === "contacts" ? (
-                        <ContactsView me={me} users={users} metas={metas} presence={presence} onSelect={select} setSection={setSection} />
+                        <ContactsView me={me} users={users} metas={metas} presence={presence} onSelect={select} setSection={setSection} show={show} />
                     ) : section === "calls" ? (
                         <CallsView me={me} users={users} metas={metas} presence={presence} onSelect={select} setSection={setSection} show={show} />
                     ) : (
