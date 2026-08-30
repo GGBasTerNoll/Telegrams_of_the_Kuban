@@ -1,7 +1,24 @@
-# Telegrams of the Kuban
-Telegrams of the Kuban - its national Messenger from the Russia, Krasndoarskiy Krai. city Armavir. This is light messenger, which you using it on your broswer. Without difficult registration and more.
-СЛАВА КУБАНИ!
+# Телеграммы по Кубани (Android)
 
-Мессенджер обновлён до версии 2.8 (24.08.2026 14:15🕥)
------------------
-Добавлен новый шрифт на русском языке, новые возможности кастомизации, избранные сообщения, фиксы ошибок
+Нативное приложение для Android Studio на Kotlin + Jetpack Compose. Подключается к тому же Firebase, что и веб-мессенджер (`bibby-message`): вход, список чатов, личные/групповые чаты и каналы, контакты, избранное, статус «в сети».
+
+## Как открыть
+
+1. Установите [Android Studio](https://developer.android.com/studio).
+2. **File → Open** и выберите папку `C:\Users\ggbaster\TelegramsKuban`.
+3. Дождитесь Gradle Sync (Android Studio сам скачает Gradle Wrapper).
+4. Выберите эмулятор или телефон и нажмите Run.
+
+Нужен JDK 17 (идёт вместе со студией).
+
+## Что уже есть
+
+- Вход по email/паролю, регистрация, анонимный вход и создание профиля
+- Чаты из Realtime Database (`chatsMeta`, `chats/.../messages`)
+- Поиск людей по юзернейму
+- Отправка текстовых сообщений (совместимо с вебом)
+- Тёмная тема и выход
+
+## Что пока не перенесено с веба
+
+Звонки WebRTC, опросы, стикеры, голосовые, E2E-шифрование, сторис, QR, создание групп/каналов. Их можно добавить поверх этой архитектуры (MVVM + репозитории Firebase).
